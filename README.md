@@ -1,2 +1,2 @@
 # StructureMetrics
-Structure metrics are used to tell the authenticity of predicted structures. 
+Structure metrics are used to tell the authenticity of predicted structures. We believe that the metrics like RDF and ADF can be used in both simulations and experiments if we agree on density functional theory. Therefore, distribution comes from the predicted structure of ML model by inputing real AFM images can be compared to the target distribution that originated from DFT calculations. 
