@@ -3,7 +3,7 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-from water import read_samples
+from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
@@ -13,11 +13,7 @@ if __name__ == '__main__':
         os.makedirs('statistic')
 
     # Read the samples
-    if len(sys.argv) != 3:
-        print('Usage: python {}  <#folderToSee> <#xyzToSee>'.format(sys.argv[0]))
-        sys.exit(1)
-    toSee = (int(sys.argv[1]), int(sys.argv[2]))
-    simulation = 'Water-bilayer'
+    reference = ''
     samples = read_samples(simulation, toSee)
 
     # Common parameters for plotting

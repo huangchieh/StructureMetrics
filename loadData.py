@@ -20,7 +20,7 @@ for urls, name in zip([urls_test, urls_train, urls_val], ['test', 'train', 'val'
     xyz_dataset = dataset.select(lambda sample: 'xyz' in sample)
 
     # Ensure the target directory exists
-    output_dir = 'Structures/{}/'.format(name)
+    output_dir = 'Structures/Label/{}/'.format(name)
     os.makedirs(output_dir, exist_ok=True)
 
     # Iterate through the filtered dataset and process .xyz files

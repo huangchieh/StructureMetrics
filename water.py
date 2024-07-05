@@ -89,6 +89,22 @@ def read_samples(simulation, toSee):
             samples.append(structure)
     return samples
 
+def read_samples_from_folder(folder):
+    '''
+    Read a list of sample paths from a folder
+    Input: 
+        folder: a folder
+        toSee: a integer, number of xyz files to see  
+    Output: a list of sample paths
+    '''
+    samples = []
+    xyz_files = [f for f in os.listdir(folder) if f.endswith('.xyz')]
+    for xyz_file in  xyz_files:
+        structure = os.path.join(folder, xyz_file) 
+        samples.append(structure)
+    return samples
+
+
 def find_closest_neighbors(atoms, B_idx, A, num_neighbors=2, mic=True):
     '''
     Find the closest neighbor atoms with type A near atom B (Assume A, C are the same type of atoms)
