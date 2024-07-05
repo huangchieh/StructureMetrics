@@ -7,36 +7,47 @@ from water import read_samples_from_folder
 from water import mean_rdf, mean_adf, mean_distance_distribution
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
+
 if __name__ == '__main__':
-    # Create output folder
-    if not os.path.exists('statistic'):
-        os.makedirs('statistic')
+    baseOut = 'output'
+    #os.makedirs(outputFolder, exist_ok=True)
+    #structures = ['Label', 'Prediction_1', 'Prediction_2', 'Prediction_3', \
+    #              'Prediction_a', 'Prediction_b', 'Prediction_c']
+
+    structures = ['Label']
+    
+    # Create the output folders
+    for structure in structures:
+        os.makedirs(os.path.join(baseOut, structure), exist_ok=True)
 
     # Read the samples
-    reference = ''
-    samples = read_samples(simulation, toSee)
+    structure = structures[0]
 
-    # Common parameters for plotting
+    samples = read_samples_from_folder(os.path.join('Structures', structure))
+    print('Calculating for structure: {}'.format(structure))
+
+    # Common parameters for the plots, and output folder
     r_max = 10.0
     mic = True
     bins = 120
     color = '#299035'
+    outputFolder = os.path.join(baseOut, structure)
 
     # --- RDF 
     print('Calulating RDF ...')
     # O-O 
     r, gr_OO = mean_rdf(samples, 'O', 'O',  mic=mic, bins=bins)
-    label = 'RDF_OO_{}_{}_{}'.format(simulation, toSee[0], toSee[1])
+    label = 'RDF_OO_{}'.format(structure)
     legend = 'O-O (Target)'
-    plot_rdf(r, gr_OO, label, legend)
-    np.savez('statistic/RDF_OO_{}_{}_{}.npz'.format(simulation, toSee[0], toSee[1]), r=r, gr=gr_OO)
+    plot_rdf(r, gr_OO, label, legend, outfolder=outputFolder)
+    np.savez('{}/RDF_OO_{}.npz'.format(outputFolder, structure), r=r, gr=gr_OO)
 
     # O-H 
     r, gr_OH = mean_rdf(samples, 'O', 'H',  mic=mic, bins=bins)
-    label = 'RDF_OH_{}_{}_{}'.format(simulation, toSee[0], toSee[1])
+    label = 'RDF_OH_{}'.format(structure)
     legend = 'O-H (Target)'
-    plot_rdf(r, gr_OH, label, legend)
-    np.savez('statistic/RDF_OH_{}_{}_{}.npz'.format(simulation, toSee[0], toSee[1]), r=r, gr=gr_OH)
+    plot_rdf(r, gr_OH, label, legend, outfolder=outputFolder)
+    np.savez('{}/RDF_OH.npz'.format(outputFolder, structure), r=r, gr=gr_OH)
 
     # --- ADF
     print('Calulating ADF ...')
@@ -45,33 +56,18 @@ if __name__ == '__main__':
     
     # H-O-H 
     y_lim = 0.3 if firstTwo else 0.02
-    label = "HOH_dist_{}_FT{}_{}_{}".format(simulation, int(firstTwo), toSee[0], toSee[1])
+    label = "HOH_dist_{}".format(structure)
     legend = 'H-O-H (Target)'
     angles = mean_adf(samples, 'H', 'O', 'H', r_max=r_max, firstTwo=firstTwo, mic=mic, onlyAngle=onlyAngle)
-    np.savez('statistic/{}.npz'.format(label), angles=angles)
-    plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim)
+    np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
+    plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
 
     # O-O-O 
     y_lim = 0.3 if firstTwo else 0.02
-    label = "OOO_dist_{}_FT{}_{}_{}".format(simulation, int(firstTwo), toSee[0], toSee[1])
+    label = "OOO_dist_{}".format(structure)
     legend = 'O-O-O (Target)'
     angles = mean_adf(samples, 'O', 'O', 'O', r_max=r_max, firstTwo=firstTwo, mic=mic, onlyAngle=onlyAngle)
-    np.savez('statistic/{}.npz'.format(label), angles=angles)
-    plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim)
+    np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
+    plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
 
-    # --- Atoms distances distributions
-    y_lim = 0.4
-    # O-H 
-    label = 'OH_dist_{}_{}_{}'.format(simulation, toSee[0], toSee[1])
-    legend = 'O-H (Target)'
-    distances = mean_distance_distribution(samples, 'O', 'H', mic=True, dr=0.1, r_max=r_max, onlyDistances=True)
-    np.savez('statistic/{}.npz'.format(label), distances=distances)
-    plot_distance_distribution(distances, label, legend=legend, r_max=r_max,  color=color, bins=bins, y_lim=y_lim)
-
-    # O-O 
-    label = 'OO_dist_{}_{}_{}'.format(simulation, toSee[0], toSee[1])
-    legend = 'O-O (Target)'
-    distances = mean_distance_distribution(samples, 'O', 'O', mic=True, dr=0.1, r_max=r_max, onlyDistances=True)
-    np.savez('statistic/{}.npz'.format(label), distances=distances)
-    plot_distance_distribution(distances, label, legend, r_max=r_max,  color=color, bins=bins, y_lim=y_lim)
 

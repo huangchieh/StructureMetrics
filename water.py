@@ -2,6 +2,7 @@ from ase import Atoms
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from tqdm import tqdm
 
 def read_xyz_with_atomic_numbers(file_path):
     '''
@@ -14,7 +15,7 @@ def read_xyz_with_atomic_numbers(file_path):
     # Read number of atoms and comment line
     num_atoms = int(lines[0])
     comment = lines[1].strip()
-    print(comment)
+    #print(comment)
 
     symbols = []
     positions = []
@@ -258,7 +259,7 @@ def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True,
     ABC_all_angles = []
     rhos = []
     refNums = []
-    for sample in samples:
+    for sample in tqdm(samples):
         # Prepare the sample atoms with PBC cell 
         atoms = read_xyz_with_atomic_numbers(sample)
         substrate = atoms[atoms.numbers == subNum]
@@ -302,7 +303,7 @@ def mean_distance_distribution(samples, A, B, subNum=79, dr=0.1, r_max=4, mic=Tr
     '''
     AB_all_distances = []
     refNums = []
-    for sample in samples:
+    for sample in tqdm(samples):
         # Prepare the sample atoms with PBC cell 
         atoms = read_xyz_with_atomic_numbers(sample)
         substrate = atoms[atoms.numbers == subNum]
@@ -360,7 +361,7 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
     AB_all_distances = []
     rhos = []
     refNums = []
-    for sample in samples:
+    for sample in tqdm(samples):
         # Prepare the sample atoms with PBC cell 
         atoms = read_xyz_with_atomic_numbers(sample)
         substrate = atoms[atoms.numbers == subNum]
@@ -380,7 +381,7 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
     r, gr = rdf(AB_all_distances, meanRho, refNum, r_max=r_max, bins=bins)
     return r, gr
 
-def plot_distance_distribution(distances, label, legend, r_max=10,  color='#299035', bins=120, y_lim=0.4):
+def plot_distance_distribution(distances, label, legend, r_max=10,  color='#299035', bins=120, y_lim=0.4, outfolder='output'):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
@@ -392,14 +393,14 @@ def plot_distance_distribution(distances, label, legend, r_max=10,  color='#2990
     plt.ylabel('Probability Density')
     plt.tight_layout()
     plt.legend(frameon=False, loc='upper right')
-    if not os.path.exists('statistic'):
-        os.makedirs('statistic')
-    plt.savefig('statistic/{}.png'.format(label), dpi=300)
-    plt.savefig('statistic/{}.pdf'.format(label))
+    if not os.path.exists(outfolder):
+        os.makedirs(outfolder)
+    plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
+    plt.savefig('{}/{}.pdf'.format(outfolder, label))
     plt.clf()
     plt.close()
 
-def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4):
+def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4, outfolder='output'):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
@@ -411,14 +412,14 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
     plt.ylabel('Probability Density')
     plt.tight_layout()
     plt.legend(frameon=False, loc='upper right')
-    if not os.path.exists('statistic'):
-        os.makedirs('statistic')
-    plt.savefig('statistic/{}.png'.format(label), dpi=300)
-    plt.savefig('statistic/{}.pdf'.format(label))
+    if not os.path.exists(outfolder):
+        os.makedirs(outfolder)
+    plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
+    plt.savefig('{}/{}.pdf'.format(outfolder, label))
     plt.clf()
     plt.close()
 
-def plot_rdf(r, gr, label, legend, color='#299035', y_lim=10):
+def plot_rdf(r, gr, label, legend, color='#299035', y_lim=10, outfolder='output'):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
@@ -430,9 +431,9 @@ def plot_rdf(r, gr, label, legend, color='#299035', y_lim=10):
     plt.ylabel('g(r)')
     plt.tight_layout()
     plt.legend(frameon=False, loc='upper right')
-    if not os.path.exists('statistic'):
-        os.makedirs('statistic')
-    plt.savefig('statistic/{}.png'.format(label), dpi=300)
-    plt.savefig('statistic/{}.pdf'.format(label))
+    if not os.path.exists(outfolder):
+        os.makedirs(outfolder)
+    plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
+    plt.savefig('{}/{}.pdf'.format(outfolder, label))
     plt.clf()
     plt.close()

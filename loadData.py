@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import os
 import webdataset as wds
 
@@ -11,7 +10,7 @@ urls_test = "Water-bilayer-K-{1..10}_test_{0..3}.tar"
 urls_train = "Water-bilayer-K-{1..10}_train_{0..31}.tar"
 urls_val = "Water-bilayer-K-{1..5}_val_{0..3}.tar"
 
-for urls, name in zip([urls_test, urls_train, urls_val], ['test', 'train', 'val']):
+for urls, name in zip([urls_val], ['val']):
     print(f"Processing dataset: {urls}")
     dataset_path = base + urls
     dataset = wds.WebDataset(dataset_path)
@@ -20,7 +19,7 @@ for urls, name in zip([urls_test, urls_train, urls_val], ['test', 'train', 'val'
     xyz_dataset = dataset.select(lambda sample: 'xyz' in sample)
 
     # Ensure the target directory exists
-    output_dir = 'Structures/Label/{}/'.format(name)
+    output_dir = 'Structures/Label/'
     os.makedirs(output_dir, exist_ok=True)
 
     # Iterate through the filtered dataset and process .xyz files
