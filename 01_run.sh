@@ -7,6 +7,10 @@
 module load mamba 
 export OMP_NUM_THREADS=1
 
+# Note for me:
+# Structures P and Predictions are from 
+# StageTwo/EvaluatePerformance folder
+
 # Run 
 python loadData.py
 python main.py
