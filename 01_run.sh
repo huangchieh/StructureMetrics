@@ -12,7 +12,7 @@ export OMP_NUM_THREADS=1
 # StageTwo/EvaluatePerformance folder
 
 # Run 
-python loadData.py
+#python loadData.py
 python main.py
 
 # Clean up

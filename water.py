@@ -213,8 +213,10 @@ def cal_angles(atoms, A, B, C, r_max=10.0, firstTwo=False, mic=True):
             angles.append(angle)
         else:
             neighbor_indices = find_neighbors(atoms, B_idx, A, r_max=r_max, mic=mic)
-            temp_angles = atoms.get_angles(neighbor_indices, mic=mic)
-            angles.extend(list(temp_angles))
+            #print('Debug: \n', neighbor_indices)
+            if len(neighbor_indices) != 0:
+                temp_angles = atoms.get_angles(neighbor_indices, mic=mic)
+                angles.extend(list(temp_angles))
     return angles 
 
 def adf(ABC_all_angles, dtheta=1.0):
@@ -262,10 +264,21 @@ def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True,
     for sample in tqdm(samples):
         # Prepare the sample atoms with PBC cell 
         atoms = read_xyz_with_atomic_numbers(sample)
-        substrate = atoms[atoms.numbers == subNum]
-        lattice_vectors = calculate_lattice_vectors(substrate)
-        atoms.set_pbc([True, True, True])
-        atoms.set_cell(lattice_vectors)
+        if mic:
+            substrate = atoms[atoms.numbers == subNum]
+            lattice_vectors = calculate_lattice_vectors(substrate)
+            atoms.set_pbc([True, True, True])
+            atoms.set_cell(lattice_vectors)
+        else:
+            x_min, x_max = min(atoms.positions[:,0]), max(atoms.positions[:,0])
+            y_min, y_max  = min(atoms.positions[:,1]), max(atoms.positions[:,1])
+            z_min, z_max  = min(atoms.positions[:,2]), max(atoms.positions[:,2])
+            a, b, c = x_max-x_min, y_max-y_min, z_max-z_min
+            origin = np.array([x_min, y_min, z_min])
+            atoms.positions -= origin # Shift the atoms to the origin
+            lattice_vectors = np.array([[a, 0, 0], [0, b, 0], [0, 0, c]])
+            atoms.set_pbc([False, False, False])
+            atoms.set_cell(lattice_vectors)
 
         # Calculate angles between atom type A, B, and C. 
         angles = cal_angles(atoms, A, B, C, r_max=r_max, firstTwo=firstTwo, mic=mic)
@@ -364,10 +377,21 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
     for sample in tqdm(samples):
         # Prepare the sample atoms with PBC cell 
         atoms = read_xyz_with_atomic_numbers(sample)
-        substrate = atoms[atoms.numbers == subNum]
-        lattice_vectors = calculate_lattice_vectors(substrate)
-        atoms.set_pbc([True, True, True])
-        atoms.set_cell(lattice_vectors)
+        if mic:
+            substrate = atoms[atoms.numbers == subNum]
+            lattice_vectors = calculate_lattice_vectors(substrate)
+            atoms.set_pbc([True, True, True])
+            atoms.set_cell(lattice_vectors)
+        else:
+            x_min, x_max = min(atoms.positions[:,0]), max(atoms.positions[:,0])
+            y_min, y_max  = min(atoms.positions[:,1]), max(atoms.positions[:,1])
+            z_min, z_max  = min(atoms.positions[:,2]), max(atoms.positions[:,2])
+            a, b, c = x_max-x_min, y_max-y_min, z_max-z_min
+            origin = np.array([x_min, y_min, z_min])
+            atoms.positions -= origin # Shift the atoms to the origin
+            lattice_vectors = np.array([[a, 0, 0], [0, b, 0], [0, 0, c]])
+            atoms.set_pbc([False, False, False])
+            atoms.set_cell(lattice_vectors)
 
         # Calculate distances between atom type A and B
         AB_all_distance, rho,  refNum = cal_distances(atoms, A, B, r_max=r_max, mic=mic, onlyDistances=False)
@@ -419,14 +443,14 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
     plt.clf()
     plt.close()
 
-def plot_rdf(r, gr, label, legend, color='#299035', y_lim=10, outfolder='output'):
+def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolder='output'):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
     #plt.plot(r, gr, label=legend, color=color)
     plt.bar(r[:-1], gr, width=r[1]-r[0], alpha=0.5, edgecolor=color, align="edge", color=color, label=legend)
-    plt.xlim(0, 10)
-    #plt.ylim(0, y_lim)
+    plt.xlim(0, x_lim)
+    plt.ylim(0, y_lim)
     plt.xlabel(r'r [$\AA$]')
     plt.ylabel('g(r)')
     plt.tight_layout()
