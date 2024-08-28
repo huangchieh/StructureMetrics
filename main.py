@@ -27,7 +27,7 @@ if __name__ == '__main__':
         print('Calculating for structure: {}'.format(structure))
     
         # Common parameters for the plots, and output folder
-        r_max = 5.0
+        r_max = 4.0
         #r_max = 10.0
         #mic = True if structure == 'Label' else False
         mic = False
