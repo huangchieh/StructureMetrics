@@ -284,7 +284,7 @@ def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True,
         angles = cal_angles(atoms, A, B, C, r_max=r_max, firstTwo=firstTwo, mic=mic)
         ABC_all_angles.extend(angles)
     if onlyAngle:
-        return ABC_all_angles
+        return np.array(ABC_all_angles)
     else:
         theta, ntheta = adf(ABC_all_angles)
         return theta, ntheta 
@@ -424,12 +424,29 @@ def plot_distance_distribution(distances, label, legend, r_max=10,  color='#2990
     plt.clf()
     plt.close()
 
-def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4, outfolder='output'):
+def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4, outfolder='output', style='bar'):
+    def plot_one(angles, color, legend, style='bar'):
+        if style == 'bar':
+            plt.hist(angles, bins=bins, density=True, range=(0, 180), color=color, alpha=0.5, label=legend)
+            plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1)
+        elif style == 'step':
+            plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1, label=legend)
+        else:
+            raise ValueError("Invalid mode")
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
-    plt.hist(angles, bins=bins, density=True, range=(0, 180), color=color, alpha=0.5, label=legend)
-    plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1)
+    #print('Debug:', type(angles))
+    if type(angles) == list:
+        # Check if the style, and color  are the same as the length of angles
+        if len(angles) != len(style) or len(angles) != len(color):
+            raise ValueError("The length of angles, legend, and color should be the same.")
+        for i, a in enumerate(angles):
+            plot_one(a, color[i], legend[i], style[i])
+    else:
+        plot_one(angles, color, legend, style)
+    #plt.hist(angles, bins=bins, density=True, range=(0, 180), color=color, alpha=0.5, label=legend)
+    #plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1)
     plt.xlim(0, 180)
     plt.ylim(0, y_lim)
     plt.xlabel(r"$\theta$ [degree]")
@@ -443,12 +460,28 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
     plt.clf()
     plt.close()
 
-def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolder='output'):
+def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolder='output', style='bar'):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
-    #plt.plot(r, gr, label=legend, color=color)
-    plt.bar(r[:-1], gr, width=r[1]-r[0], alpha=0.5, edgecolor=color, align="edge", color=color, label=legend)
+    def plot_one(r, gr, color, legend, style='bar'):
+        if style == 'bar':
+            plt.bar(r[:-1], gr, width=r[1]-r[0], alpha=0.5, edgecolor=color, align="edge", color=color, label=legend)
+        elif style == 'line':
+            plt.plot(r[:-1] + (r[1] - r[0]) / 2, gr, label=legend, color=color)
+        elif style == 'step':
+            plt.step(np.append(r[:-1], r[-1]), np.append(gr, gr[-1]), color=color, linestyle='-', label=legend)
+        else:
+            raise ValueError("Invalid mode")
+    # If gr is a list, loop over it
+    if type(gr) == list:
+        # Check if the style, and color  are the same as the length of gr
+        if len(gr) != len(style) or len(gr) != len(color):
+            raise ValueError("The length of gr, legend, and color should be the same.")
+        for i, g in enumerate(gr):
+            plot_one(r, g, color[i], legend[i], style[i])
+    else:
+        plot_one(r, gr, color, legend, style)
     plt.xlim(0, x_lim)
     plt.ylim(0, y_lim)
     plt.xlabel(r'r [$\AA$]')
