@@ -43,7 +43,7 @@ if __name__ == '__main__':
         legend = 'O-O ({})'.format(structure)
         ylim= 6 if structure == 'Label' else 1.7
         plot_rdf(r, gr_OO, label, legend, x_lim=r_max, y_lim=ylim, outfolder=outputFolder)
-        np.savez('{}/RDF_OO_{}.npz'.format(outputFolder, structure), r=r, gr=gr_OO)
+        np.savez('{}/RDF_OO.npz'.format(outputFolder), r=r, gr=gr_OO)
     
         # O-H 
         r, gr_OH = mean_rdf(samples, 'O', 'H', r_max=r_max, mic=mic, bins=bins)
@@ -51,7 +51,7 @@ if __name__ == '__main__':
         legend = 'O-H ({})'.format(structure)
         ylim= 60 if structure == 'Label' else 15
         plot_rdf(r, gr_OH, label, legend, x_lim=r_max, y_lim=ylim, outfolder=outputFolder)
-        np.savez('{}/RDF_OH.npz'.format(outputFolder, structure), r=r, gr=gr_OH)
+        np.savez('{}/RDF_OH.npz'.format(outputFolder), r=r, gr=gr_OH)
     
         # --- ADF
         print('Calulating ADF ...')
