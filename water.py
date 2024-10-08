@@ -424,35 +424,36 @@ def plot_distance_distribution(distances, label, legend, r_max=10,  color='#2990
     plt.clf()
     plt.close()
 
-def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4, outfolder='output', style='bar'):
+def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4, outfolder='output', style='bar', loc='upper left'):
     def plot_one(angles, color, legend, style='bar'):
         if style == 'bar':
-            plt.hist(angles, bins=bins, density=True, range=(0, 180), color=color, alpha=0.5, label=legend)
-            plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1)
+          plt.hist(angles, bins=bins, density=True, range=(0, 180), color=color, alpha=0.5, label=legend)
+          n, _, _ = plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1)
         elif style == 'step':
-            plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1, label=legend)
+          n, _, _ = plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1, label=legend)
         else:
             raise ValueError("Invalid mode")
+        return n
+
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
-    #print('Debug:', type(angles))
     if type(angles) == list:
+        ns = []
         # Check if the style, and color  are the same as the length of angles
         if len(angles) != len(style) or len(angles) != len(color):
             raise ValueError("The length of angles, legend, and color should be the same.")
         for i, a in enumerate(angles):
-            plot_one(a, color[i], legend[i], style[i])
+            n = plot_one(a, color[i], legend[i], style[i])
+            ns.append(n)
     else:
-        plot_one(angles, color, legend, style)
-    #plt.hist(angles, bins=bins, density=True, range=(0, 180), color=color, alpha=0.5, label=legend)
-    #plt.hist(angles, bins=bins, histtype='step', fill=False, density=True, range=(0, 180), color=color, alpha=1)
+       n = plot_one(angles, color, legend, style)
     plt.xlim(0, 180)
     plt.ylim(0, y_lim)
     plt.xlabel(r"$\theta$ [degree]")
     plt.ylabel('Probability Density')
     plt.tight_layout()
-    plt.legend(frameon=False, loc='upper right')
+    plt.legend(frameon=False, loc=loc)
     if not os.path.exists(outfolder):
         os.makedirs(outfolder)
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
@@ -460,7 +461,12 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
     plt.clf()
     plt.close()
 
-def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolder='output', style='bar'):
+    if type(angles) == list:
+        return ns
+    else:
+        return n
+
+def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolder='output', style='bar', loc="upper right"):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
@@ -470,7 +476,7 @@ def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolde
         elif style == 'line':
             plt.plot(r[:-1] + (r[1] - r[0]) / 2, gr, label=legend, color=color)
         elif style == 'step':
-            plt.step(np.append(r[:-1], r[-1]), np.append(gr, gr[-1]), color=color, linestyle='-', label=legend)
+            plt.step(np.append(r[:-1], r[-1]), np.append(gr, gr[-1]), color=color, linestyle='-', lw=1, alpha=0.6, label=legend)
         else:
             raise ValueError("Invalid mode")
     # If gr is a list, loop over it
@@ -487,7 +493,7 @@ def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolde
     plt.xlabel(r'r [$\AA$]')
     plt.ylabel('g(r)')
     plt.tight_layout()
-    plt.legend(frameon=False, loc='upper right')
+    plt.legend(frameon=False, loc=loc)
     if not os.path.exists(outfolder):
         os.makedirs(outfolder)
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
