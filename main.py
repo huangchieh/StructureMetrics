@@ -15,7 +15,7 @@ if __name__ == '__main__':
                   'Prediction_a', 'Prediction_b', 'Prediction_c']
     #structures = ['Label']
 
-    
+     
     for structure in structures:
         # Create the output folders
         os.makedirs(os.path.join(baseOut, structure), exist_ok=True)
@@ -52,6 +52,7 @@ if __name__ == '__main__':
         ylim= 60 if structure == 'Label' else 15
         plot_rdf(r, gr_OH, label, legend, x_lim=r_max, y_lim=ylim, outfolder=outputFolder)
         np.savez('{}/RDF_OH.npz'.format(outputFolder), r=r, gr=gr_OH)
+
     
         # --- ADF
         print('Calulating ADF ...')
