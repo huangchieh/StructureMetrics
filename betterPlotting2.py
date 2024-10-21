@@ -185,7 +185,7 @@ if __name__ == '__main__':
     print('Plotting ADF_OOO') 
     y_lim = 0.025
     bins = 120
-    plot_angle_distribution([angles, angles1, angles2, angles3], label='OOO_dist_abc', legend=['Reference', 'O-O-O (Prediction a)', 'O-O-O (Prediction b)', 'O-O-O (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OOO_dist_abc', legend=['Reference', 'O-O-O (Prediction a)', 'O-O-O (Prediction b)', 'O-O-O (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
