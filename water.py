@@ -405,6 +405,50 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
     r, gr = rdf(AB_all_distances, meanRho, refNum, r_max=r_max, bins=bins)
     return r, gr
 
+def all_distances(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
+    '''
+    Obtain all distances between atom type A and B for a list of samples
+    input:
+        samples: list of sample paths
+        A: str, atom type A
+        B: str, atom type B
+        r_max: float, maximum distance to calculate RDF
+        bins: int, bin number
+        mic: bool, whether to consider PBC
+        subNum: int, atomic number of the substrate
+    return:
+        AB_all_distances: list of float, all distances between atom type A and B
+    '''
+    AB_all_distances = []
+    rhos = []
+    refNums = []
+    for sample in tqdm(samples):
+        # Prepare the sample atoms with PBC cell 
+        atoms = read_xyz_with_atomic_numbers(sample)
+        if mic:
+            substrate = atoms[atoms.numbers == subNum]
+            lattice_vectors = calculate_lattice_vectors(substrate)
+            atoms.set_pbc([True, True, True])
+            atoms.set_cell(lattice_vectors)
+        else:
+            x_min, x_max = min(atoms.positions[:,0]), max(atoms.positions[:,0])
+            y_min, y_max  = min(atoms.positions[:,1]), max(atoms.positions[:,1])
+            z_min, z_max  = min(atoms.positions[:,2]), max(atoms.positions[:,2])
+            a, b, c = x_max-x_min, y_max-y_min, z_max-z_min
+            origin = np.array([x_min, y_min, z_min])
+            atoms.positions -= origin # Shift the atoms to the origin
+            lattice_vectors = np.array([[a, 0, 0], [0, b, 0], [0, 0, c]])
+            atoms.set_pbc([False, False, False])
+            atoms.set_cell(lattice_vectors)
+
+        # Calculate distances between atom type A and B
+        AB_all_distance = cal_distances(atoms, A, B, r_max=r_max, mic=mic, onlyDistances=True)
+
+        # Collect all distances
+        AB_all_distances.extend(AB_all_distance)
+    return  AB_all_distances
+
+
 def plot_distance_distribution(distances, label, legend, r_max=10,  color='#299035', bins=120, y_lim=0.4, outfolder='output'):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
