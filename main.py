@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from water import read_samples_from_folder 
-from water import mean_rdf, mean_adf, mean_distance_distribution
+from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
 
@@ -13,6 +13,7 @@ if __name__ == '__main__':
     #os.makedirs(outputFolder, exist_ok=True)
     structures = ['Label', 'P', 'Prediction_1', 'Prediction_2', 'Prediction_3', \
                   'Prediction_a', 'Prediction_b', 'Prediction_c']
+    #structures = ['Label', 'P']
     #structures = ['Label']
 
     for structure in structures:
@@ -24,7 +25,7 @@ if __name__ == '__main__':
         samples = read_samples_from_folder(os.path.join('Structures', structure))
         print('Calculating for structure: {}'.format(structure))
         # Common parameters for the plots, and output folder
-        r_max = 1.5
+        r_max = 3.5
         #r_max = 10.0
         #mic = True if structure == 'Label' else False
         mic = False
@@ -49,12 +50,10 @@ if __name__ == '__main__':
         plot_rdf(r, gr_OH, label, legend, x_lim=r_max, y_lim=ylim, outfolder=outputFolder)
         np.savez('{}/RDF_OH.npz'.format(outputFolder), r=r, gr=gr_OH)
 
-    
         # --- ADF
         print('Calulating ADF ...')
         firstTwo = False
         onlyAngle = True
-        
         # H-O-H: Water angle
         y_lim = 0.3 if firstTwo else 0.02
         label = "HOH_dist_{}".format(structure)
@@ -62,19 +61,20 @@ if __name__ == '__main__':
         angles = mean_adf(samples, 'H', 'O', 'H', r_max=r_max, firstTwo=firstTwo, mic=mic, onlyAngle=onlyAngle)
         np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
         plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
-    
-        # O-O-O: Related to Au
-        y_lim = 0.3 if firstTwo else 0.02
-        label = "OOO_dist_{}".format(structure)
-        legend = 'O-O-O ({})'.format(structure)
-        angles = mean_adf(samples, 'O', 'O', 'O', r_max=r_max, firstTwo=firstTwo, mic=mic, onlyAngle=onlyAngle)
-        np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
-        plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
-
+     
         # O-H-O: H-bond
         y_lim = 0.3 if firstTwo else 0.02
         label = "OHO_dist_{}".format(structure)
         legend = 'O-H-O ({})'.format(structure)
         angles = mean_adf(samples, 'O', 'H', 'O', r_max=r_max, firstTwo=firstTwo, mic=mic, onlyAngle=onlyAngle)
+        np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
+        plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
+
+        # Theta of OH and z-axis 
+        y_lim = 0.04
+        bins = 30 
+        label = "Theta_OH_dist_{}".format(structure)
+        legend = "$\\theta_\\text{OH}$" + " ({})".format(structure)
+        angles = mean_adf_OH(samples, r_max = 1, firstTwo=False, mic=False, onlyAngle=True)
         np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
         plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
