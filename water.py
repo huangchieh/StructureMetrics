@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from tqdm import tqdm
+# ASE viewer
+from ase.visualize import view
 
 def read_xyz_with_atomic_numbers(file_path):
     '''
@@ -219,6 +221,38 @@ def cal_angles(atoms, A, B, C, r_max=10.0, firstTwo=False, mic=True):
                 angles.extend(list(temp_angles))
     return angles 
 
+def cal_angles_OH(atoms, r_max=1, mic=True): 
+    '''
+    Calculate the angles between OH an z axis
+    '''
+    vectorUP = np.array([0, 0, 1])
+    symbols = atoms.get_chemical_symbols()
+    O_indices = [i for i, s in enumerate(symbols) if s == 'O'] 
+    angles = []
+    #view(atoms)
+    #input('Press Enter to continue...')
+    for O_idx in O_indices:
+        neighbor_indices = find_neighbors(atoms, O_idx, 'H', r_max=r_max, mic=mic) # H-O-H
+        #print('Debug: Neighbor indices', neighbor_indices)
+        #print('Debug: Number of neighbors', len(neighbor_indices))
+        if len(neighbor_indices) == 1:
+            neighbor_indices = neighbor_indices[0] # [[ H1, O, H2]] -> [H1, O, H2]
+            #print('Debug: Neighbor indices', neighbor_indices)
+            OH_vector1 = atoms.positions[neighbor_indices[0]] - atoms.positions[neighbor_indices[1]]
+            OH_vector2 = atoms.positions[neighbor_indices[-1]] - atoms.positions[neighbor_indices[1]]
+            angle1 = np.arccos(np.dot(OH_vector1, vectorUP) / (np.linalg.norm(OH_vector1) * np.linalg.norm(vectorUP))) * 180 / np.pi
+            angle2 = np.arccos(np.dot(OH_vector2, vectorUP) / (np.linalg.norm(OH_vector2) * np.linalg.norm(vectorUP))) * 180 / np.pi
+            OH_angles = [angle1, angle2]
+            angles.extend(OH_angles)
+
+            #for H_idx in (neighbor_indices[0], neighbor_indices[-1]):
+            #    # Calculate the vector of the OH bond 
+            #    OH_vector = atoms.positions[H_idx] - atoms.positions[neighbor_indices[1]]
+            #    # Compute the angle in degree between OH and z axis
+            #    angle = np.arccos(np.dot(OH_vector, vectorUP) / (np.linalg.norm(OH_vector) * np.linalg.norm(vectorUP))) * 180 / np.pi
+            #angles.append(angle)
+    return angles
+
 def adf(ABC_all_angles, dtheta=1.0):
     '''
     Calculate the angular distribution function (ADF) for two atom types A and B
@@ -238,6 +272,44 @@ def adf(ABC_all_angles, dtheta=1.0):
     theta = 0.5 * (theta[1:] + theta[:-1]) # theta is the center of the bin
 
     return theta, ntheta
+
+def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False):
+    '''
+    Calculate the mean OH ADF for a list of samples
+    Return:
+        list or tuple of theta and ntheta:
+        List of all angles if onlyAngle is True, otherwise (theta, ntheta).
+    '''
+    OH_all_angles = []
+    rhos = []
+    refNums = []
+    for sample in tqdm(samples):
+        # Prepare the sample atoms with PBC cell 
+        atoms = read_xyz_with_atomic_numbers(sample)
+        if mic:
+            substrate = atoms[atoms.numbers == subNum]
+            lattice_vectors = calculate_lattice_vectors(substrate)
+            atoms.set_pbc([True, True, True])
+            atoms.set_cell(lattice_vectors)
+        else:
+            x_min, x_max = min(atoms.positions[:,0]), max(atoms.positions[:,0])
+            y_min, y_max  = min(atoms.positions[:,1]), max(atoms.positions[:,1])
+            z_min, z_max  = min(atoms.positions[:,2]), max(atoms.positions[:,2])
+            a, b, c = x_max-x_min, y_max-y_min, z_max-z_min
+            origin = np.array([x_min, y_min, z_min])
+            atoms.positions -= origin # Shift the atoms to the origin
+            lattice_vectors = np.array([[a, 0, 0], [0, b, 0], [0, 0, c]])
+            atoms.set_pbc([False, False, False])
+            atoms.set_cell(lattice_vectors)
+
+        # Calculate angles between atom type A, B, and C. 
+        angles = cal_angles_OH(atoms, r_max=r_max, mic=mic)
+        OH_all_angles.extend(angles)
+    if onlyAngle:
+        return np.array(OH_all_angles)
+    else:
+        theta, ntheta = adf(OH_all_angles)
+        return theta, ntheta 
 
 def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False):
     '''
@@ -520,7 +592,7 @@ def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolde
         elif style == 'line':
             plt.plot(r[:-1] + (r[1] - r[0]) / 2, gr, label=legend, color=color)
         elif style == 'step':
-            plt.step(np.append(r[:-1], r[-1]), np.append(gr, gr[-1]), color=color, linestyle='-', lw=1, alpha=0.6, label=legend)
+            plt.step(np.append(r[:-1], r[-1]), np.append(gr, gr[-1]), color=color, linestyle='-', lw=1, alpha=1, label=legend)
         else:
             raise ValueError("Invalid mode")
     # If gr is a list, loop over it

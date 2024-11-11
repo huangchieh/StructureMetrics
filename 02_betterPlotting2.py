@@ -78,23 +78,6 @@ if __name__ == '__main__':
     s3 = cosine_similarity(ns[0], ns[3])
     print('Similarity between Reference and Prediction 1, 2, 3: ', s1, s2, s3)
 
-    # O-O-O 
-    data = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'P', 'P'))
-    data1 = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'Prediction_1', 'Prediction_1'))
-    data2 = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'Prediction_2', 'Prediction_2'))
-    data3 = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'Prediction_3', 'Prediction_3'))
-    angles = data['angles']
-    angles1 = data1['angles']
-    angles2 = data2['angles']
-    angles3 = data3['angles']
-    print('Plotting ADF_OOO') 
-    y_lim = 0.025
-    bins = 120
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OOO_dist_123', legend=['Reference', 'O-O-O (Prediction 1)', 'O-O-O (Prediction 2)', 'O-O-O (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
-    s1 = cosine_similarity(ns[0], ns[1])
-    s2 = cosine_similarity(ns[0], ns[2])
-    s3 = cosine_similarity(ns[0], ns[3])
-    print('Similarity between Reference and Prediction 1, 2, 3: ', s1, s2, s3)
     # O-H-O 
     data = np.load('{}/{}/OHO_dist_{}.npz'.format(outputFolder, 'P', 'P'))
     data1 = np.load('{}/{}/OHO_dist_{}.npz'.format(outputFolder, 'Prediction_1', 'Prediction_1'))
@@ -108,6 +91,25 @@ if __name__ == '__main__':
     y_lim = 0.025
     bins = 120
     ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OHO_dist_123', legend=['Reference', 'O-H-O (Prediction 1)', 'O-H-O (Prediction 2)', 'O-H-O (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
+    s1 = cosine_similarity(ns[0], ns[1])
+    s2 = cosine_similarity(ns[0], ns[2])
+    s3 = cosine_similarity(ns[0], ns[3])
+    print('Similarity between Reference and Prediction 1, 2, 3: ', s1, s2, s3)
+
+
+    # Theta O-H 
+    data = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'P', 'P'))
+    data1 = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'Prediction_1', 'Prediction_1'))
+    data2 = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'Prediction_2', 'Prediction_2'))
+    data3 = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'Prediction_3', 'Prediction_3'))
+    angles = data['angles']
+    angles1 = data1['angles']
+    angles2 = data2['angles']
+    angles3 = data3['angles']
+    print('Plotting ADF_ThetaOH') 
+    y_lim = 0.035
+    bins = 30 
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='ThetaOH_dist_123', legend=['Reference', 'O-H (Prediction 1)', 'O-H (Prediction 2)', 'O-H (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
@@ -173,25 +175,6 @@ if __name__ == '__main__':
     s3 = cosine_similarity(ns[0], ns[3])
     print('Similarity between Reference and Prediction a, b, c: ', s1, s2, s3)
 
-    # O-O-O 
-    data = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'P', 'P'))
-    data1 = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'Prediction_a', 'Prediction_a'))
-    data2 = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'Prediction_b', 'Prediction_b'))
-    data3 = np.load('{}/{}/OOO_dist_{}.npz'.format(outputFolder, 'Prediction_c', 'Prediction_c'))
-    angles = data['angles']
-    angles1 = data1['angles']
-    angles2 = data2['angles']
-    angles3 = data3['angles']
-    print('Plotting ADF_OOO') 
-    y_lim = 0.025
-    bins = 120
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OOO_dist_abc', legend=['Reference', 'O-O-O (Prediction a)', 'O-O-O (Prediction b)', 'O-O-O (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
-    s1 = cosine_similarity(ns[0], ns[1])
-    s2 = cosine_similarity(ns[0], ns[2])
-    s3 = cosine_similarity(ns[0], ns[3])
-    print('Similarity between Reference and Prediction a, b, c: ', s1, s2, s3)
-
-
     # O-H-O 
     data = np.load('{}/{}/OHO_dist_{}.npz'.format(outputFolder, 'P', 'P'))
     data1 = np.load('{}/{}/OHO_dist_{}.npz'.format(outputFolder, 'Prediction_a', 'Prediction_a'))
@@ -205,6 +188,24 @@ if __name__ == '__main__':
     y_lim = 0.025
     bins = 120
     ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OHO_dist_abc', legend=['Reference', 'O-H-O (Prediction a)', 'O-H-O (Prediction b)', 'O-H-O (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
+    s1 = cosine_similarity(ns[0], ns[1])
+    s2 = cosine_similarity(ns[0], ns[2])
+    s3 = cosine_similarity(ns[0], ns[3])
+    print('Similarity between Reference and Prediction a, b, c: ', s1, s2, s3)
+
+    # Theta O-H 
+    data = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'P', 'P'))
+    data1 = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'Prediction_a', 'Prediction_a'))
+    data2 = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'Prediction_b', 'Prediction_b'))
+    data3 = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'Prediction_c', 'Prediction_c'))
+    angles = data['angles']
+    angles1 = data1['angles']
+    angles2 = data2['angles']
+    angles3 = data3['angles']
+    print('Plotting ADF_ThetaOH') 
+    y_lim = 0.035
+    bins = 30
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='ThetaHO_dist_abc', legend=['Reference', 'O-H (Prediction a)', 'O-H (Prediction b)', 'O-H (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
