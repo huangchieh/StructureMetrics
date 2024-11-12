@@ -5,6 +5,7 @@ import os
 from tqdm import tqdm
 # ASE viewer
 from ase.visualize import view
+from scipy.stats import gaussian_kde
 
 def read_xyz_with_atomic_numbers(file_path):
     '''
@@ -220,6 +221,59 @@ def cal_angles(atoms, A, B, C, r_max=10.0, firstTwo=False, mic=True):
                 temp_angles = atoms.get_angles(neighbor_indices, mic=mic)
                 angles.extend(list(temp_angles))
     return angles 
+
+def find_hydrogen_bonds(structure, distance_cutoff=3.5, angle_cutoff=120, z_min=None):
+    """
+    function to find hydrogen bonds in a structure
+    :param structure: ASE Atoms object
+    :param distance_cutoff: float, maximum distance between donor and acceptor O atoms
+    :param angle_cutoff: float, minimum angle D-H...A
+    :return: list of tuples with the indices of the donor O, H, acceptor O atoms, the distance O...O, the angle D-H...A and the angle H-D...A
+    """
+    hydrogen_bonds = []
+    for i, donor_atom in enumerate(structure):
+        if donor_atom.symbol == 'O': # Donor atom is an oxygen
+            donor_pos = donor_atom.position
+            # Find hydrogens bonded to this oxygen (within a smaller distance)
+            bonded_hydrogens = [h_atom for h_atom in structure if h_atom.symbol == 'H' and structure.get_distance(i, h_atom.index) < 1.2]
+            for h_atom in bonded_hydrogens:
+                h_pos = h_atom.position
+                # Check potential acceptor atoms
+                for j, acceptor_atom in enumerate(structure):
+                    if acceptor_atom.symbol == 'O' and acceptor_atom.index != i:
+                        acc_pos = acceptor_atom.position
+                        # Use OO distance for the cutoff
+                        distance_oo = structure.get_distance(i, j)
+                        if distance_oo <= distance_cutoff:
+                            # Calculate angle D-H...A
+                            vector_hd = donor_pos - h_pos
+                            vector_ha = acc_pos - h_pos
+                            cosine_angle = np.dot(vector_hd, vector_ha) / (np.linalg.norm(vector_hd) * np.linalg.norm(vector_ha))
+                            #print(f"vector_hd: {vector_hd}, vector_ha: {vector_ha}, cosine_angle: {cosine_angle}")  # Debug statement
+                            angle = np.degrees(np.arccos(cosine_angle))
+                            if angle >= angle_cutoff:
+                                # Calculate angle HD...A
+                                vector_da = acc_pos - donor_pos
+                                vector_dh = h_pos - donor_pos
+                                cosine_angle = np.dot(vector_da, vector_dh) / (np.linalg.norm(vector_da) * np.linalg.norm(vector_dh))
+                                angle_hda = np.degrees(np.arccos(cosine_angle))
+                                if z_min is  None:
+                                    hydrogen_bonds.append((donor_atom.index, h_atom.index, acceptor_atom.index, distance_oo, angle, angle_hda))
+                                else:
+                                    if donor_pos[2] > z_min:
+                                        hydrogen_bonds.append((donor_atom.index, h_atom.index, acceptor_atom.index, distance_oo, angle, angle_hda))
+    return hydrogen_bonds
+
+def cal_all_hydrogen_bonds(samples, distance_cutoff=3.5, angle_cutoff=120, z_min=None):
+    '''
+    Find all hydrogen bonds in a list of samples
+    '''
+    all_hydrogen_bonds = []
+    for sample in tqdm(samples):
+        atoms = read_xyz_with_atomic_numbers(sample)
+        hydrogen_bonds = find_hydrogen_bonds(atoms, distance_cutoff=distance_cutoff, angle_cutoff=angle_cutoff, z_min=z_min)
+        all_hydrogen_bonds.extend(hydrogen_bonds)
+    return all_hydrogen_bonds
 
 def cal_angles_OH(atoms, r_max=1, mic=True): 
     '''
@@ -615,4 +669,98 @@ def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolde
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
     plt.savefig('{}/{}.pdf'.format(outfolder, label))
     plt.clf()
+    plt.close()
+
+def plot_hbond_distance_vs_angle_bak(hydrogen_bonds, angle_type='dha', label='hb-d-angle',  cmap='Greens', outfolder='output'):
+    distances = [hb[3] for hb in hydrogen_bonds]
+    angles = [hb[4] for hb in hydrogen_bonds] if angle_type == 'dha' else [hb[5] for hb in hydrogen_bonds]
+
+    # Generate a 2D density estimate
+    xy = np.vstack([distances, angles])
+    kde = gaussian_kde(xy)
+    # Generate a grid to evaluate the KDE over
+    xmin, xmax = 1.0, 3.5
+    (ymin, ymax) = (120, 180) if angle_type == 'dha' else (0, 60)    
+    xgrid = np.linspace(xmin, xmax, 300)
+    ygrid = np.linspace(ymin, ymax, 300)
+    X, Y = np.meshgrid(xgrid, ygrid)
+    positions = np.vstack([X.ravel(), Y.ravel()])
+    Z = kde(positions).reshape(X.shape)  # Evaluate the KDE on the grid
+
+    plt.figure(figsize=(6, 5))
+    contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=0.22, levels=30)
+    plt.colorbar(contour, label='Probability Density')
+    plt.xlim(xmin, xmax)
+    plt.ylim(ymin, ymax)
+
+    # Labels and title
+    plt.xlabel("$d_{OO}$ (Å)")
+    plt.ylabel(r"$\theta$ (degree)") if angle_type == 'dha' else plt.ylabel(r"$\phi$ (degree)") 
+    plt.tight_layout()
+    plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
+    plt.savefig('{}/{}.pdf'.format(outfolder, label))
+    plt.show()
+    return X, Y, Z
+
+def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-angle', cmap='Greens', outfolder='output', use_density_estimate=True, levels=30, nbin=100, vmax=0.22):
+    # Extract distances and angles
+    distances = [hb[3] for hb in hydrogen_bonds]
+    angles = [hb[4] for hb in hydrogen_bonds] if angle_type == 'dha' else [hb[5] for hb in hydrogen_bonds]
+
+    # Define plot range
+    xmin, xmax = 1.0, 3.5
+    ymin, ymax = (120, 180) if angle_type == 'dha' else (0, 60)
+    xgrid = np.linspace(xmin, xmax, nbin)
+    ygrid = np.linspace(ymin, ymax, nbin)
+    X, Y = np.meshgrid(xgrid, ygrid)
+
+    plt.figure(figsize=(6, 5))
+
+    if use_density_estimate:
+        # Generate a 2D density estimate
+        xy = np.vstack([distances, angles])
+        kde = gaussian_kde(xy)
+        positions = np.vstack([X.ravel(), Y.ravel()])
+        Z = kde(positions).reshape(X.shape)  # Evaluate the KDE on the grid
+        # Plot the density estimate
+        lv = np.linspace(0, vmax, levels+1)
+        contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=vmax, levels=lv)
+        plt.colorbar(contour, label='Probability Density')
+    else:
+        # Use a 2D histogram (heatmap) for raw values on a grid
+        H, xedges, yedges = np.histogram2d(distances, angles, bins=(nbin, nbin), range=[[xmin, xmax], [ymin, ymax]])
+        Z = H.T  # Transpose H to match the grid orientation
+        # Plot the raw data as a heatmap
+        contour = plt.pcolormesh(X, Y, Z, cmap=cmap, shading='auto')
+        plt.colorbar(contour, label='Count')
+
+    # Set plot limits and labels
+    plt.xlim(xmin, xmax)
+    plt.ylim(ymin, ymax)
+    plt.xlabel("$d_{OO}$ (Å)")
+    plt.ylabel(r"$\theta$ (degree)" if angle_type == 'dha' else r"$\phi$ (degree)")
+    plt.tight_layout()
+
+    # Save the plot
+    plt.savefig(f'{outfolder}/{label}.png', dpi=300)
+    # plt.savefig(f'{outfolder}/{label}.pdf')
+    plt.show()
+    plt.close()
+
+    return X, Y, Z
+
+def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', levels=30, label='density-difference', outfolder='output', use_density_estimate=True):
+    lv = np.linspace(-0.05, 0.05, levels+1)
+    if use_density_estimate:
+        contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=-0.05, vmax=0.05, levels=lv)
+    else: 
+        contour = plt.pcolormesh(X, Y, Z, cmap=cmap, shading='auto', vmin=-0.05, vmax=0.05)
+    plt.colorbar(contour, label=r'Probability Density Difference')
+    # Labels and title
+    plt.xlabel("$d_{OO}$ (Å)")
+    plt.ylabel(r"$\theta$ (degree)") if angle_type == 'dha' else plt.ylabel(r"$\phi$ (degree)") 
+    plt.tight_layout()
+    plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
+    # plt.savefig('{}/{}.pdf'.format(outfolder, label))
+    plt.show()
     plt.close()
