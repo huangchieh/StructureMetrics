@@ -36,7 +36,7 @@ if __name__ == '__main__':
     r_3, gr_OO_3 = data3['r'], data3['gr']
     print('Plotting RDF_OO')
     ylim= 3
-    plot_rdf(r, [gr_OO, gr_OO_1, gr_OO_2, gr_OO_3 ], label='RDF_OO_123',  legend=['Reference', 'O-O (Prediction 1)', 'O-O (Prediction 2)', 'O-O (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper left")
+    plot_rdf(r, [gr_OO, gr_OO_1, gr_OO_2, gr_OO_3 ], label='RDF_OO_123',  legend=['Reference', 'OO (Prediction 1)', 'OO (Prediction 2)', 'OO (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper left")
     s1 = cosine_similarity(gr_OO, gr_OO_1)
     s2 = cosine_similarity(gr_OO, gr_OO_2)
     s3 = cosine_similarity(gr_OO, gr_OO_3)
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     r_3, gr_OH_3 = data3['r'], data3['gr']
     print('Plotting RDF_OH')
     ylim= 20 
-    plot_rdf(r, [gr_OH, gr_OH_1, gr_OH_2, gr_OH_3 ], label='RDF_OH_123',  legend=['Reference', 'O-H (Prediction 1)', 'O-H (Prediction 2)', 'O-H (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper right")
+    plot_rdf(r, [gr_OH, gr_OH_1, gr_OH_2, gr_OH_3 ], label='RDF_OH_123',  legend=['Reference', 'OH (Prediction 1)', 'OH (Prediction 2)', 'OH (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper right")
     s1 = cosine_similarity(gr_OH, gr_OH_1)
     s2 = cosine_similarity(gr_OH, gr_OH_2)
     s3 = cosine_similarity(gr_OH, gr_OH_3)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     print('Plotting ADF_HOH') 
     y_lim = 0.025
     bins = 120
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='HOH_dist_123', legend=['Reference', 'H-O-H (Prediction 1)', 'H-O-H (Prediction 2)', 'H-O-H (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='HOH_dist_123', legend=['Reference', 'HOH (Prediction 1)', 'HOH (Prediction 2)', 'HOH (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     print('Plotting ADF_OHO') 
     y_lim = 0.025
     bins = 120
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OHO_dist_123', legend=['Reference', 'O-H-O (Prediction 1)', 'O-H-O (Prediction 2)', 'O-H-O (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OHO_dist_123', legend=['Reference', 'OHO (Prediction 1)', 'OHO (Prediction 2)', 'OHO (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
@@ -109,7 +109,7 @@ if __name__ == '__main__':
     print('Plotting ADF_ThetaOH') 
     y_lim = 0.035
     bins = 30 
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='ThetaOH_dist_123', legend=['Reference', 'O-H (Prediction 1)', 'O-H (Prediction 2)', 'O-H (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='ThetaOH_dist_123', legend=['Reference', 'OH (Prediction 1)', 'OH (Prediction 2)', 'OH (Prediction 3)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     r_3, gr_OO_3 = data3['r'], data3['gr']
     print('Plotting RDF_OO')
     ylim= 3
-    plot_rdf(r, [gr_OO, gr_OO_1, gr_OO_2, gr_OO_3 ], label='RDF_OO_abc',  legend=['Reference', 'O-O (Prediction a)', 'O-O (Prediction b)', 'O-O (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper left")
+    plot_rdf(r, [gr_OO, gr_OO_1, gr_OO_2, gr_OO_3 ], label='RDF_OO_abc',  legend=['Reference', 'OO (Prediction a)', 'OO (Prediction b)', 'OO (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper left")
     s1 = cosine_similarity(gr_OO, gr_OO_1)
     s2 = cosine_similarity(gr_OO, gr_OO_2)
     s3 = cosine_similarity(gr_OO, gr_OO_3)
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     r_3, gr_OH_3 = data3['r'], data3['gr']
     print('Plotting RDF_OH')
     ylim= 20 
-    plot_rdf(r, [gr_OH, gr_OH_1, gr_OH_2, gr_OH_3 ], label='RDF_OH_abc',  legend=['Reference', 'O-H (Prediction a)', 'O-H (Prediction b)', 'O-H (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper right")
+    plot_rdf(r, [gr_OH, gr_OH_1, gr_OH_2, gr_OH_3 ], label='RDF_OH_abc',  legend=['Reference', 'OH (Prediction a)', 'OH (Prediction b)', 'OH (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc="upper right")
     s1 = cosine_similarity(gr_OH, gr_OH_1)
     s2 = cosine_similarity(gr_OH, gr_OH_2)
     s3 = cosine_similarity(gr_OH, gr_OH_3)
@@ -169,7 +169,7 @@ if __name__ == '__main__':
     print('Plotting ADF_HOH') 
     y_lim = 0.025
     bins = 120
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='HOH_dist_abc', legend=['Reference', 'H-O-H (Prediction a)', 'H-O-H (Prediction b)', 'H-O-H (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='HOH_dist_abc', legend=['Reference', 'HOH (Prediction a)', 'HOH (Prediction b)', 'HOH (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'])
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     print('Plotting ADF_OHO') 
     y_lim = 0.025
     bins = 120
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OHO_dist_abc', legend=['Reference', 'O-H-O (Prediction a)', 'O-H-O (Prediction b)', 'O-H-O (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='OHO_dist_abc', legend=['Reference', 'OHO (Prediction a)', 'OHO (Prediction b)', 'OHO (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])
@@ -205,7 +205,7 @@ if __name__ == '__main__':
     print('Plotting ADF_ThetaOH') 
     y_lim = 0.035
     bins = 30
-    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='ThetaHO_dist_abc', legend=['Reference', 'O-H (Prediction a)', 'O-H (Prediction b)', 'O-H (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
+    ns = plot_angle_distribution([angles, angles1, angles2, angles3], label='ThetaHO_dist_abc', legend=['Reference', 'OH (Prediction a)', 'OH (Prediction b)', 'OH (Prediction c)'], color=['#299035', '#fc0006', 'orange', 'black'], bins=bins, y_lim=y_lim, outfolder=outputFolder, style=['bar', 'step', 'step', 'step'], loc='upper right')
     s1 = cosine_similarity(ns[0], ns[1])
     s2 = cosine_similarity(ns[0], ns[2])
     s3 = cosine_similarity(ns[0], ns[3])

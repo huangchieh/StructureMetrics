@@ -65,7 +65,7 @@ if __name__ == '__main__':
             r, gr_OH = mean_rdf(samples, 'O', 'H', r_max=r_max, mic=mic, bins=bins)
             np.savez('{}/RDF_OH.npz'.format(outputFolder, structure), r=r, gr=gr_OH)
         label = 'RDF_OH_{}'.format(structure)
-        legend = 'O-H ({})'.format(structure)
+        legend = 'OH ({})'.format(structure)
         ylim= 60 if structure == 'Label' else 15
         plot_rdf(r, [ref_gr_OH, gr_OH], label, legend=['Reference', legend], color=['#299035', '#fc0006'], x_lim=r_max, y_lim=ylim, outfolder=outputFolder, style=['bar', 'step'])
         #plot_rdf(r, gr_OH, label, legend, x_lim=r_max, y_lim=ylim, outfolder=outputFolder)
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         ref_angles = ref_data['angles']
         y_lim = 0.3 if firstTwo else 0.02
         label = "HOH_dist_{}".format(structure)
-        legend = 'H-O-H ({})'.format(structure)
+        legend = 'HOH ({})'.format(structure)
         if os.path.exists('{}/{}.npz'.format(outputFolder, label)):
             print('Loading HOH_dist_{}.npz'.format(structure))
             data = np.load('{}/{}.npz'.format(outputFolder, label))
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         ref_angles = ref_data['angles']
         y_lim = 0.3 if firstTwo else 0.02
         label = "OOO_dist_{}".format(structure)
-        legend = 'O-O-O ({})'.format(structure)
+        legend = 'OOO ({})'.format(structure)
         if os.path.exists('{}/{}.npz'.format(outputFolder, label)):
             print('Loading OOO_dist_{}.npz'.format(structure))
             data = np.load('{}/{}.npz'.format(outputFolder, label))
