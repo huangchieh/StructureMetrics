@@ -688,7 +688,7 @@ def plot_hbond_distance_vs_angle_bak(hydrogen_bonds, angle_type='dha', label='hb
     Z = kde(positions).reshape(X.shape)  # Evaluate the KDE on the grid
 
     plt.figure(figsize=(6, 5))
-    contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=0.22, levels=30)
+    contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=0.3, levels=30)
     plt.colorbar(contour, label='Probability Density')
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
@@ -716,23 +716,24 @@ def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-a
 
     plt.figure(figsize=(6, 5))
 
-    if use_density_estimate:
-        # Generate a 2D density estimate
-        xy = np.vstack([distances, angles])
-        kde = gaussian_kde(xy)
-        positions = np.vstack([X.ravel(), Y.ravel()])
-        Z = kde(positions).reshape(X.shape)  # Evaluate the KDE on the grid
-        # Plot the density estimate
-        lv = np.linspace(0, vmax, levels+1)
-        contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=vmax, levels=lv)
-        plt.colorbar(contour, label='Probability Density')
-    else:
-        # Use a 2D histogram (heatmap) for raw values on a grid
-        H, xedges, yedges = np.histogram2d(distances, angles, bins=(nbin, nbin), range=[[xmin, xmax], [ymin, ymax]])
-        Z = H.T  # Transpose H to match the grid orientation
-        # Plot the raw data as a heatmap
-        contour = plt.pcolormesh(X, Y, Z, cmap=cmap, shading='auto')
-        plt.colorbar(contour, label='Count')
+    #if use_density_estimate:
+    # Generate a 2D density estimate
+    xy = np.vstack([distances, angles])
+    kde = gaussian_kde(xy)
+    positions = np.vstack([X.ravel(), Y.ravel()])
+    Z = kde(positions).reshape(X.shape)  # Evaluate the KDE on the grid
+    # Plot the density estimate
+    lv = np.linspace(0, vmax, levels+1)
+    ## contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=vmax, levels=lv)
+    contour = plt.pcolormesh(X, Y, Z, cmap=cmap, vmin=0, vmax=vmax)
+    plt.colorbar(contour, label='Probability Density')
+    # else:
+    #     # Use a 2D histogram (heatmap) for raw values on a grid
+    #     H, xedges, yedges = np.histogram2d(distances, angles, bins=(nbin, nbin), range=[[xmin, xmax], [ymin, ymax]])
+    #     Z = H.T  # Transpose H to match the grid orientation
+    #     # Plot the raw data as a heatmap
+    #     contour = plt.pcolormesh(X, Y, Z, cmap=cmap, shading='auto')
+    #     plt.colorbar(contour, label='Count')
 
     # Set plot limits and labels
     plt.xlim(xmin, xmax)
@@ -751,10 +752,7 @@ def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-a
 
 def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', levels=30, label='density-difference', outfolder='output', use_density_estimate=True):
     lv = np.linspace(-0.05, 0.05, levels+1)
-    if use_density_estimate:
-        contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=-0.05, vmax=0.05, levels=lv)
-    else: 
-        contour = plt.pcolormesh(X, Y, Z, cmap=cmap, shading='auto', vmin=-0.05, vmax=0.05)
+    contour = plt.pcolormesh(X, Y, Z, cmap=cmap, vmin=-0.05, vmax=0.05)
     plt.colorbar(contour, label=r'Probability Density Difference')
     # Labels and title
     plt.xlabel("$d_{OO}$ (Å)")
