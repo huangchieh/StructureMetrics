@@ -32,8 +32,8 @@ if __name__ == '__main__':
         print('Finding hydrogen bonds ...')
         #hbonds = cal_all_hydrogen_bonds(samples, z_min=9.5) # For the top layer water
         hbonds = cal_all_hydrogen_bonds(samples)
-        X_dha, Y_dha, Z_dha = plot_hbond_distance_vs_angle(hbonds, angle_type='dha', label='HBond_dha_{}'.format(structure), cmap='viridis', use_density_estimate=True)
-        X_hda, Y_hda, Z_hda = plot_hbond_distance_vs_angle(hbonds, angle_type='hda', label='HBond_hda_{}'.format(structure), cmap='viridis', use_density_estimate=True)
+        X_dha, Y_dha, Z_dha = plot_hbond_distance_vs_angle(hbonds, angle_type='dha', label='HBond_dha_{}'.format(structure), cmap='Greens')
+        X_hda, Y_hda, Z_hda = plot_hbond_distance_vs_angle(hbonds, angle_type='hda', label='HBond_hda_{}'.format(structure), cmap='Greens')
         
         # Plot the density difference
         if structure == 'P':
@@ -43,9 +43,22 @@ if __name__ == '__main__':
         if structure == 'Prediction_c':
             Z_dha_diff_c, Z_hda_diff_c = Z_dha - Z_dha_p, Z_hda - Z_hda_p
     
-    print('Mean square error between Prediction_3 and Label: dha {:.5f}, hda {:.5f}'.format(np.mean(Z_dha_diff_3**2), np.mean(Z_hda_diff_3**2)))
-    print('Mean square error between Prediction_c and Label: dha {:.5f}, hda {:.5f}'.format(np.mean(Z_dha_diff_c**2), np.mean(Z_hda_diff_c**2)))
-    plot_density_difference(X_dha, Y_dha, Z_dha_diff_3, angle_type='dha', label='HBond_dha_diff_3', cmap='BrBG', use_density_estimate=True)
-    plot_density_difference(X_hda, Y_hda, Z_hda_diff_3, angle_type='hda', label='HBond_hda_diff_3', cmap='BrBG', use_density_estimate=True)
-    plot_density_difference(X_dha, Y_dha, Z_dha_diff_c, angle_type='dha', label='HBond_dha_diff_c', cmap='BrBG', use_density_estimate=True)
-    plot_density_difference(X_hda, Y_hda, Z_hda_diff_c, angle_type='hda', label='HBond_hda_diff_c', cmap='BrBG', use_density_estimate=True)
+    # Calculate the mean square error for dha and hda
+    mse_dha_3 = np.mean(Z_dha_diff_3**2)
+    mse_hda_3 = np.mean(Z_hda_diff_3**2)
+    mse_dha_c = np.mean(Z_dha_diff_c**2)
+    mse_hda_c = np.mean(Z_hda_diff_c**2)
+
+    # Calculate the percentage improvement
+    percent_improvement_dha = ((mse_dha_3 - mse_dha_c) / mse_dha_3) * 100
+    percent_improvement_hda = ((mse_hda_3 - mse_hda_c) / mse_hda_3) * 100
+
+    # Print the results
+    print('Mean square error between Prediction_3 and Label: dha {:.5f}, hda {:.5f}'.format(mse_dha_3, mse_hda_3))
+    print('Mean square error between Prediction_c and Label: dha {:.5f}, hda {:.5f}'.format(mse_dha_c, mse_hda_c))
+    print('Percentage improvement for Prediction_c compared to Prediction_3: dha {:.2f}%, hda {:.2f}%'.format(percent_improvement_dha, percent_improvement_hda))
+
+    plot_density_difference(X_dha, Y_dha, Z_dha_diff_3, angle_type='dha', label='HBond_dha_diff_3', cmap='BrBG')
+    plot_density_difference(X_hda, Y_hda, Z_dha_diff_3, angle_type='hda', label='HBond_hda_diff_3', cmap='BrBG')
+    plot_density_difference(X_dha, Y_dha, Z_dha_diff_c, angle_type='dha', label='HBond_dha_diff_c', cmap='BrBG')
+    plot_density_difference(X_hda, Y_hda, Z_hda_diff_c, angle_type='hda', label='HBond_hda_diff_c', cmap='BrBG')
