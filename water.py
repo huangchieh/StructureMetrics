@@ -702,7 +702,7 @@ def plot_hbond_distance_vs_angle_bak(hydrogen_bonds, angle_type='dha', label='hb
     plt.show()
     return X, Y, Z
 
-def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-angle', cmap='Greens', outfolder='output', use_density_estimate=True, levels=30, nbin=100, vmax=0.22):
+def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-angle', cmap='Greens', outfolder='output', nbin=100, vmax=0.22):
     # Extract distances and angles
     distances = [hb[3] for hb in hydrogen_bonds]
     angles = [hb[4] for hb in hydrogen_bonds] if angle_type == 'dha' else [hb[5] for hb in hydrogen_bonds]
@@ -715,25 +715,15 @@ def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-a
     X, Y = np.meshgrid(xgrid, ygrid)
 
     plt.figure(figsize=(6, 5))
-
-    #if use_density_estimate:
     # Generate a 2D density estimate
     xy = np.vstack([distances, angles])
     kde = gaussian_kde(xy)
     positions = np.vstack([X.ravel(), Y.ravel()])
     Z = kde(positions).reshape(X.shape)  # Evaluate the KDE on the grid
     # Plot the density estimate
-    lv = np.linspace(0, vmax, levels+1)
-    ## contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=vmax, levels=lv)
     contour = plt.pcolormesh(X, Y, Z, cmap=cmap, vmin=0, vmax=vmax)
     plt.colorbar(contour, label='Probability Density')
-    # else:
-    #     # Use a 2D histogram (heatmap) for raw values on a grid
-    #     H, xedges, yedges = np.histogram2d(distances, angles, bins=(nbin, nbin), range=[[xmin, xmax], [ymin, ymax]])
-    #     Z = H.T  # Transpose H to match the grid orientation
-    #     # Plot the raw data as a heatmap
-    #     contour = plt.pcolormesh(X, Y, Z, cmap=cmap, shading='auto')
-    #     plt.colorbar(contour, label='Count')
+
 
     # Set plot limits and labels
     plt.xlim(xmin, xmax)
@@ -741,24 +731,18 @@ def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-a
     plt.xlabel("$d_{OO}$ (Å)")
     plt.ylabel(r"$\theta$ (degree)" if angle_type == 'dha' else r"$\phi$ (degree)")
     plt.tight_layout()
-
-    # Save the plot
     plt.savefig(f'{outfolder}/{label}.png', dpi=300)
-    # plt.savefig(f'{outfolder}/{label}.pdf')
     plt.show()
     plt.close()
 
     return X, Y, Z
 
-def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', levels=30, label='density-difference', outfolder='output', use_density_estimate=True):
-    lv = np.linspace(-0.05, 0.05, levels+1)
+def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', label='density-difference', outfolder='output'):
     contour = plt.pcolormesh(X, Y, Z, cmap=cmap, vmin=-0.05, vmax=0.05)
     plt.colorbar(contour, label=r'Probability Density Difference')
-    # Labels and title
     plt.xlabel("$d_{OO}$ (Å)")
     plt.ylabel(r"$\theta$ (degree)") if angle_type == 'dha' else plt.ylabel(r"$\phi$ (degree)") 
     plt.tight_layout()
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
-    # plt.savefig('{}/{}.pdf'.format(outfolder, label))
     plt.show()
     plt.close()
