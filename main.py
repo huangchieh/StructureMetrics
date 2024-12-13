@@ -11,22 +11,28 @@ from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 if __name__ == '__main__':
     baseOut = 'output'
     #os.makedirs(outputFolder, exist_ok=True)
-    structures = ['Label', 'P', 'Prediction_1', 'Prediction_2', 'Prediction_3', \
-                  'Prediction_a', 'Prediction_b', 'Prediction_c']
-    #structures = ['Label', 'P']
-    #structures = ['Label']
+    structures = ['Label', 'P', \
+                  'Ref', \
+                  'PPAFM2Exp_CoAll_L60_L0_Elatest', \
+                  'PPAFM2Exp_CoAll_L60_L0.1_Elatest', \
+                  'PPAFM2Exp_CoAll_L60_L1_Elatest', \
+                  'PPAFM2Exp_CoAll_L60_L10_Elatest', \
+                  'PPAFM2Exp_CoAll_L50_L1_Elatest', \
+                  'PPAFM2Exp_CoAll_L40_L1_Elatest', \
+                  'PPAFM2Exp_CoAll_L20_L1_Elatest', \
+                  'PPAFM2Exp_CoAll_L10_L1_Elatest', \
+                  ]
 
     for structure in structures:
         # Create the output folders
         os.makedirs(os.path.join(baseOut, structure), exist_ok=True)
 
         # Read the samples
-        # structure = structures[0]
-        samples = read_samples_from_folder(os.path.join('Structures', structure))
+        sampleFolder = os.path.join('BatchOutStructures', structure) if (structure == 'Label' or structure == 'P') else os.path.join('BatchOutStructures', structure, 'Prediction_c')
+        samples = read_samples_from_folder(sampleFolder)
         print('Calculating for structure: {}'.format(structure))
         # Common parameters for the plots, and output folder
         r_max = 3.5
-        #r_max = 10.0
         #mic = True if structure == 'Label' else False
         mic = False
         bins = 120
