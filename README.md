@@ -1,6 +1,8 @@
 # StructureMetrics
 Structure metrics are used to tell the authenticity of predicted structures. 
 
+- Input: The PredictionsABC from https://github.com/huangchieh/StageTwo 
+
 Now, we have three types of datasets. 
 
 <img src='https://cdn.jsdelivr.net/gh/HuangJiaLian/DataBase0@master/uPic/2024-07-04-02-46-DataSets.png' width='30%'/>
