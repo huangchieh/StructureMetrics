@@ -249,8 +249,10 @@ def find_hydrogen_bonds(structure, distance_cutoff=3.5, angle_cutoff=120, z_min=
                             vector_hd = donor_pos - h_pos
                             vector_ha = acc_pos - h_pos
                             cosine_angle = np.dot(vector_hd, vector_ha) / (np.linalg.norm(vector_hd) * np.linalg.norm(vector_ha))
+                            cosine_angle = np.clip(cosine_angle, -1.0, 1.0) # Avoid numerical floating-point precision errors
                             #print(f"vector_hd: {vector_hd}, vector_ha: {vector_ha}, cosine_angle: {cosine_angle}")  # Debug statement
                             angle = np.degrees(np.arccos(cosine_angle))
+                            #print('Debug: ', cosine_angle, angle, angle >= angle_cutoff) if (cosine_angle > 1 or cosine_angle < -1) else None
                             if angle >= angle_cutoff:
                                 # Calculate angle HD...A
                                 vector_da = acc_pos - donor_pos
