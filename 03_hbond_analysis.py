@@ -47,20 +47,34 @@ if __name__ == '__main__':
                   'PPAFM2Exp_CoAll_L20_L1_Elatest', \
                   'PPAFM2Exp_CoAll_L10_L1_Elatest', \
                   ]
+    
+
     results = {}
     for structure in structures:
         X_dha, Y_dha, Z_dha, X_hda, Y_hda, Z_hda = calculate(structure)
-        Z_dha_diff_c, Z_hda_diff_c = Z_dha - Z_dha_p, Z_hda - Z_hda_p # This is the results from the Fake AFM
+        Z_dha_diff_c, Z_hda_diff_c = Z_dha - Z_dha_p, Z_hda - Z_hda_p  # Differences for Prediction_c
         mse_dha_c = np.mean(Z_dha_diff_c**2)
         mse_hda_c = np.mean(Z_hda_diff_c**2)
 
-        percent_improvement_dha = ((mse_dha_3 - mse_dha_c) / mse_dha_3) * 100
-        percent_improvement_hda = ((mse_hda_3 - mse_hda_c) / mse_hda_3) * 100
+        relative_improvement_dha = (mse_dha_3 - mse_dha_c) / mse_dha_3
+        relative_improvement_hda = (mse_hda_3 - mse_hda_c) / mse_hda_3
+        absolute_improvement_dha = mse_dha_3 - mse_dha_c
+        absolute_improvement_hda = mse_hda_3 - mse_hda_c
+        rmse_dha_3 = np.sqrt(mse_dha_3)
+        rmse_hda_3 = np.sqrt(mse_hda_3)
+        rmse_dha_c = np.sqrt(mse_dha_c)
+        rmse_hda_c = np.sqrt(mse_hda_c)
+        mae_dha_c = np.mean(np.abs(Z_dha_diff_c))
+        mae_hda_c = np.mean(np.abs(Z_hda_diff_c))
 
         # Print the results
         print('Mean square error between Prediction_3 and Label: dha {:.5f}, hda {:.5f}'.format(mse_dha_3, mse_hda_3))
         print('Mean square error between Prediction_c and Label: dha {:.5f}, hda {:.5f}'.format(mse_dha_c, mse_hda_c))
-        print('Percentage improvement for Prediction_c compared to Prediction_3: dha {:.2f}%, hda {:.2f}%'.format(percent_improvement_dha, percent_improvement_hda))
+        print('Relative improvement for Prediction_c compared to Prediction_3: dha {:.2f}, hda {:.2f}'.format(relative_improvement_dha, relative_improvement_hda))
+        print('Absolute improvement for Prediction_c compared to Prediction_3: dha {:.5f}, hda {:.5f}'.format(absolute_improvement_dha, absolute_improvement_hda))
+        print('Root mean square error for Prediction_3: dha {:.5f}, hda {:.5f}'.format(rmse_dha_3, rmse_hda_3))
+        print('Root mean square error for Prediction_c: dha {:.5f}, hda {:.5f}'.format(rmse_dha_c, rmse_hda_c))
+        print('Mean absolute error for Prediction_c: dha {:.5f}, hda {:.5f}'.format(mae_dha_c, mae_hda_c))
 
         # Store the results in the dictionary
         results[structure] = {
@@ -68,8 +82,16 @@ if __name__ == '__main__':
             'mse_hda_3': mse_hda_3,
             'mse_dha_c': mse_dha_c,
             'mse_hda_c': mse_hda_c,
-            'percent_improvement_dha': percent_improvement_dha,
-            'percent_improvement_hda': percent_improvement_hda
+            'relative_improvement_dha': relative_improvement_dha,
+            'relative_improvement_hda': relative_improvement_hda,
+            'absolute_improvement_dha': absolute_improvement_dha,
+            'absolute_improvement_hda': absolute_improvement_hda,
+            'rmse_dha_3': rmse_dha_3,
+            'rmse_hda_3': rmse_hda_3,
+            'rmse_dha_c': rmse_dha_c,
+            'rmse_hda_c': rmse_hda_c,
+            'mae_dha_c': mae_dha_c,
+            'mae_hda_c': mae_hda_c
         }
 
         outfolder = os.path.join(baseOut, structure)
