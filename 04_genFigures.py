@@ -25,7 +25,6 @@ povray_settings = {
     'pause': True,  # Pause when done rendering (only if display)
     'transparent': True,  # Transparent background
     'canvas_width': 800,  # Reduced width of canvas in pixels
-    'canvas_height': 800,  # Reduced height of canvas in pixels
     'camera_dist': 50.,  # Distance from camera to front atom
     'image_plane': None,  # Distance from front atom to image plane
     'point_lights': [],  # Simplified lighting
