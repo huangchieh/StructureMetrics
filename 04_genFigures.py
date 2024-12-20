@@ -8,6 +8,9 @@ import os
 demoStructure = 'BatchOutStructures/Label/0.xyz'
 atoms = read_xyz_with_atomic_numbers(demoStructure)
 
+# Save the structure as .png file with high resolution
+
+
 # Define the perspectives
 perspectives = [
     ('x', '270x,270y,0z'),  # View along x-axis

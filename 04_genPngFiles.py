@@ -6,8 +6,6 @@ from ase.data import covalent_radii as radii
 from ase.data.colors import jmol_colors
 from matplotlib.patches import Circle
 
-
-# 3D render figures from viewer's perspective x, y, z
 from water import read_xyz_with_atomic_numbers
 from water import read_samples_from_folder
 from ase.io import read, write
@@ -33,8 +31,39 @@ for structure in samples:
 demoStructure = 'BatchOutStructures/Label/0.xyz'
 atoms = read_xyz_with_atomic_numbers(demoStructure)
 
+fig = plt.figure(figsize=(9, 9))
+gs = fig.add_gridspec(1, 1)
+ax1 = fig.add_subplot(gs[0, 0])
+ax1.set_aspect('equal')
+
+atoms = sorted(atoms, key=lambda atom: atom.position[2])
+for atom in atoms:
+    color = jmol_colors[atom.number]
+    radius = radii[atom.number]
+    circle = Circle((atom.x, atom.y), radius, facecolor=color,
+                            edgecolor='k', linewidth=0.5)
+    ax1.add_patch(circle)
+
+# Get the minimum and maximum x and y positions of the atoms
+x_positions = [atom.position[0] for atom in atoms]
+y_positions = [atom.position[1] for atom in atoms]
+xmin, xmax = min(x_positions), max(x_positions)
+ymin, ymax = min(y_positions), max(y_positions)
+offset = 2
+ax1.set_xlim([xmin - offset, xmax + offset])
+ax1.set_ylim([ymin - offset, ymax + offset])
+ax1.set_xlabel(r'$x$ (Å)')
+ax1.set_ylabel(r'$y$ (Å)')
+fig.subplots_adjust(hspace=0, wspace=0, left=0.08, bottom=0.15, right=0.99, top=0.95)
+plt.show()
+#fig.savefig("xy_distribution.png", dpi=300, bbox_inches='tight')  # Set DPI to 300
+#fig.savefig("xy_distribution.pdf")  # Set DPI to 300
+#fig.savefig("xy_distribution.svg")
+plt.close(fig)
+
 # Get all the z positions of Au atoms
 # Use the mean z position of Au atoms as the reference plane z=0
+atoms = read_xyz_with_atomic_numbers(demoStructure)
 z_positions_Au = [atom.position[2] for atom in atoms if atom.symbol == 'Au']
 mean_z_Au = sum(z_positions_Au) / len(z_positions_Au)
 for atom in atoms:
