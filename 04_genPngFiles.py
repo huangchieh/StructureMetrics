@@ -56,9 +56,9 @@ ax1.set_xlabel(r'$x$ (Å)')
 ax1.set_ylabel(r'$y$ (Å)')
 fig.subplots_adjust(hspace=0, wspace=0, left=0.08, bottom=0.15, right=0.99, top=0.95)
 plt.show()
-#fig.savefig("xy_distribution.png", dpi=300, bbox_inches='tight')  # Set DPI to 300
-#fig.savefig("xy_distribution.pdf")  # Set DPI to 300
-#fig.savefig("xy_distribution.svg")
+fig.savefig("xy_view.png", dpi=300, bbox_inches='tight')  # Set DPI to 300
+fig.savefig("xy_view.pdf")  # Set DPI to 300
+fig.savefig("xy_view.svg")
 plt.close(fig)
 
 # Get all the z positions of Au atoms
