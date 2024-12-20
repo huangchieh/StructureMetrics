@@ -75,6 +75,8 @@ ax1.set_ylabel(r'$z$ (Å)')
 
 #ax1.axhline(0, color=jmol_colors[79], linestyle='--') # Au surface
 # Add the atoms to the plot as circles.
+# Reorder the atoms based on the z position so that the atoms at the back are plotted first
+atoms = sorted(atoms, key=lambda atom: atom.position[2])
 for atom in atoms:
     color = jmol_colors[atom.number]
     radius = radii[atom.number]
