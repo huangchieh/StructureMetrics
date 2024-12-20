@@ -23,7 +23,7 @@ generic_projection_settings = {
 povray_settings = {
     'display': False,  # Display while rendering
     'pause': True,  # Pause when done rendering (only if display)
-    'transparent': True,  # Transparent background
+    'transparent': False,  # Transparent background
     'canvas_width': 1000,  # Reduced width of canvas in pixels
     'canvas_height': None,  # Reduced width of canvas in pixels
     'camera_dist': 50.,  # Distance from camera to front atom
