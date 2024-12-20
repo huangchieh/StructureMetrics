@@ -2,45 +2,48 @@
 
 # 3D render figures from viewer's perspective x, y, z
 from water import read_xyz_with_atomic_numbers
-from ase.visualize import view
 from ase.io import read, write
 import os
 
 demoStructure = 'BatchOutStructures/Label/0.xyz'
 atoms = read_xyz_with_atomic_numbers(demoStructure)
 
-# Visualize the atoms
-view(atoms)
+# Define the perspectives
+perspectives = [
+    ('x', '270x,270y,0z'),  # View along x-axis
+    ('y', '90x,0y,180z'),  # View along y-axis
+    ('z', '0x,0y,0z')   # View along z-axis
+]
 
-# Render the atoms and save the image
-generic_projection_settings = {
-    'rotation': '0x,0y,0z',  # text string with rotation (default='' )
-    'radii': .85,  # float, or a list with one float per atom
-    'colors': None,  # List: one (r, g, b) tuple per atom
-    'show_unit_cell': 2,   # 0, 1, or 2 to not show, show, and show all of cell
-}
-
+# Base POV-Ray settings
 povray_settings = {
     'display': False,  # Display while rendering
     'pause': True,  # Pause when done rendering (only if display)
-    'transparent': False,  # Transparent background
-    'canvas_width': 1000,  # Reduced width of canvas in pixels
-    'canvas_height': None,  # Reduced width of canvas in pixels
+    'transparent': True,  # Transparent background
+    'canvas_width': 2500,  # Reduced width of canvas in pixels
     'camera_dist': 50.,  # Distance from camera to front atom
     'image_plane': None,  # Distance from front atom to image plane
-    'point_lights': [],  # Simplified lighting
-    'area_light': [(2., 3., 40.),  # location
-                   'White',  # color
-                   .7, .7, 3, 3],  # Reduced number of lamps
-    'background': 'White',  # color
+    'point_lights': [[(10, 10, 10), 'White shadowless']],  # Simplified lighting
+    'area_light': [(10, 10, 50), 'White shadowless', 2, 2, 4, 4],
+    'background': 'White',  # Background color
     'textures': None,  # Length of atoms list of texture names
     'celllinewidth': 0.1,  # Radius of the cylinders representing the cell
 }
 
-write('atoms.pov', atoms, **generic_projection_settings, povray_settings=povray_settings)
-
-# Render the .pov file to an image
-os.system('povray +Iatoms.pov +Oatoms.png +W800 +H800 +D +FN')
+# Generate images from different perspectives
+for name, rotation in perspectives:
+    generic_projection_settings = {
+        'rotation': rotation,  # Set the specific rotation
+        'radii': 0.85,  # Atom radii
+        'colors': None,  # List: one (r, g, b) tuple per atom
+        'show_unit_cell': 2,  # Show all of the cell
+    }
+    
+    # Write the .pov file
+    pov_file = f'atoms_{name}.pov'
+    png_file = f'atoms_{name}.png'
+    renderer = write(pov_file, atoms, **generic_projection_settings, povray_settings=povray_settings)
+    renderer.render()
 
 
 # O position distribution on z axis
