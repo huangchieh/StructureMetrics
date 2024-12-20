@@ -24,13 +24,14 @@ povray_settings = {
     'display': False,  # Display while rendering
     'pause': True,  # Pause when done rendering (only if display)
     'transparent': True,  # Transparent background
-    'canvas_width': 800,  # Reduced width of canvas in pixels
+    'canvas_width': 1000,  # Reduced width of canvas in pixels
+    'canvas_height': None,  # Reduced width of canvas in pixels
     'camera_dist': 50.,  # Distance from camera to front atom
     'image_plane': None,  # Distance from front atom to image plane
     'point_lights': [],  # Simplified lighting
     'area_light': [(2., 3., 40.),  # location
                    'White',  # color
-                   .7, .7, 1, 1],  # Reduced number of lamps
+                   .7, .7, 3, 3],  # Reduced number of lamps
     'background': 'White',  # color
     'textures': None,  # Length of atoms list of texture names
     'celllinewidth': 0.1,  # Radius of the cylinders representing the cell
