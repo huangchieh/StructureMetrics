@@ -11,19 +11,12 @@ from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 if __name__ == '__main__':
     baseOut = 'output'
     #os.makedirs(outputFolder, exist_ok=True)
-    structures = ['Label', 'P', \
-                  'Ref', \
-                  'PPAFM2Exp_CoAll_L60_L0_Elatest', \
-                  'PPAFM2Exp_CoAll_L60_L0.1_Elatest', \
-                  'PPAFM2Exp_CoAll_L60_L1_Elatest', \
-                  'PPAFM2Exp_CoAll_L60_L10_Elatest', \
-                  'PPAFM2Exp_CoAll_L50_L1_Elatest', \
-                  'PPAFM2Exp_CoAll_L40_L1_Elatest', \
-                  'PPAFM2Exp_CoAll_L20_L1_Elatest', \
-                  'PPAFM2Exp_CoAll_L10_L1_Elatest', \
-                  ]
 
+    structures = ['Label', 'P', 'Ref']
+    structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
+    structures.extend(structures_temp)
     for structure in structures:
+        print('Calculating for structure: {}'.format(structure))
         # Create the output folders
         os.makedirs(os.path.join(baseOut, structure), exist_ok=True)
 

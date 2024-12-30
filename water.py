@@ -145,7 +145,7 @@ def find_neighbors(atoms, B_idx, A, r_max=10, mic=True):
     return np.array(close_neighbors_indices)
 
 
-def cal_distances(atoms, A, B, r_max=4, mic=True, onlyDistances=False):
+def cal_distances(atoms, A, B, r_max=4, mic=True, onlyDistances=False, zThresholdO=4.85, aboveZthres=None):
     '''
     Calculate distances between atom type A and B
     input: 
@@ -155,6 +155,8 @@ def cal_distances(atoms, A, B, r_max=4, mic=True, onlyDistances=False):
         r_max: float, maximum distance to consider
         mic: bool, whether to consider PBC
         onlyDistances: bool, whether to return only distances
+        zThresholdO: float, z threshold of O atom (related to the Au surface) to separate the first and second layers water molecules
+        aboveZthres: None: select all; True: select above the z threshold; False: select below the z threshold
     return:
         if onlyDistances:
             AB_all_distance: list of float, all distances between atom type A and B
@@ -165,7 +167,21 @@ def cal_distances(atoms, A, B, r_max=4, mic=True, onlyDistances=False):
     '''
     positions = atoms.positions
     symbols = atoms.get_chemical_symbols()
-    A_indices = [i for i, s in enumerate(symbols) if s == A]
+    if aboveZthres is not None and A == 'O':
+        #print('Debug: z threshold O', zThresholdO)
+        # Calculate the mean value of z positions of Au atoms 
+        Au_indices = [i for i, s in enumerate(symbols) if s == 'Au']
+        Au_positions = positions[Au_indices]
+        z_mean = np.max(Au_positions[:, 2]) # as the reference plane
+        #print('Debug: Au_indices', Au_indices)
+        #print('Debug: z mean Au surface', z_mean)
+        if aboveZthres == True:
+            A_indices = [i for i, s in enumerate(symbols) if s == A and positions[i][2] - z_mean > zThresholdO]
+        elif aboveZthres == False:
+            A_indices = [i for i, s in enumerate(symbols) if s == A and positions[i][2] - z_mean <= zThresholdO] 
+        #print('Debug: A_indices', A_indices)
+    else:   
+        A_indices = [i for i, s in enumerate(symbols) if s == A]
     B_indices = [i for i, s in enumerate(symbols) if s == B]
     B_positions = positions[B_indices]
 
@@ -190,7 +206,7 @@ def cal_distances(atoms, A, B, r_max=4, mic=True, onlyDistances=False):
         refNum = len(A_indices)
         return AB_all_distance, rho,  refNum 
 
-def cal_angles(atoms, A, B, C, r_max=10.0, firstTwo=False, mic=True):
+def cal_angles(atoms, A, B, C, r_max=10.0, firstTwo=False, mic=True, zThresholdB=4.85, aboveZthres=None):
     '''
     Calculate angles between atom type A, B, and C, where B is the central atom, A and C are the first and second neighbors
 
@@ -202,12 +218,24 @@ def cal_angles(atoms, A, B, C, r_max=10.0, firstTwo=False, mic=True):
         r_max: float, maximum distance to consider
         firstTwo: bool, whether to consider only the first two neighbors
         mic: bool, whether to consider PBC
+        zThresholdB: float, z threshold of B atom (related to the Au surface) to separate the first and second layers water molecules
+        aboveZthres: None: select all; True: select above the z threshold; False: select below the z threshold
 
     Return:
         angles: list of angles
     '''
     symbols = atoms.get_chemical_symbols()
-    B_indices = [i for i, s in enumerate(symbols) if s == B]
+    if aboveZthres is not None:
+        # Calculate the mean value of z positions of Au atoms 
+        Au_indices = [i for i, s in enumerate(symbols) if s == 'Au']
+        Au_positions = atoms.positions[Au_indices]
+        z_mean = np.max(Au_positions[:, 2])
+        if aboveZthres == True:
+            B_indices = [i for i, s in enumerate(symbols) if s == B and atoms.positions[i][2] - z_mean > zThresholdB]
+        elif aboveZthres == False:
+            B_indices = [i for i, s in enumerate(symbols) if s == B and atoms.positions[i][2] - z_mean <= zThresholdB] 
+    else:
+        B_indices = [i for i, s in enumerate(symbols) if s == B]
     angles = []
     for B_idx in B_indices:
         if firstTwo:
@@ -222,7 +250,7 @@ def cal_angles(atoms, A, B, C, r_max=10.0, firstTwo=False, mic=True):
                 angles.extend(list(temp_angles))
     return angles 
 
-def find_hydrogen_bonds(structure, distance_cutoff=3.5, angle_cutoff=120, z_min=None):
+def find_hydrogen_bonds(structure, distance_cutoff=3.5, angle_cutoff=120, zThresholdO=4.85, aboveZthres=None):
     """
     function to find hydrogen bonds in a structure
     :param structure: ASE Atoms object
@@ -231,6 +259,14 @@ def find_hydrogen_bonds(structure, distance_cutoff=3.5, angle_cutoff=120, z_min=
     :return: list of tuples with the indices of the donor O, H, acceptor O atoms, the distance O...O, the angle D-H...A and the angle H-D...A
     """
     hydrogen_bonds = []
+    # If aboveZthres is not None, calculate the mean value of z positions of Au atoms
+
+    if aboveZthres is not None:
+        Au_indices = [i for i, s in enumerate(structure.get_chemical_symbols()) if s == 'Au']
+        Au_positions = structure.positions[Au_indices]
+        z_mean_Au = np.mean(Au_positions[:, 2])
+        #print('Debug: z mean Au surface', z_mean_Au)
+
     for i, donor_atom in enumerate(structure):
         if donor_atom.symbol == 'O': # Donor atom is an oxygen
             donor_pos = donor_atom.position
@@ -259,31 +295,44 @@ def find_hydrogen_bonds(structure, distance_cutoff=3.5, angle_cutoff=120, z_min=
                                 vector_dh = h_pos - donor_pos
                                 cosine_angle = np.dot(vector_da, vector_dh) / (np.linalg.norm(vector_da) * np.linalg.norm(vector_dh))
                                 angle_hda = np.degrees(np.arccos(cosine_angle))
-                                if z_min is  None:
+                                if aboveZthres is  None: # all
                                     hydrogen_bonds.append((donor_atom.index, h_atom.index, acceptor_atom.index, distance_oo, angle, angle_hda))
-                                else:
-                                    if donor_pos[2] > z_min:
+                                elif aboveZthres is True: # top layer
+                                    if donor_pos[2] - z_mean_Au > zThresholdO:
+                                        hydrogen_bonds.append((donor_atom.index, h_atom.index, acceptor_atom.index, distance_oo, angle, angle_hda))
+                                elif aboveZthres is False: # bottom layer
+                                    if donor_pos[2] - z_mean_Au <= zThresholdO:
                                         hydrogen_bonds.append((donor_atom.index, h_atom.index, acceptor_atom.index, distance_oo, angle, angle_hda))
     return hydrogen_bonds
 
-def cal_all_hydrogen_bonds(samples, distance_cutoff=3.5, angle_cutoff=120, z_min=None):
+def cal_all_hydrogen_bonds(samples, distance_cutoff=3.5, angle_cutoff=120, zThresholdO=4.85, aboveZthres=None):
     '''
     Find all hydrogen bonds in a list of samples
     '''
     all_hydrogen_bonds = []
     for sample in tqdm(samples):
         atoms = read_xyz_with_atomic_numbers(sample)
-        hydrogen_bonds = find_hydrogen_bonds(atoms, distance_cutoff=distance_cutoff, angle_cutoff=angle_cutoff, z_min=z_min)
+        hydrogen_bonds = find_hydrogen_bonds(atoms, distance_cutoff=distance_cutoff, angle_cutoff=angle_cutoff, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
         all_hydrogen_bonds.extend(hydrogen_bonds)
     return all_hydrogen_bonds
 
-def cal_angles_OH(atoms, r_max=1, mic=True): 
+def cal_angles_OH(atoms, r_max=1, mic=True, zThresholdO=4.85, aboveZthres=None): 
     '''
     Calculate the angles between OH an z axis
     '''
     vectorUP = np.array([0, 0, 1])
     symbols = atoms.get_chemical_symbols()
-    O_indices = [i for i, s in enumerate(symbols) if s == 'O'] 
+    if aboveZthres is not None:
+        # Calculate the mean value of z positions of Au atoms 
+        Au_indices = [i for i, s in enumerate(symbols) if s == 'Au']
+        Au_positions = atoms.positions[Au_indices]
+        z_mean = np.max(Au_positions[:, 2])
+        if aboveZthres == True:
+            O_indices = [i for i, s in enumerate(symbols) if s == 'O' and atoms.positions[i][2] - z_mean > zThresholdO]
+        elif aboveZthres == False:
+            O_indices = [i for i, s in enumerate(symbols) if s == 'O' and atoms.positions[i][2] - z_mean <= zThresholdO]
+    else:
+        O_indices = [i for i, s in enumerate(symbols) if s == 'O'] 
     angles = []
     #view(atoms)
     #input('Press Enter to continue...')
@@ -329,9 +378,10 @@ def adf(ABC_all_angles, dtheta=1.0):
 
     return theta, ntheta
 
-def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False):
+def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False, zThresholdO=4.85, aboveZthres=None):
     '''
     Calculate the mean OH ADF for a list of samples
+
     Return:
         list or tuple of theta and ntheta:
         List of all angles if onlyAngle is True, otherwise (theta, ntheta).
@@ -359,7 +409,7 @@ def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAn
             atoms.set_cell(lattice_vectors)
 
         # Calculate angles between atom type A, B, and C. 
-        angles = cal_angles_OH(atoms, r_max=r_max, mic=mic)
+        angles = cal_angles_OH(atoms, r_max=r_max, mic=mic, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
         OH_all_angles.extend(angles)
     if onlyAngle:
         return np.array(OH_all_angles)
@@ -367,7 +417,7 @@ def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAn
         theta, ntheta = adf(OH_all_angles)
         return theta, ntheta 
 
-def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False):
+def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False, zThresholdB=4.85, aboveZthres=None):
     '''
     Calculate the mean ADF for a list of samples
 
@@ -381,6 +431,8 @@ def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True,
         subNum: int, atomic number of the substrate
         mic: bool, whether to consider PBC
         onlyAngle: bool, whether to return only angles
+        zThresholdB: float, z threshold of atom B (related to the Au surface) to separate the first and second layers water molecules
+        aboveZthres: None: select all; True: select above the z threshold; False: select below the z threshold
 
     Return:
         list or tuple of theta and ntheta:
@@ -409,7 +461,7 @@ def mean_adf(samples, A, B, C, r_max=10.0,  subNum=79, firstTwo=False, mic=True,
             atoms.set_cell(lattice_vectors)
 
         # Calculate angles between atom type A, B, and C. 
-        angles = cal_angles(atoms, A, B, C, r_max=r_max, firstTwo=firstTwo, mic=mic)
+        angles = cal_angles(atoms, A, B, C, r_max=r_max, firstTwo=firstTwo, mic=mic, zThresholdB=zThresholdB, aboveZthres=aboveZthres)
         ABC_all_angles.extend(angles)
     if onlyAngle:
         return np.array(ABC_all_angles)
@@ -484,7 +536,7 @@ def rdf(AB_all_distances, meanRho, refNum, r_max=10.0, bins=120):
     gr = nr / (meanRho*4*np.pi*r_center**2*dr) / refNum  # Todo   
     return r, gr
 
-def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
+def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79, zThresholdO=4.85, aboveZthres=None):
     '''
     Calculate the mean RDF for a list of samples.
     input:
@@ -495,6 +547,8 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
         bins: int, bin number
         mic: bool, whether to consider PBC
         subNum: int, atomic number of the substrate
+        zThresholdO: float, z threshold of O atom (related to the Au surface) to separate the first and second layers water molecules
+        aboveZthres: None: select all; True: select above the z threshold; False: select below the z threshold
     return:
         r: np.array, distance values
         gr: np.array, RDF values
@@ -522,7 +576,7 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
             atoms.set_cell(lattice_vectors)
 
         # Calculate distances between atom type A and B
-        AB_all_distance, rho,  refNum = cal_distances(atoms, A, B, r_max=r_max, mic=mic, onlyDistances=False)
+        AB_all_distance, rho,  refNum = cal_distances(atoms, A, B, r_max=r_max, mic=mic, onlyDistances=False, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
 
         # Collect all distances
         AB_all_distances.extend(AB_all_distance)
@@ -596,7 +650,7 @@ def plot_distance_distribution(distances, label, legend, r_max=10,  color='#2990
     plt.clf()
     plt.close()
 
-def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4, outfolder='output', style='bar', loc='upper left'):
+def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_lim=0.4, outfolder='output', style='bar', loc='upper left', figure_size=(6, 2.5) , show=False):
     def plot_one(angles, color, legend, style='bar'):
         if style == 'bar':
           plt.hist(angles, bins=bins, density=True, range=(0, 180), color=color, alpha=0.5, label=legend)
@@ -607,7 +661,7 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
             raise ValueError("Invalid mode")
         return n
 
-    figure_size=(6, 2.5)
+    figure_size=figure_size
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
     if type(angles) == list:
@@ -622,7 +676,7 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
        n = plot_one(angles, color, legend, style)
     plt.xlim(0, 180)
     plt.ylim(0, y_lim)
-    plt.xlabel(r"$\theta$ [degree]")
+    plt.xlabel(r"$\theta$ (degree)")
     plt.ylabel('Probability Density')
     plt.tight_layout()
     plt.legend(frameon=False, loc=loc)
@@ -630,6 +684,9 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
         os.makedirs(outfolder)
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
     plt.savefig('{}/{}.pdf'.format(outfolder, label))
+    plt.savefig('{}/{}.svg'.format(outfolder, label))
+    if show:
+        plt.show()
     plt.clf()
     plt.close()
 
@@ -638,8 +695,7 @@ def plot_angle_distribution(angles, label, legend, color='#299035', bins=120, y_
     else:
         return n
 
-def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolder='output', style='bar', loc="upper right"):
-    figure_size=(6, 2.5)
+def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolder='output', style='bar', loc="upper right", figure_size=(6, 2.5), show=False):
     plt.figure(figsize=figure_size)
     plt.tick_params(direction="in", axis='both', top=True)
     def plot_one(r, gr, color, legend, style='bar'):
@@ -662,7 +718,7 @@ def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolde
         plot_one(r, gr, color, legend, style)
     plt.xlim(0, x_lim)
     plt.ylim(0, y_lim)
-    plt.xlabel(r'r [$\AA$]')
+    plt.xlabel(r'r (Å)')
     plt.ylabel('g(r)')
     plt.tight_layout()
     plt.legend(frameon=False, loc=loc)
@@ -670,6 +726,9 @@ def plot_rdf(r, gr, label, legend, color='#299035', x_lim=10, y_lim=10, outfolde
         os.makedirs(outfolder)
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
     plt.savefig('{}/{}.pdf'.format(outfolder, label))
+    plt.savefig('{}/{}.svg'.format(outfolder, label))
+    if show:
+        plt.show()
     plt.clf()
     plt.close()
 
@@ -691,20 +750,20 @@ def plot_hbond_distance_vs_angle_bak(hydrogen_bonds, angle_type='dha', label='hb
 
     plt.figure(figsize=(6, 5))
     contour = plt.contourf(X, Y, Z, cmap=cmap, vmin=0, vmax=0.3, levels=30)
-    plt.colorbar(contour, label='Probability Density')
+    plt.colorbar(contour, label=r'$\rho(d_\text{OO}, \theta)$')
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
 
     # Labels and title
     plt.xlabel("$d_{OO}$ (Å)")
-    plt.ylabel(r"$\theta$ (degree)") if angle_type == 'dha' else plt.ylabel(r"$\phi$ (degree)") 
+    plt.ylabel(r"$\angle$DHA (degree)") if angle_type == 'dha' else plt.ylabel(r"$\angle$HDA (degree)") 
     plt.tight_layout()
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
     plt.savefig('{}/{}.pdf'.format(outfolder, label))
     plt.show()
     return X, Y, Z
 
-def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-angle', cmap='Greens', outfolder='output', nbin=100, vmax=0.22):
+def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-angle', cmap='Greens', outfolder='output', figsize=(3, 3), nbin=100, vmax=0.22):
     # Extract distances and angles
     distances = [hb[3] for hb in hydrogen_bonds]
     angles = [hb[4] for hb in hydrogen_bonds] if angle_type == 'dha' else [hb[5] for hb in hydrogen_bonds]
@@ -716,7 +775,8 @@ def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-a
     ygrid = np.linspace(ymin, ymax, nbin)
     X, Y = np.meshgrid(xgrid, ygrid)
 
-    plt.figure(figsize=(6, 5))
+    plt.figure(figsize=figsize)
+    plt.tick_params(direction="in", axis='both', top=True, right=True)
     # Generate a 2D density estimate
     xy = np.vstack([distances, angles])
     kde = gaussian_kde(xy)
@@ -724,16 +784,16 @@ def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-a
     Z = kde(positions).reshape(X.shape)  # Evaluate the KDE on the grid
     # Plot the density estimate
     contour = plt.pcolormesh(X, Y, Z, cmap=cmap, vmin=0, vmax=vmax)
-    plt.colorbar(contour, label='Probability Density')
-
-
+    plt.colorbar(contour, label=r'$\rho(d, \theta)$')
     # Set plot limits and labels
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     plt.xlabel("$d_{OO}$ (Å)")
-    plt.ylabel(r"$\theta$ (degree)" if angle_type == 'dha' else r"$\phi$ (degree)")
+    plt.ylabel(r"$\angle$DHA (degrees)" if angle_type == 'dha' else r"$\angle$HDA (degree)")
     plt.tight_layout()
     plt.savefig(f'{outfolder}/{label}.png', dpi=300)
+    plt.savefig(f'{outfolder}/{label}.pdf')
+    plt.savefig(f'{outfolder}/{label}.svg')
     plt.show()
     plt.close()
 
