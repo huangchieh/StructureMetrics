@@ -44,13 +44,13 @@ if __name__ == '__main__':
             legend = 'OO {} ({})'.format(key, structure) if structure != 'P' else 'OO {} (Reference)'.format(key)
             np.savez('{}/OO_distances_{}.npz'.format(outputFolder, key), distances=OO_distances, r_max=r_max)
             if key != 'Bottom':
-                axs[0].hist(OO_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.3)
+                axs[0].hist(OO_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             sns.kdeplot(OO_distances, ax=axs[0], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
         axs[0].set_xlabel('r (Å)')
         axs[0].set_ylabel(r'$\rho_\text{OO}(r)$')
-        axs[0].set_ylim(0, 4.8)
+        #axs[0].set_ylim(0, 4.8)
         axs[0].set_xlim(0, r_max)
-        axs[0].legend(frameon=False, ncol=2)
+        axs[0].legend(frameon=False, ncol=1)
         axs[0].tick_params(axis='both', direction='in')
 
         # O-H all water molecules
@@ -62,7 +62,7 @@ if __name__ == '__main__':
             #ylim = 150 if structure == 'Label' else 15
             np.savez('{}/OH_distances_{}.npz'.format(outputFolder, key), distances=OH_distances, r_max=r_max)
             if key != 'Bottom':
-                axs[1].hist(OH_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.3)
+                axs[1].hist(OH_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             sns.kdeplot(OH_distances, ax=axs[1], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
         axs[1].set_xlabel('r (Å)')
         axs[1].set_ylabel(r'$\rho_\text{OH}(r)$')
@@ -83,7 +83,7 @@ if __name__ == '__main__':
             np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
             #plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder, show=True, figure_size=(3, 3))
             if key != 'Bottom':
-                axs[2].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.3)
+                axs[2].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             sns.kdeplot(angles, ax=axs[2], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
         axs[2].set_xlabel(r'$\angle$HOH (degrees)')
         axs[2].set_xlim(90, 120)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
             np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
             #plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder, show=True, figure_size=(3, 3))
             if key != 'Bottom': 
-                axs[3].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.3)
+                axs[3].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             sns.kdeplot(angles, ax=axs[3], linewidth=1, label=legend, bw_adjust=0.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
         axs[3].set_xlabel(r'$\angle$ZOH (degrees)')
         axs[3].set_xlim(0, 180)
