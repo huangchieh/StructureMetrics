@@ -536,7 +536,7 @@ def rdf(AB_all_distances, meanRho, refNum, r_max=10.0, bins=120):
     gr = nr / (meanRho*4*np.pi*r_center**2*dr) / refNum  # Todo   
     return r, gr
 
-def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79, zThresholdO=4.85, aboveZthres=None):
+def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79, zThresholdO=4.85, aboveZthres=None, onlyDistances=False):
     '''
     Calculate the mean RDF for a list of samples.
     input:
@@ -549,6 +549,7 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79, zThreshol
         subNum: int, atomic number of the substrate
         zThresholdO: float, z threshold of O atom (related to the Au surface) to separate the first and second layers water molecules
         aboveZthres: None: select all; True: select above the z threshold; False: select below the z threshold
+        onlyDistances: bool, whether to return only distances
     return:
         r: np.array, distance values
         gr: np.array, RDF values
@@ -582,10 +583,13 @@ def mean_rdf(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79, zThreshol
         AB_all_distances.extend(AB_all_distance)
         rhos.append(rho)
         refNums.append(refNum)
-    meanRho = np.mean(rhos)
-    refNum = np.sum(refNums) 
-    r, gr = rdf(AB_all_distances, meanRho, refNum, r_max=r_max, bins=bins)
-    return r, gr
+    if onlyDistances:
+        return AB_all_distances
+    else:
+        meanRho = np.mean(rhos)
+        refNum = np.sum(refNums) 
+        r, gr = rdf(AB_all_distances, meanRho, refNum, r_max=r_max, bins=bins)
+        return r, gr
 
 def all_distances(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
     '''
