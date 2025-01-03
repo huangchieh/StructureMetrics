@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH
-from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
-from scipy.ndimage import gaussian_filter1d
+from water import plot_rdf, plot_angle_distribution, plot_distance_distribution, plot_kde_fill
 import seaborn as sns
+from scipy.stats import gaussian_kde
 
 if __name__ == '__main__':
     baseOut = 'Figures'
@@ -45,7 +45,8 @@ if __name__ == '__main__':
             np.savez('{}/OO_distances_{}.npz'.format(outputFolder, key), distances=OO_distances, r_max=r_max)
             if key != 'Bottom':
                 axs[0].hist(OO_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
-            sns.kdeplot(OO_distances, ax=axs[0], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            #sns.kdeplot(OO_distances, ax=axs[0], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=OO_distances, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3)
         axs[0].set_xlabel('r (Å)')
         axs[0].set_ylabel(r'$\rho_\text{OO}(r)$')
         #axs[0].set_ylim(0, 4.8)
@@ -63,7 +64,8 @@ if __name__ == '__main__':
             np.savez('{}/OH_distances_{}.npz'.format(outputFolder, key), distances=OH_distances, r_max=r_max)
             if key != 'Bottom':
                 axs[1].hist(OH_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
-            sns.kdeplot(OH_distances, ax=axs[1], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            #sns.kdeplot(OH_distances, ax=axs[1], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            plot_kde_fill(ax=axs[1], data=OH_distances, xmin=0, xmax=r_max, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3)
         axs[1].set_xlabel('r (Å)')
         axs[1].set_ylabel(r'$\rho_\text{OH}(r)$')
         #axs[1].set_ylim(0, 120)
@@ -84,7 +86,8 @@ if __name__ == '__main__':
             #plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder, show=True, figure_size=(3, 3))
             if key != 'Bottom':
                 axs[2].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
-            sns.kdeplot(angles, ax=axs[2], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            #sns.kdeplot(angles, ax=axs[2], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            plot_kde_fill(ax=axs[2], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3)
         axs[2].set_xlabel(r'$\angle$HOH (degrees)')
         axs[2].set_xlim(90, 120)
         axs[2].set_ylabel(r'$\rho(\theta)$')
@@ -103,7 +106,8 @@ if __name__ == '__main__':
             #plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder, show=True, figure_size=(3, 3))
             if key != 'Bottom': 
                 axs[3].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
-            sns.kdeplot(angles, ax=axs[3], linewidth=1, label=legend, bw_adjust=0.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            #sns.kdeplot(angles, ax=axs[3], linewidth=1, label=legend, bw_adjust=0.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
+            plot_kde_fill(ax=axs[3], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3)
         axs[3].set_xlabel(r'$\angle$ZOH (degrees)')
         axs[3].set_xlim(0, 180)
         axs[3].set_ylabel(r'$\rho(\theta)$')
