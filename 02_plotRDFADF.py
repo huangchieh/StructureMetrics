@@ -1,12 +1,14 @@
 #!/usr/bin/env python
+
+# Load data from the output folder and plot RDF and ADF for the reference and predicted structures
+# Calculate the cosine similarity between the reference and predicted RDF and ADF
+
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
-
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
-
 import json
 
 def cosine_similarity(a, b):
@@ -25,20 +27,13 @@ def write_similarity_to_file(file_path, similarities):
 if __name__ == '__main__':
     baseOut = 'output'
     imagePath = 'images'
-    results_file = os.path.join(imagePath, 'similarities.json')
-    structures = [
-        'PPAFM2Exp_CoAll_L60_L0_Elatest',
-        'PPAFM2Exp_CoAll_L60_L0.1_Elatest',
-        'PPAFM2Exp_CoAll_L60_L1_Elatest',
-        'PPAFM2Exp_CoAll_L60_L10_Elatest',
-        'PPAFM2Exp_CoAll_L50_L1_Elatest',
-        'PPAFM2Exp_CoAll_L40_L1_Elatest',
-        'PPAFM2Exp_CoAll_L20_L1_Elatest',
-        'PPAFM2Exp_CoAll_L10_L1_Elatest',
-    ]
+    ground_truth = 'Label'
+    results_file = os.path.join(imagePath, 'similarities_{}.json'.format(ground_truth))
+    structures = []
+    structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
+    structures.extend(structures_temp)
 
     all_similarities = {}
-
     for structure in structures:
         print('Calculating for structure: {}'.format(structure))
         similarity_file = os.path.join(imagePath, structure, 'similarity.json')
@@ -50,7 +45,7 @@ if __name__ == '__main__':
 
         # --- RDF 
         # O-O 
-        data = np.load('{}/{}/RDF_OO.npz'.format(outputFolder, 'P')) 
+        data = np.load('{}/{}/RDF_OO.npz'.format(outputFolder, ground_truth)) 
         r, gr_OO = data['r'], data['gr']
         data3 = np.load('{}/{}/RDF_OO.npz'.format(outputFolder, 'Ref'))
         r_3, gr_OO_3 = data3['r'], data3['gr']
@@ -68,7 +63,7 @@ if __name__ == '__main__':
         similarities['RDF_OO'] = {'s3': s3, 'sc': sc, 'similarity_increase': similarity_increase}
 
         # O-H 
-        data = np.load('{}/{}/RDF_OH.npz'.format(outputFolder, 'P'))
+        data = np.load('{}/{}/RDF_OH.npz'.format(outputFolder, ground_truth))
         r, gr_OH = data['r'], data['gr']
         data3 = np.load('{}/{}/RDF_OH.npz'.format(outputFolder, "Ref"))
         r_3, gr_OH_3 = data3['r'], data3['gr']
@@ -87,7 +82,7 @@ if __name__ == '__main__':
 
         # --- ADF
         # H-O-H 
-        data = np.load('{}/{}/HOH_dist_{}.npz'.format(outputFolder, 'P', 'P'))
+        data = np.load('{}/{}/HOH_dist_{}.npz'.format(outputFolder, ground_truth, ground_truth))
         angles = data['angles']
         data3 = np.load('{}/{}/HOH_dist_{}.npz'.format(outputFolder, 'Ref', 'Ref'))
         angles3 = data3['angles']
@@ -106,7 +101,7 @@ if __name__ == '__main__':
         similarities['ADF_HOH'] = {'s3': s3, 'sc': sc, 'similarity_increase': similarity_increase}
 
         # O-H-O 
-        data = np.load('{}/{}/OHO_dist_{}.npz'.format(outputFolder, 'P', 'P'))
+        data = np.load('{}/{}/OHO_dist_{}.npz'.format(outputFolder, ground_truth, ground_truth))
         angles = data['angles']
         data3 = np.load('{}/{}/OHO_dist_{}.npz'.format(outputFolder, 'Ref', 'Ref'))
         angles3 = data3['angles']
@@ -125,7 +120,7 @@ if __name__ == '__main__':
         similarities['ADF_OHO'] = {'s3': s3, 'sc': sc, 'similarity_increase': similarity_increase}
 
         # Theta O-H 
-        data = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'P', 'P'))
+        data = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, ground_truth, ground_truth))
         angles = data['angles']
         data3 = np.load('{}/{}/Theta_OH_dist_{}.npz'.format(outputFolder, 'Ref', 'Ref'))
         angles3 = data3['angles']

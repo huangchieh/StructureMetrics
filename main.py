@@ -42,6 +42,7 @@ if __name__ == '__main__':
         np.savez('{}/RDF_OO.npz'.format(outputFolder), r=r, gr=gr_OO)
     
         # O-H 
+        r_max = 1.25
         r, gr_OH = mean_rdf(samples, 'O', 'H', r_max=r_max, mic=mic, bins=bins)
         label = 'RDF_OH_{}'.format(structure)
         legend = 'OH ({})'.format(structure) if structure  !=  'P' else 'OH (Reference)'
@@ -50,6 +51,7 @@ if __name__ == '__main__':
         np.savez('{}/RDF_OH.npz'.format(outputFolder), r=r, gr=gr_OH)
 
         # --- ADF
+        r_max = 1.25
         print('Calulating ADF ...')
         firstTwo = False
         onlyAngle = True
@@ -62,6 +64,7 @@ if __name__ == '__main__':
         plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
      
         # O-H-O: H-bond
+        r_max = 3.5
         y_lim = 0.3 if firstTwo else 0.02
         label = "OHO_dist_{}".format(structure)
         legend = 'OHO ({})'.format(structure) if structure  !=  'P' else 'OHO (Reference)'
@@ -70,10 +73,11 @@ if __name__ == '__main__':
         plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
 
         # Theta of OH and z-axis 
+        r_max = 1.25
         y_lim = 0.04
         bins = 30 
         label = "Theta_OH_dist_{}".format(structure)
         legend = "$\\theta_\\text{OH}$" + " ({})".format(structure) if structure  !=  'P' else "$\\theta_\\text{OH}$" + " (Reference)"
-        angles = mean_adf_OH(samples, r_max = 1, firstTwo=False, mic=False, onlyAngle=True)
+        angles = mean_adf_OH(samples, r_max = r_max, firstTwo=False, mic=False, onlyAngle=True)
         np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
         plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
