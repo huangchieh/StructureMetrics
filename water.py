@@ -5,7 +5,7 @@ import os
 from tqdm import tqdm
 # ASE viewer
 from ase.visualize import view
-from scipy.stats import gaussian_kde
+from scipy.stats import gaussian_kde, wasserstein_distance
 
 def read_xyz_with_atomic_numbers(file_path):
     '''
@@ -812,3 +812,77 @@ def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', label='d
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
     plt.show()
     plt.close()
+
+def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=1000, bw_method=None, hist=False):
+    """
+    Plots a KDE curve with optional fill under the curve and returns the x and y values.
+
+    Parameters:
+    - ax: The matplotlib axis to plot on.
+    - data: Data points to calculate the KDE from.
+    - color: Color for the line and fill.
+    - linestyle: Line style for the curve.
+    - label: Label for the legend.
+    - fill: Whether to fill under the curve (default: True).
+    - alpha_fill: Transparency of the fill (default: 0.3).
+    - num_points: Number of points for the KDE curve (default: 1000).
+    - bw_method: Bandwidth method for KDE (default: None).
+    - hist: Whether to plot a histogram of the data (default: False).
+
+    Returns:
+    - x: The x values of the KDE curve.
+    - y: The y values of the KDE curve.
+    """
+    data = np.array(data) if not isinstance(data, np.ndarray) else data
+    kde = gaussian_kde(data, bw_method=bw_method)
+    xmin = data.min() if xmin is None else xmin
+    xmax = data.max() if xmax is None else xmax
+    x = np.linspace(xmin, xmax, num_points)
+    y = kde(x)
+    ax.fill_between(
+        x, 0, y,
+        facecolor=color if fill else "none",
+        edgecolor=color,
+        linestyle=linestyle,
+        label=label,
+        alpha=alpha_fill
+    )
+    if hist:
+        ax.hist(data, bins=120, histtype='step', density=True, color=color, alpha=0.3)
+    return x, y
+
+def compute_kde_wasserstein(data1, data2, bw_method=None, num_points=1000):
+    """
+    Compute KDE-smoothed Wasserstein Distance between two datasets.
+
+    Parameters:
+    - data1: array-like
+        First dataset.
+    - data2: array-like
+        Second dataset.
+    - bw_method: float or None
+        Bandwidth method for KDE (e.g., 0.5 for smaller bandwidth, 2 for larger bandwidth).
+        If None, the default bandwidth is used.
+    - num_points: int
+        Number of points for KDE evaluation.
+
+    Returns:
+    - wdistance_smoothed: float
+        Wasserstein distance between the smoothed PDFs.
+    """
+    # Perform KDE smoothing
+    kde1 = gaussian_kde(data1, bw_method=bw_method)
+    kde2 = gaussian_kde(data2, bw_method=bw_method)
+
+    # Create a common range for comparison
+    x_range = np.linspace(min(min(data1), min(data2)) - 1,
+                          max(max(data1), max(data2)) + 1, num_points)
+
+    # Evaluate KDE PDFs
+    pdf1 = kde1(x_range)
+    pdf2 = kde2(x_range)
+
+    # Compute Wasserstein distance
+    wdistance_smoothed = wasserstein_distance(x_range, x_range, u_weights=pdf1, v_weights=pdf2)
+
+    return wdistance_smoothed
