@@ -7,7 +7,7 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 from water import plot_rdf, plot_angle_distribution, plot_kde_fill  
-from water import compute_kde_wasserstein
+from water import compute_kde_wasserstein, compute_kde_wasserstein_2d
 import json
 
 def cosine_similarity(a, b):
@@ -227,6 +227,15 @@ if __name__ == '__main__':
         plt.savefig(os.path.join(imagePath, structure, 'DistanceAngelDists.png'), dpi=300)
         #plt.show()
         plt.close()
+
+        # Hbond
+        data = np.load('{}/{}/Hbonds.npz'.format(outputFolder, ground_truth))['distance_angle']
+        data3 = np.load('{}/{}/Hbonds.npz'.format(outputFolder, 'Ref'))['distance_angle']
+        datac = np.load('{}/{}/Hbonds.npz'.format(outputFolder, structure))['distance_angle']
+        wdistance3, x_range, y_range, pdf1, pdf2  = compute_kde_wasserstein_2d(data, data3)
+        wdistancec, x_range, y_range, pdf1, pdf2  = compute_kde_wasserstein_2d(data, datac)
+        wdistance_decrease = wdistance3 - wdistancec
+        similarities['Hbonds'] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
 
     # Write all similarities to a single JSON file
     write_similarity_to_file(results_file, all_similarities)
