@@ -767,7 +767,7 @@ def plot_hbond_distance_vs_angle_bak(hydrogen_bonds, angle_type='dha', label='hb
     plt.show()
     return X, Y, Z
 
-def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-angle', cmap='Greens', outfolder='output', figsize=(3, 3), nbin=100, vmax=0.22):
+def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-angle', cmap='Greens', outfolder='output', figsize=(3, 3), nbin=100, vmax=0.22, show=False):
     # Extract distances and angles
     distances = [hb[3] for hb in hydrogen_bonds]
     angles = [hb[4] for hb in hydrogen_bonds] if angle_type == 'dha' else [hb[5] for hb in hydrogen_bonds]
@@ -798,19 +798,21 @@ def plot_hbond_distance_vs_angle(hydrogen_bonds, angle_type='dha', label='hb-d-a
     plt.savefig(f'{outfolder}/{label}.png', dpi=300)
     plt.savefig(f'{outfolder}/{label}.pdf')
     plt.savefig(f'{outfolder}/{label}.svg')
-    plt.show()
+    if show:
+        plt.show()
     plt.close()
 
     return X, Y, Z
 
-def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', label='density-difference', outfolder='output'):
+def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', label='density-difference', outfolder='output', show=False):
     contour = plt.pcolormesh(X, Y, Z, cmap=cmap, vmin=-0.05, vmax=0.05)
     plt.colorbar(contour, label=r'Probability Density Difference')
     plt.xlabel("$d_{OO}$ (Å)")
     plt.ylabel(r"$\theta$ (degree)") if angle_type == 'dha' else plt.ylabel(r"$\phi$ (degree)") 
     plt.tight_layout()
     plt.savefig('{}/{}.png'.format(outfolder, label), dpi=300)
-    plt.show()
+    if show:
+        plt.show()
     plt.close()
 
 def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=1000, bw_method=None, hist=False):
