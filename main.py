@@ -31,7 +31,7 @@ if __name__ == '__main__':
         bins = 120
         color = '#299035'
         outputFolder = os.path.join(baseOut, structure)
-        # --- RDF 
+        # --- RDF  and OO, OH distances distirbution
         print('Calulating RDF ...')
         # O-O 
         r, gr_OO = mean_rdf(samples, 'O', 'O', r_max=r_max, mic=mic, bins=bins)
