@@ -813,7 +813,7 @@ def plot_density_difference(X, Y, Z, angle_type='dha', cmap='coolwarm', label='d
     plt.show()
     plt.close()
 
-def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=1000, bw_method=None):
+def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=1000, bw_method=None, hist=False):
     """
     Plots a KDE curve with optional fill under the curve and returns the x and y values.
 
@@ -826,6 +826,8 @@ def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, 
     - fill: Whether to fill under the curve (default: True).
     - alpha_fill: Transparency of the fill (default: 0.3).
     - num_points: Number of points for the KDE curve (default: 1000).
+    - bw_method: Bandwidth method for KDE (default: None).
+    - hist: Whether to plot a histogram of the data (default: False).
 
     Returns:
     - x: The x values of the KDE curve.
@@ -845,6 +847,8 @@ def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, 
         label=label,
         alpha=alpha_fill
     )
+    if hist:
+        ax.hist(data, bins=120, histtype='step', density=True, color=color, alpha=0.3)
     return x, y
 
 def compute_kde_wasserstein(data1, data2, bw_method=None, num_points=1000):
