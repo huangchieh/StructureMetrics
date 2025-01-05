@@ -294,6 +294,7 @@ def find_hydrogen_bonds(structure, distance_cutoff=3.5, angle_cutoff=120, zThres
                                 vector_da = acc_pos - donor_pos
                                 vector_dh = h_pos - donor_pos
                                 cosine_angle = np.dot(vector_da, vector_dh) / (np.linalg.norm(vector_da) * np.linalg.norm(vector_dh))
+                                cosine_angle = np.clip(cosine_angle, -1.0, 1.0) # Avoid numerical floating-point precision errors
                                 angle_hda = np.degrees(np.arccos(cosine_angle))
                                 if aboveZthres is  None: # all
                                     hydrogen_bonds.append((donor_atom.index, h_atom.index, acceptor_atom.index, distance_oo, angle, angle_hda))
@@ -888,3 +889,60 @@ def compute_kde_wasserstein(data1, data2, bw_method=None, num_points=1000):
     wdistance_smoothed = wasserstein_distance(x_range, x_range, u_weights=pdf1, v_weights=pdf2)
 
     return wdistance_smoothed
+
+
+def compute_kde_wasserstein_2d(data1, data2, bw_method=None, grid_size=100):
+    """
+    Compute KDE-smoothed Wasserstein Distance between two 2D datasets.
+
+    Parameters:
+    - data1: array-like, shape (n_samples, 2)
+        First dataset in 2D.
+    - data2: array-like, shape (n_samples, 2)
+        Second dataset in 2D.
+    - bw_method: float or None
+        Bandwidth method for KDE (e.g., 0.5 for smaller bandwidth, 2 for larger bandwidth).
+        If None, the default bandwidth is used.
+    - grid_size: int
+        Number of points along each dimension for KDE grid.
+
+    Returns:
+    - wdistance_smoothed: float
+        Wasserstein distance between the smoothed 2D PDFs (flattened).
+    - x_range: array
+        Common grid for x-axis.
+    - y_range: array
+        Common grid for y-axis.
+    - pdf1: 2D array
+        Smoothed PDF for data1.
+    - pdf2: 2D array
+        Smoothed PDF for data2.
+    """
+    # Perform KDE smoothing
+    kde1 = gaussian_kde(data1.T, bw_method=bw_method)  # Transpose required for gaussian_kde
+    kde2 = gaussian_kde(data2.T, bw_method=bw_method)
+
+    # Create a common grid for comparison
+    x_range = np.linspace(
+        min(data1[:, 0].min(), data2[:, 0].min()) - 1,
+        max(data1[:, 0].max(), data2[:, 0].max()) + 1,
+        grid_size
+    )
+    y_range = np.linspace(
+        min(data1[:, 1].min(), data2[:, 1].min()) - 1,
+        max(data1[:, 1].max(), data2[:, 1].max()) + 1,
+        grid_size
+    )
+    X, Y = np.meshgrid(x_range, y_range)
+    grid_coords = np.vstack([X.ravel(), Y.ravel()])
+
+    # Evaluate KDE PDFs
+    pdf1 = kde1(grid_coords).reshape(grid_size, grid_size)
+    pdf2 = kde2(grid_coords).reshape(grid_size, grid_size)
+
+    # Flatten the PDFs and compute Wasserstein distance
+    wdistance_smoothed = wasserstein_distance(
+        np.arange(grid_size**2), np.arange(grid_size**2), u_weights=pdf1.ravel(), v_weights=pdf2.ravel()
+    )
+
+    return wdistance_smoothed, x_range, y_range, pdf1, pdf2 
