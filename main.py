@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from water import read_samples_from_folder 
-from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH
+from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, cal_all_hydrogen_bonds
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
 
@@ -87,3 +87,11 @@ if __name__ == '__main__':
         angles = mean_adf_OH(samples, r_max = r_max, firstTwo=False, mic=False, onlyAngle=True)
         np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
         plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
+
+        # H-bonds 
+        print('Finding hydrogen bonds ...')
+        hbonds = cal_all_hydrogen_bonds(samples)
+        distances_da = [hb[3] for hb in hbonds]
+        angles_dha = [hb[4] for hb in hbonds]
+        distance_angle = np.array([distances_da, angles_dha]).T
+        np.savez('{}/Hbonds.npz'.format(outputFolder), distance_angle=distance_angle)
