@@ -232,11 +232,53 @@ if __name__ == '__main__':
         data = np.load('{}/{}/Hbonds.npz'.format(outputFolder, ground_truth))['distance_angle']
         data3 = np.load('{}/{}/Hbonds.npz'.format(outputFolder, 'Ref'))['distance_angle']
         datac = np.load('{}/{}/Hbonds.npz'.format(outputFolder, structure))['distance_angle']
-        wdistance3, x_range, y_range, pdf1, pdf2  = compute_kde_wasserstein_2d(data, data3)
-        wdistancec, x_range, y_range, pdf1, pdf2  = compute_kde_wasserstein_2d(data, datac)
+        wdistance3, x_range_3, y_range_3, pdf, pdf_3  = compute_kde_wasserstein_2d(data, data3)
+        wdistancec, x_range_c, y_range_c, pdf, pdf_c  = compute_kde_wasserstein_2d(data, datac)
         wdistance_decrease = wdistance3 - wdistancec
         similarities['Hbonds'] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
 
+        plt.figure(figsize=(22, 6))
+        # Plot PDF
+        plt.subplot(1, 3, 1)
+        plt.tick_params(axis='both', direction='in')
+        contourf = plt.contourf(x_range_3, y_range_3, pdf, levels=30, cmap='Blues')
+        subset = data[np.random.choice(data.shape[0], size=int(0.1 * data.shape[0]), replace=False)]
+        plt.scatter(subset[:, 0], subset[:, 1], s=0.5, color='black', alpha=0.1)
+        plt.xlim(0.8, 3.8)
+        plt.ylim(120, 180)
+        #plt.title("Data1 KDE PDF")
+        plt.xlabel(r"$d_\text{OO}$ (Å)")
+        plt.ylabel(r"$\angle$DHA (degrees)")
+        plt.colorbar(contourf, label="Density")
+
+        # Plot PDF3
+        plt.subplot(1, 3, 2)
+        plt.tick_params(axis='both', direction='in')
+        contourf_3 = plt.contourf(x_range_3, y_range_3, pdf_3, levels=30, cmap='Reds')
+        plt.scatter(data3[:, 0], data3[:, 1], s=0.5, color='black', alpha=0.1)
+        #plt.title("Data2 KDE PDF")
+        plt.xlim(0.8, 3.8)
+        plt.ylim(120, 180)
+        plt.xlabel(r"$d_\text{OO}$ (Å)")
+        plt.ylabel(r"$\angle$DHA (degrees)")
+        plt.colorbar(contourf_3, label="Density")
+
+        # Plot PDFc
+        plt.subplot(1, 3, 3)
+        plt.tick_params(axis='both', direction='in')
+        contourf_c = plt.contourf(x_range_c, y_range_c, pdf_c, levels=30, cmap='Greens')
+        plt.scatter(datac[:, 0], datac[:, 1], s=0.5, color='black', alpha=0.1)
+        #plt.title("Data2 KDE PDF")
+        plt.xlim(0.8, 3.8)
+        plt.ylim(120, 180)
+        plt.xlabel(r"$d_\text{OO}$ (Å)")
+        plt.ylabel(r"$\angle$DHA (degrees)")
+        plt.colorbar(contourf_c, label="Density")
+
+        plt.tight_layout()
+        plt.savefig(os.path.join(imagePath, structure, 'Hbonds_dists.png'), dpi=300)
+        #plt.show()
+        plt.close()
     # Write all similarities to a single JSON file
     write_similarity_to_file(results_file, all_similarities)
 
