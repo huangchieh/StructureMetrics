@@ -71,7 +71,7 @@ def plot_heatmaps(score_data, title_suffix, cmap='viridis', filename=None):
     # Adjust layout to prevent overlap
     fig.subplots_adjust(hspace=0.1, wspace=0.3, left=0.1, bottom=0.1, right=0.90, top=0.95)
     if filename is not None:
-        plt.savefig(filename, dpi=300)
+        plt.savefig(filename, dpi=600)
     plt.show()
 
 # Plot heatmaps for score and score_increase
