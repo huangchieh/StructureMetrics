@@ -4,6 +4,8 @@ import json
 import pandas as pd
 import seaborn as sns
 
+showFig = False
+
 # Function to calculate the filled area of a radar plot
 def calculate_filled_area(data, angles):
     # Convert polar coordinates to Cartesian coordinates
@@ -85,11 +87,12 @@ axes[-1].tick_params(axis='x', rotation=45)
 #plt.tight_layout()
 print(min_max)
 plt.savefig('images/similarities_Label.png', dpi=300)
-plt.show()
+plt.show() if showFig else None
 plt.close()
 
 print('The min and max values for WdistanceC are:')
 
+final_scores = {}
 # Data
 categories = [r'OO', r'OH', r'$\angle$HOH', r'$\angle$ZOH', r'H-bond']
 for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]:
@@ -117,15 +120,17 @@ for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]:
         data_c.append(data_c[0])  # Close the circle
         #ax.fill(angles, values, alpha=0.4, label=label)
         #ax.plot(angles, data_3, linewidth=1, label='V0')
-        ax.fill(angles, data_3, alpha=0.4, label='V0')
-        #ax.plot(angles, data_c, linewidth=1, label='V1')
-        ax.fill(angles, data_c, alpha=0.4, label='V1')
+        ax.fill(angles, data_3, alpha=0.4, label='V0', zorder=2)
+        ax.fill(angles, data_c, alpha=0.4, label='V1', zorder=1)
 
 
         # Calculate areas for data_3 and data_c
         area = calculate_filled_area([1, 1, 1, 1, 1, 1], angles)
         area_3 = calculate_filled_area(data_3, angles)
         area_c = calculate_filled_area(data_c, angles)
+        score_3 = (area_3 / area)
+        score_c = (area_c / area)
+        final_scores[model] = {'Overall': score_c, 'OO': data_c[0], 'OH': data_c[1], 'HOH': data_c[2], 'ThetaOH': data_c[3], 'Hbonds': data_c[4]} 
         print('Area for best:', area)
         print('Area for V0:', area_3)
         print('Area for V1:', area_c)
@@ -147,5 +152,11 @@ for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]:
 
         plt.tight_layout()
         plt.savefig('images/{}/radar.png'.format(model), dpi=300)
-        plt.show()
+        plt.show() if showFig else None
         plt.close()
+
+final_scores['Ref'] = {'Overall': score_3, 'OO': data_3[0], 'OH': data_3[1], 'HOH': data_3[2], 'ThetaOH': data_3[3], 'Hbonds': data_3[4]} 
+print(final_scores)
+# Save final scores to a file
+with open('images/final_scores.json', 'w') as file:
+    json.dump(final_scores, file)
