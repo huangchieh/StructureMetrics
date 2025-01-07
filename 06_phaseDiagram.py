@@ -47,6 +47,13 @@ def plot_heatmaps(score_data, title_suffix, cmap='viridis', filename=None):
         # Plot the heatmap with consistent vmin and vmax
         im = ax.imshow(score_data[i], cmap=cmap, aspect='equal', origin='lower', vmin=vmin, vmax=vmax)
 
+        # Find the top 3 values and their indices
+        flat_indices = np.argsort(score_data[i].flatten())[-3:]  # Indices of top 3 values
+        top_indices = np.unravel_index(flat_indices, score_data[i].shape)  # Convert to 2D indices
+
+        # Highlight the top 3 cells with markers
+        ax.scatter(top_indices[1], top_indices[0], color='red', s=50, marker='o', label='Top 3')
+
         # Add labels and title
         ax.set_xticks(range(len(L1_values)))
         ax.set_xticklabels(L1_values, fontsize=8)

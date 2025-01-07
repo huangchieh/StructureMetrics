@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import seaborn as sns
 
-showFig = False
+showFig = True
 
 # Function to calculate the filled area of a radar plot
 def calculate_filled_area(data, angles):
