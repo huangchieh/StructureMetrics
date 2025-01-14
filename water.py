@@ -6,6 +6,8 @@ from tqdm import tqdm
 # ASE viewer
 from ase.visualize import view
 from scipy.stats import gaussian_kde, wasserstein_distance
+from geomloss import SamplesLoss
+import torch
 
 def read_xyz_with_atomic_numbers(file_path):
     '''
@@ -891,34 +893,25 @@ def compute_kde_wasserstein(data1, data2, bw_method=None, num_points=1000):
     return wdistance_smoothed
 
 
-def compute_kde_wasserstein_2d(data1, data2, bw_method=None, grid_size=100):
-    """
-    Compute KDE-smoothed Wasserstein Distance between two 2D datasets.
 
-    Parameters:
-    - data1: array-like, shape (n_samples, 2)
-        First dataset in 2D.
-    - data2: array-like, shape (n_samples, 2)
-        Second dataset in 2D.
-    - bw_method: float or None
-        Bandwidth method for KDE (e.g., 0.5 for smaller bandwidth, 2 for larger bandwidth).
-        If None, the default bandwidth is used.
-    - grid_size: int
-        Number of points along each dimension for KDE grid.
-
-    Returns:
-    - wdistance_smoothed: float
-        Wasserstein distance between the smoothed 2D PDFs (flattened).
-    - x_range: array
-        Common grid for x-axis.
-    - y_range: array
-        Common grid for y-axis.
-    - pdf1: 2D array
-        Smoothed PDF for data1.
-    - pdf2: 2D array
-        Smoothed PDF for data2.
+def sinkhorn_2d_distance(data1, data2, p=1, blur=0.0001, bw_method=None, grid_size=100):
     """
-    # Perform KDE smoothing
+    For blur is small enough, the Sinkhorn distance is the Eurth Mover's distance 
+    Ref: 
+    1. SINKHORN DISTANCES: LIGHTSPEED COMPUTATION OF  OPTIMAL TRANSPORTATION DISTANCES
+    2. https://dfdazac.github.io/sinkhorn.html 
+    """
+    # Convert data to PyTorch tensors
+    x = torch.tensor(data1, dtype=torch.float32)
+    y = torch.tensor(data2, dtype=torch.float32)
+
+    loss = SamplesLoss("sinkhorn", p=p, blur=blur)
+    distance = loss(x, y)
+    
+    return distance.item()
+
+def kde(data1, data2, bw_method=None, grid_size=100):
+    # Perform KDE smoothing for plotting
     kde1 = gaussian_kde(data1.T, bw_method=bw_method)  # Transpose required for gaussian_kde
     kde2 = gaussian_kde(data2.T, bw_method=bw_method)
 
@@ -940,9 +933,78 @@ def compute_kde_wasserstein_2d(data1, data2, bw_method=None, grid_size=100):
     pdf1 = kde1(grid_coords).reshape(grid_size, grid_size)
     pdf2 = kde2(grid_coords).reshape(grid_size, grid_size)
 
-    # Flatten the PDFs and compute Wasserstein distance
-    wdistance_smoothed = wasserstein_distance(
-        np.arange(grid_size**2), np.arange(grid_size**2), u_weights=pdf1.ravel(), v_weights=pdf2.ravel()
-    )
+    return x_range, y_range, pdf1, pdf2
 
-    return wdistance_smoothed, x_range, y_range, pdf1, pdf2 
+def SinkhornDistance(samples1, samples2, eps=0.1, max_iter=100, tol=1e-6):
+    """
+    Note: This self-implemented function isn't numerical stable yet. I tried to make it work for 1D, but for some samples, 0 could be found at the denominator.
+    Then I use the Wasserstein distance function in Scipy and use Sinkhorn distance with small weight loss for the entropy part for the 2D samples.
+
+    Compute the Sinkhorn distance between two distributions and return the distance, transport plan, and cost matrix.
+    Ref: Sinkhorn distances: lightspeed computation of optimal transport
+    Args:
+        samples1 (torch.Tensor): First distribution samples (n x d).
+        samples2 (torch.Tensor): Second distribution samples (m x d).
+        epsilon (float): Regularization parameter.
+        max_iter (int): Maximum number of iterations.
+        tol (float): Convergence tolerance.
+
+    Returns:
+        dist (torch.Tensor): Sinkhorn distance.
+        transport_plan (torch.Tensor): Optimal transport plan matrix (n x m).
+        cost_matrix (torch.Tensor): Cost matrix (n x m).
+    """
+    # If samples are not PyTorch tensors, convert them
+    samples1 = torch.tensor(samples1, dtype=torch.float)
+    samples2 = torch.tensor(samples2, dtype=torch.float)
+
+    # If samples are 1D, convert them to 2D
+    if samples1.dim() == 1:
+        samples1 = samples1.unsqueeze(1)
+    if samples2.dim() == 1:
+        samples2 = samples2.unsqueeze(1)
+
+    if torch.isnan(samples1).any() or torch.isnan(samples2).any():
+        raise ValueError("Input samples contain NaN.")
+    if torch.isinf(samples1).any() or torch.isinf(samples2).any():
+        raise ValueError("Input samples contain infinity.")
+
+    # Compute cost matrix (pairwise squared Euclidean distances)
+    cost_matrix = torch.cdist(samples1, samples2, p=2) ** 2  # Cost matrix (n x m)
+    #print('Cost_matrix', cost_matrix)
+    # Initialize uniform weights for the two distributions
+    n, m = cost_matrix.shape
+    a = torch.ones(n, dtype=torch.float) / n  # Uniform weights for samples1
+    b = torch.ones(m, dtype=torch.float) / m  # Uniform weights for samples2
+
+    # Initialize u and v (scaling factors for Sinkhorn-Knopp)
+    u = torch.ones_like(a)
+    v = torch.ones_like(b)
+
+    # Kernel matrix (regularized by epsilon)
+    K = torch.exp(-cost_matrix / eps)
+
+    # Sinkhorn iterations
+    for _ in range(max_iter):
+        u_prev = u.clone()
+        u = a / (K @ v)
+        v = b / (K.T @ u)
+        if torch.isnan(u).any() or torch.isnan(v).any():
+            print("NaN detected in scaling factors.")
+            break
+        # Check for convergence
+        if torch.max(torch.abs(u - u_prev)) < tol:
+            break
+
+    # Compute transport plan
+    transport_plan = torch.diag(u) @ K @ torch.diag(v)
+
+    # Compute Sinkhorn distance
+    dist = torch.sum(transport_plan * cost_matrix)
+
+    # Return number and np.array of the ransport plan, and cost matrix
+    dist, transport_plan, cost_matrix = dist.item(), transport_plan.detach().numpy(), cost_matrix.detach().numpy()
+    # Check if distance is NaN
+    if np.isnan(dist):
+        print("Sinkhorn distance is NaN.")
+    return dist, transport_plan, cost_matrix
