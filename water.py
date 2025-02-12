@@ -638,6 +638,37 @@ def all_distances(samples, A, B, r_max=10.0, bins=120, mic=True, subNum=79):
     return  AB_all_distances
 
 
+def cal_d5(atoms):
+    '''
+    Calculate the 5th nearest neighbor distance of O atoms
+    '''
+    # Find all the O atoms
+    O_indices = [i for i, atom in enumerate(atoms) if atom.symbol == 'O']
+    # Loop through all the O atoms
+    d5s = []
+    for O_idx in O_indices:
+        # Get all the other indices of O atoms
+        O_indices_ = [i for i in O_indices if i != O_idx]
+        # Get the distances between the central O atom and all the other O atoms
+        distances = atoms.get_distances(O_idx, O_indices_)
+        # Sort the distances from smallest to largest
+        distances = sorted(distances)
+        if len(distances) >= 5:
+            d5 = distances[4]
+            d5s.append(d5)
+    return d5s
+
+def cal_d5_all(samples):
+    '''
+    Calculate the 5th nearest neighbor distance of O atoms for all samples
+    '''
+    d5s = []
+    for sample in tqdm(samples):
+        atoms = read_xyz_with_atomic_numbers(sample)
+        d5 = cal_d5(atoms)
+        d5s.extend(d5)
+    return np.array(d5s)
+
 def plot_distance_distribution(distances, label, legend, r_max=10,  color='#299035', bins=120, y_lim=0.4, outfolder='output'):
     figure_size=(6, 2.5)
     plt.figure(figsize=figure_size)
