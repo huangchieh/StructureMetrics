@@ -151,7 +151,8 @@ for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]:
         ax.legend(loc='upper right', frameon=False)
 
         plt.tight_layout()
-        plt.savefig('images/{}/radar.png'.format(model), dpi=300)
+        #plt.savefig('images/{}/radar.png'.format(model), dpi=300)
+        plt.savefig('images/{}_radar.png'.format(model), dpi=300)
         plt.show() if showFig else None
         plt.close()
 
