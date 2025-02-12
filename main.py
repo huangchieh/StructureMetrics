@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, cal_all_hydrogen_bonds
+from water import cal_d5_all 
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
 
@@ -95,3 +96,7 @@ if __name__ == '__main__':
         angles_dha = [hb[4] for hb in hbonds]
         distance_angle = np.array([distances_da, angles_dha]).T
         np.savez('{}/Hbonds.npz'.format(outputFolder), distance_angle=distance_angle)
+        # d5 
+        print('Calculating d5 ...')
+        d5s = cal_d5_all(samples)
+        np.savez('{}/d5.npz'.format(outputFolder), d5=d5s)
