@@ -68,6 +68,11 @@ def plot_heatmaps(score_data, title_suffix, cmap='viridis', filename=None):
         cbar = fig.colorbar(im, cax=cax)
         cbar.set_label(r'{} score {}'.format(labels[i], title_suffix), fontsize=10)
 
+        # Print the first 3 values and their indices to the terminal
+        print(f'Top 3 {labels[i]} values:')
+        for value, x, y in zip(score_data[i][top_indices], top_indices[1], top_indices[0]):
+            print(f'{value:.3f} at L1={L1_values[x]}, L2={L2_values[y]}')
+        
     # Adjust layout to prevent overlap
     fig.subplots_adjust(hspace=0.1, wspace=0.3, left=0.1, bottom=0.1, right=0.90, top=0.95)
     if filename is not None:
