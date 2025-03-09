@@ -45,7 +45,7 @@ if __name__ == '__main__':
         # Common parameters for the plots, and output folder
         outputFolder = os.path.join(baseOut)
 
-        fig, axs = plt.subplots(4, 1, figsize=(6, 6))
+        fig, axs = plt.subplots(2, 2, figsize=(8, 6))
         axs = axs.flatten()
         colors = {'All': 'green', 'V0': 'red', 'V1': 'black'}
         linestypes = {'All': '-', 'V0': ':', 'V1': '-.'}
@@ -66,14 +66,17 @@ if __name__ == '__main__':
         similarities['OO_dist'] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
 
         # Visulize 
+        show_plots = False
         r_max = 3.5
         bins = 120
-        plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=distances, color=colors['All'], linestyle=linestypes['All'], label='Ground truth', fill=fills['All'], alpha_fill=0.3)
-        plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=distances3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=True)
-        plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=distancesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=True)
+        hist = True
+        plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=distances, color=colors['All'], linestyle=linestypes['All'], label='Reference', fill=fills['All'], alpha_fill=0.3)
+        plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=distances3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=hist)
+        plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=distancesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=hist)
         axs[0].set_xlabel(r'$r_\text{OO}$ (Å)')
         axs[0].set_ylabel(r'$\rho(r)$')
-        axs[0].set_xlim(0, r_max)
+        axs[0].set_xlim(1.5, r_max)
+        axs[0].set_ylim(bottom=0)
         axs[0].legend(frameon=False, ncol=1)
         axs[0].tick_params(axis='both', direction='in')
 
@@ -91,11 +94,12 @@ if __name__ == '__main__':
 
         r_max = 1.25 
         plot_kde_fill(ax=axs[1], xmin=0, xmax=r_max, data=distances, color=colors['All'], linestyle=linestypes['All'], label='Ground truth', fill=fills['All'], alpha_fill=0.3)
-        plot_kde_fill(ax=axs[1], xmin=0, xmax=r_max, data=distances3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=True)
-        plot_kde_fill(ax=axs[1], xmin=0, xmax=r_max, data=distancesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=True)
+        plot_kde_fill(ax=axs[1], xmin=0, xmax=r_max, data=distances3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=hist)
+        plot_kde_fill(ax=axs[1], xmin=0, xmax=r_max, data=distancesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=hist)
         axs[1].set_xlabel(r'$r_\text{OH}$ (Å)')
         axs[1].set_ylabel(r'$\rho(r)$')
-        axs[1].set_xlim(0, r_max)
+        axs[1].set_xlim(0.6, r_max)
+        axs[1].set_ylim(bottom=0)
         axs[1].tick_params(axis='both', direction='in')
 
         # --- ADF
@@ -112,10 +116,11 @@ if __name__ == '__main__':
         similarities['HOH_dist'] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
 
         plot_kde_fill(ax=axs[2], xmin=0, xmax=180, data=angles, color=colors['All'], linestyle=linestypes['All'], label='Ground truth', fill=fills['All'], alpha_fill=0.3)
-        plot_kde_fill(ax=axs[2], xmin=0, xmax=180, data=angles3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=True)
-        plot_kde_fill(ax=axs[2], xmin=0, xmax=180, data=anglesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=True)
+        plot_kde_fill(ax=axs[2], xmin=0, xmax=180, data=angles3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=hist)
+        plot_kde_fill(ax=axs[2], xmin=0, xmax=180, data=anglesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=hist)
         axs[2].set_xlabel(r'$\angle$HOH (degrees)')
-        axs[2].set_xlim(0, 180)
+        axs[2].set_xlim(50, 150)
+        axs[2].set_ylim(bottom=0)
         axs[2].set_ylabel(r'$\rho(\theta)$')
         axs[2].tick_params(axis='both', direction='in')
 
@@ -133,19 +138,21 @@ if __name__ == '__main__':
         similarities['ThetaOH_dist'] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
 
         plot_kde_fill(ax=axs[3], xmin=0, xmax=180, data=angles, color=colors['All'], linestyle=linestypes['All'], label='Ground truth', fill=fills['All'], alpha_fill=0.3)
-        plot_kde_fill(ax=axs[3], xmin=0, xmax=180, data=angles3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=True)
-        plot_kde_fill(ax=axs[3], xmin=0, xmax=180, data=anglesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=True)
+        plot_kde_fill(ax=axs[3], xmin=0, xmax=180, data=angles3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=hist, bins=40)
+        plot_kde_fill(ax=axs[3], xmin=0, xmax=180, data=anglesc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=hist, bins=40)
         axs[3].set_xlabel(r'$\angle$ZOH (degrees)')
         axs[3].set_xlim(0, 180)
+        axs[3].set_ylim(bottom=0)
         axs[3].set_ylabel(r'$\rho(\theta)$')
         axs[3].tick_params(axis='both', direction='in')
 
         # Store similarities for the current structure
         all_similarities[structure] = similarities
 
-        fig.subplots_adjust(hspace=0.4, wspace=0, left=0.1, bottom=0.1, right=0.95, top=0.98)
-        plt.savefig(os.path.join(imagePath, structure, 'DistanceAngelDists.png'), dpi=300)
-        #plt.show()
+        fig.subplots_adjust(hspace=0.2, wspace=0.3, left=0.1, bottom=0.1, right=0.95, top=0.98)
+        plt.savefig(os.path.join(imagePath, structure, 'DistanceAngelDists.png'), dpi=600)
+        if show_plots:
+            plt.show()
         plt.close()
 
         # Hbond
@@ -157,50 +164,117 @@ if __name__ == '__main__':
         wdistance_decrease = wdistance3 - wdistancec
         similarities['Hbonds'] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
 
-        plt.figure(figsize=(22, 6))
+        plt.figure(figsize=(10, 2.5))
         # Plot PDF
         x_range_3, y_range_3, pdf, pdf_3  = kde(data, data3)
         x_range_c, y_range_c, pdf, pdf_c  = kde(data, datac)
-        plt.subplot(1, 3, 1)
-        plt.tick_params(axis='both', direction='in')
-        contourf = plt.contourf(x_range_3, y_range_3, pdf, levels=30, cmap='Blues')
-        subset = data[np.random.choice(data.shape[0], size=int(0.1 * data.shape[0]), replace=False)]
-        plt.scatter(subset[:, 0], subset[:, 1], s=0.5, color='black', alpha=0.1)
-        plt.xlim(0.8, 3.8)
-        plt.ylim(120, 180)
-        #plt.title("Data1 KDE PDF")
-        plt.xlabel(r"$d_\text{OO}$ (Å)")
-        plt.ylabel(r"$\angle$DHA (degrees)")
-        plt.colorbar(contourf, label="Density")
+        x_min = np.min([x_range_3.min(), x_range_c.min()])
+        x_max = np.max([x_range_3.max(), x_range_c.max()])
+        y_min = np.min([y_range_3.min(), y_range_c.min()])
+        y_max = np.max([y_range_3.max(), y_range_c.max()])
+        def plot_sub(subNum, data, pdf, xlabel, ylabel, text, cmap, x_min=0.8, x_max=3.8, y_min=120, y_max=180, percent=0.1, logY=False, levels=30):
+            plt.subplot(1, 3, subNum)
+            plt.tick_params(axis='both', direction='in')
+            if logY:
+                plt.yscale('log') 
+            #contourf = plt.contourf(x_range_3, y_range_3, pdf, levels=30, cmap=cmap)
+            contour = plt.pcolormesh(x_range_3, y_range_3, pdf, cmap=cmap)
+            plt.colorbar(contour, label="Density")
+            # if text == 'Reference' and percent < 1.0:
+            #     subset = data[np.random.choice(data.shape[0], size=int(percent * data.shape[0]), replace=False)]
+            #     plt.scatter(subset[:, 0], subset[:, 1], s=0.5, color='black', alpha=0.1)
+            # else:
+            #     print('Plotting all data')
+            #     plt.scatter(data[:, 0], data[:, 1], s=0.5, color='black', alpha=0.1)
+            plt.scatter(data[:, 0], data[:, 1], s=0.5, color='black', alpha=0.1)
+            plt.xlim(x_min, x_max)
+            plt.ylim(y_min, y_max)
+            # Add text to the top left corner of the plot
+            plt.text(0.05, 0.95, text, color='black', fontsize=10, transform=plt.gca().transAxes, verticalalignment='top')
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            #plt.colorbar(contourf, label="Density")
 
-        # Plot PDF3
-        plt.subplot(1, 3, 2)
-        plt.tick_params(axis='both', direction='in')
-        contourf_3 = plt.contourf(x_range_3, y_range_3, pdf_3, levels=30, cmap='Reds')
-        plt.scatter(data3[:, 0], data3[:, 1], s=0.5, color='black', alpha=0.1)
-        #plt.title("Data2 KDE PDF")
-        plt.xlim(0.8, 3.8)
-        plt.ylim(120, 180)
-        plt.xlabel(r"$d_\text{OO}$ (Å)")
-        plt.ylabel(r"$\angle$DHA (degrees)")
-        plt.colorbar(contourf_3, label="Density")
-
-        # Plot PDFc
-        plt.subplot(1, 3, 3)
-        plt.tick_params(axis='both', direction='in')
-        contourf_c = plt.contourf(x_range_c, y_range_c, pdf_c, levels=30, cmap='Greens')
-        plt.scatter(datac[:, 0], datac[:, 1], s=0.5, color='black', alpha=0.1)
-        #plt.title("Data2 KDE PDF")
-        plt.xlim(0.8, 3.8)
-        plt.ylim(120, 180)
-        plt.xlabel(r"$d_\text{OO}$ (Å)")
-        plt.ylabel(r"$\angle$DHA (degrees)")
-        plt.colorbar(contourf_c, label="Density")
+        xlabel = r"$d_\text{OO}$ (Å)"
+        ylabel = r"$\angle$DHA (degrees)"
+        plot_sub(1, data, pdf, xlabel, ylabel, 'Reference', 'Blues', x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max)
+        plot_sub(2, data3, pdf_3, xlabel, ylabel, 'V0', 'Reds', x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max)
+        plot_sub(3, datac, pdf_c, xlabel, ylabel, 'V1', 'Greens', x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max)
 
         plt.tight_layout()
-        plt.savefig(os.path.join(imagePath, structure, 'Hbonds_dists.png'), dpi=300)
-        #plt.show()
+        plt.savefig(os.path.join(imagePath, structure, 'Hbonds_dists.png'), dpi=600)
+        if show_plots:
+            plt.show()
         plt.close()
+
+        #######################
+        # Order parameter 2d
+        #######################
+        print('OrderP')
+        data = np.load('{}/{}/OrderP.npz'.format(outputFolder, ground_truth))['sg_sk']
+        data3 = np.load('{}/{}/OrderP.npz'.format(outputFolder, 'Ref'))['sg_sk']
+        datac = np.load('{}/{}/OrderP.npz'.format(outputFolder, structure))['sg_sk']
+        wdistance3  = sinkhorn_2d_distance(data, data3)
+        wdistancec  = sinkhorn_2d_distance(data, datac)
+        wdistance_decrease = wdistance3 - wdistancec
+        print('OrderP, wdistance3: {:.5f}, wdistancec: {:.5f}, wdistance_decrease: {:.5f}'.format(wdistance3, wdistancec, wdistance_decrease))
+        similarities['OrderP'] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
+
+        plt.figure(figsize=(10, 2.5))
+        # Plot PDF
+        x_range_3, y_range_3, pdf, pdf_3  = kde(data, data3, grid_size=200)
+        x_range_c, y_range_c, pdf, pdf_c  = kde(data, datac, grid_size=200)
+        x_min = np.min([x_range_3.min(), x_range_c.min()])
+        x_max = np.max([x_range_3.max(), x_range_c.max()])
+        y_min = np.min([y_range_3.min(), y_range_c.min()])
+        y_max = np.max([y_range_3.max(), y_range_c.max()])
+        xlabel = r"$S_g$"
+        ylabel = r"$S_k$"
+        plot_sub(1, data, pdf, xlabel, ylabel, 'Reference', 'Blues', x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max, levels=60)
+        plot_sub(2, data3, pdf_3, xlabel, ylabel, 'V0', 'Reds', x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max, levels=60)
+        plot_sub(3, datac, pdf_c, xlabel, ylabel, 'V1', 'Greens', x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max, levels=60)
+
+        plt.tight_layout()
+        plt.savefig(os.path.join(imagePath, structure, 'OrderP_dists.png'), dpi=600)
+        if show_plots:
+            plt.show()
+        plt.close()
+
+        # # Order parameter
+        # fig, axs = plt.subplots(2, 2, figsize=(8, 6))
+        # axs = axs.flatten() 
+
+        # def one_subplot(ax, prop='d5', xlabel=r'$d_5$ (Å)', ylabel=r'$\rho(d_5)$', x_min=2.6, x_max=6.5):
+        #     # d5
+        #     data = np.load('{}/{}/{}.npz'.format(outputFolder, ground_truth, prop))
+        #     prop_s = data[prop]
+        #     data3 = np.load('{}/{}/{}.npz'.format(outputFolder, 'Ref', prop))
+        #     prop_s3 = data3[prop]
+        #     datac = np.load('{}/{}/{}.npz'.format(outputFolder, structure, prop))
+        #     prop_sc = datac[prop]
+        #     wdistance3 = wasserstein_distance(prop_s, prop_s3)
+        #     wdistancec = wasserstein_distance(prop_s, prop_sc)
+        #     wdistance_decrease = wdistance3 - wdistancec
+        #     print('{}, wdistance3: {:.5f}, wdistancec: {:.5f}, wdistance_decrease: {:.5f}'.format(prop, wdistance3, wdistancec, wdistance_decrease))
+        #     similarities['{}_dist'.format(prop)] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
+
+        #     plot_kde_fill(ax=ax, xmin=x_min, xmax=x_max, data=prop_s, color=colors['All'], linestyle=linestypes['All'], label='Ground truth', fill=fills['All'], alpha_fill=0.3)
+        #     plot_kde_fill(ax=ax, xmin=x_min, xmax=x_max, data=prop_s3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=hist)
+        #     plot_kde_fill(ax=ax, xmin=x_min, xmax=x_max, data=prop_sc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=hist)
+        #     ax.set_xlabel(xlabel)
+        #     ax.set_ylabel(ylabel)
+        #     #axs[1].set_xlim(0.6, r_max)
+        #     ax.set_ylim(bottom=0)
+        #     ax.tick_params(axis='both', direction='in')
+        #     # Legend
+        #     ax.legend(frameon=False, ncol=1)
+        # one_subplot(axs[0], prop='d5', xlabel=r'$d_5$ (Å)', ylabel=r'$\rho(d_5)$')
+        # one_subplot(axs[1], prop='sg', xlabel=r'$q$', ylabel=r'$\rho(q)$', x_min=-2.3, x_max=1)
+        # one_subplot(axs[2], prop='sk', xlabel=r'$S_k$', ylabel=r'$\rho(S_k)$', x_min=0.9, x_max=1)
+        # one_subplot(axs[3], prop='lsi', xlabel=r'$LSI$ (Å)', ylabel=r'$\rho(\text{LSI})$', x_min=0, x_max=0.23)
+        # if show_plots:
+        #     plt.show()
+        # plt.close()
 
     # Write all similarities to a single JSON file
     write_similarity_to_file(results_file, all_similarities)

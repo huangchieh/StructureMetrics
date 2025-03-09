@@ -24,6 +24,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 2.897030830383301,
             "wdistance_decrease": 4.307415008544922
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2997242212295532,
+            "wdistance_decrease": -0.0020738840103149414
         }
     },
     "PPAFM2Exp_CoAll_L10_L1_Elatest": {
@@ -51,6 +56,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.2256879806518555,
             "wdistance_decrease": 1.9787578582763672
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3025820553302765,
+            "wdistance_decrease": -0.004931718111038208
         }
     },
     "PPAFM2Exp_CoAll_L10_L10_Elatest": {
@@ -78,6 +88,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 1.4625881910324097,
             "wdistance_decrease": 5.741857647895813
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.29476651549339294,
+            "wdistance_decrease": 0.002883821725845337
         }
     },
     "PPAFM2Exp_CoAll_L20_L0.1_Elatest": {
@@ -105,6 +120,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 4.070704460144043,
             "wdistance_decrease": 3.1337413787841797
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.33196398615837097,
+            "wdistance_decrease": -0.03431364893913269
         }
     },
     "PPAFM2Exp_CoAll_L20_L1_Elatest": {
@@ -132,6 +152,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 2.5127623081207275,
             "wdistance_decrease": 4.691683530807495
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2818087339401245,
+            "wdistance_decrease": 0.01584160327911377
         }
     },
     "PPAFM2Exp_CoAll_L20_L10_Elatest": {
@@ -159,6 +184,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.002962112426758,
             "wdistance_decrease": 0.20148372650146484
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2960425615310669,
+            "wdistance_decrease": 0.0016077756881713867
         }
     },
     "PPAFM2Exp_CoAll_L30_L0.1_Elatest": {
@@ -186,6 +216,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 4.252042770385742,
             "wdistance_decrease": 2.9524030685424805
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.30718955397605896,
+            "wdistance_decrease": -0.009539216756820679
         }
     },
     "PPAFM2Exp_CoAll_L30_L1_Elatest": {
@@ -213,6 +248,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.68382453918457,
             "wdistance_decrease": 1.5206212997436523
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.295671284198761,
+            "wdistance_decrease": 0.001979053020477295
         }
     },
     "PPAFM2Exp_CoAll_L30_L10_Elatest": {
@@ -240,6 +280,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.491283416748047,
             "wdistance_decrease": -0.2868375778198242
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.31520384550094604,
+            "wdistance_decrease": -0.017553508281707764
         }
     },
     "PPAFM2Exp_CoAll_L40_L0.1_Elatest": {
@@ -267,6 +312,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 4.747119426727295,
             "wdistance_decrease": 2.4573264122009277
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3273714482784271,
+            "wdistance_decrease": -0.029721111059188843
         }
     },
     "PPAFM2Exp_CoAll_L40_L1_Elatest": {
@@ -294,6 +344,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 6.72471284866333,
             "wdistance_decrease": 0.4797329902648926
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2928208112716675,
+            "wdistance_decrease": 0.004829525947570801
         }
     },
     "PPAFM2Exp_CoAll_L40_L10_Elatest": {
@@ -321,6 +376,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.287726402282715,
             "wdistance_decrease": 1.9167194366455078
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2879236340522766,
+            "wdistance_decrease": 0.00972670316696167
         }
     },
     "PPAFM2Exp_CoAll_L50_L0.1_Elatest": {
@@ -348,6 +408,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.65516996383667,
             "wdistance_decrease": 1.5492758750915527
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3430260717868805,
+            "wdistance_decrease": -0.04537573456764221
         }
     },
     "PPAFM2Exp_CoAll_L50_L1_Elatest": {
@@ -375,6 +440,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.962408065795898,
             "wdistance_decrease": 1.2420377731323242
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.31237706542015076,
+            "wdistance_decrease": -0.014726728200912476
         }
     },
     "PPAFM2Exp_CoAll_L50_L10_Elatest": {
@@ -402,6 +472,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.206851005554199,
             "wdistance_decrease": 1.9975948333740234
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3285543918609619,
+            "wdistance_decrease": -0.030904054641723633
         }
     },
     "PPAFM2Exp_CoAll_L60_L0.1_Elatest": {
@@ -429,6 +504,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 9.374046325683594,
             "wdistance_decrease": -2.169600486755371
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.34007903933525085,
+            "wdistance_decrease": -0.04242870211601257
         }
     },
     "PPAFM2Exp_CoAll_L60_L1_Elatest": {
@@ -456,6 +536,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.307040691375732,
             "wdistance_decrease": -0.10259485244750977
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2975689172744751,
+            "wdistance_decrease": 8.14199447631836e-05
         }
     },
     "PPAFM2Exp_CoAll_L60_L10_Elatest": {
@@ -483,6 +568,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 9.365723609924316,
             "wdistance_decrease": -2.1612777709960938
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.30330824851989746,
+            "wdistance_decrease": -0.00565791130065918
         }
     },
     "PPAFM2Exp_CoAll_L70_L0.1_Elatest": {
@@ -510,6 +600,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.770744323730469,
             "wdistance_decrease": -0.5662984848022461
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.31391459703445435,
+            "wdistance_decrease": -0.016264259815216064
         }
     },
     "PPAFM2Exp_CoAll_L70_L1_Elatest": {
@@ -537,6 +632,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.149297714233398,
             "wdistance_decrease": 0.05514812469482422
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.33564233779907227,
+            "wdistance_decrease": -0.037992000579833984
         }
     },
     "PPAFM2Exp_CoAll_L70_L10_Elatest": {
@@ -564,6 +664,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.2039642333984375,
             "wdistance_decrease": 0.00048160552978515625
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.31006890535354614,
+            "wdistance_decrease": -0.012418568134307861
         }
     },
     "PPAFM2Exp_CoAll_L80_L0.1_Elatest": {
@@ -591,6 +696,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 4.497853755950928,
             "wdistance_decrease": 2.706592082977295
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.33443373441696167,
+            "wdistance_decrease": -0.03678339719772339
         }
     },
     "PPAFM2Exp_CoAll_L80_L1_Elatest": {
@@ -618,6 +728,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.184567928314209,
             "wdistance_decrease": 0.019877910614013672
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3028959035873413,
+            "wdistance_decrease": -0.005245566368103027
         }
     },
     "PPAFM2Exp_CoAll_L80_L10_Elatest": {
@@ -645,6 +760,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 6.3225932121276855,
             "wdistance_decrease": 0.8818526268005371
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2915500998497009,
+            "wdistance_decrease": 0.0061002373695373535
         }
     },
     "PPAFM2Exp_CoAll_L90_L0.1_Elatest": {
@@ -672,6 +792,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.7765703201293945,
             "wdistance_decrease": 1.4278755187988281
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.29728060960769653,
+            "wdistance_decrease": 0.00036972761154174805
         }
     },
     "PPAFM2Exp_CoAll_L90_L1_Elatest": {
@@ -699,6 +824,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 6.142692565917969,
             "wdistance_decrease": 1.061753273010254
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.32877296209335327,
+            "wdistance_decrease": -0.03112262487411499
         }
     },
     "PPAFM2Exp_CoAll_L90_L10_Elatest": {
@@ -726,6 +856,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.724525451660156,
             "wdistance_decrease": 1.4799203872680664
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3108537197113037,
+            "wdistance_decrease": -0.01320338249206543
         }
     },
     "PPAFM2Exp_CoAll_L100_L0.1_Elatest": {
@@ -753,6 +888,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 7.638397693634033,
             "wdistance_decrease": -0.43395185470581055
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.35482513904571533,
+            "wdistance_decrease": -0.05717480182647705
         }
     },
     "PPAFM2Exp_CoAll_L100_L1_Elatest": {
@@ -780,6 +920,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.009339332580566,
             "wdistance_decrease": 2.1951065063476562
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2724474370479584,
+            "wdistance_decrease": 0.025202900171279907
         }
     },
     "PPAFM2Exp_CoAll_L100_L10_Elatest": {
@@ -807,6 +952,11 @@
             "wdistance3": 7.204445838928223,
             "wdistancec": 5.836239814758301,
             "wdistance_decrease": 1.3682060241699219
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.260577917098999,
+            "wdistance_decrease": 0.03707242012023926
         }
     }
 }
