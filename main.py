@@ -2,6 +2,7 @@
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
 
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, cal_all_hydrogen_bonds
@@ -10,6 +11,10 @@ from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--testStability", action="store_true", help="Use to test the stability")
+    args = parser.parse_args()
+    print("testStability:", args.testStability)
     baseOut = 'output'
     structures = ['Label', 'P', 'Ref']
     structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
