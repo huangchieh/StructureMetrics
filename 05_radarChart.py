@@ -73,7 +73,7 @@ for i, metric in enumerate(metrics):
     min_max[metric] = {'min': min_wc['WdistanceC'], 'max': max_wc['WdistanceC']}
 
     #ax.set_title(f'{metric} - Wdistance3 and WdistanceC')
-    ax.set_ylabel('WDistance {}'.format(metric))
+    ax.set_ylabel('{}'.format(metric))
     if i != len(metrics) - 1:
         ax.set_xlabel('')
         #ax.set_xticklabels([])  # Remove x-tick labels except for the last plot
@@ -94,19 +94,19 @@ print('The min and max values for WdistanceC are:')
 
 final_scores = {}
 # Data
-categories = [r'OO', r'OH', r'$\angle$HOH', r'$\angle$ZOH', r'H-bond']
+categories = [r'OO', r'OH', r'$\angle$HOH', r'$\angle$ZOH', r'H-bond', r'OrderP']
 for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]:
     for L2 in [0.1, 1, 10]:
         model = 'PPAFM2Exp_CoAll_L{}_L{}_Elatest'.format(L1, L2) 
         #print(data[model])
         #data_3 = [data[model][property]['wdistance3'] for property in ['OO_dist', 'OH_dist', 'HOH_dist', 'ThetaOH_dist', 'Hbonds']]
-        data_3 = [1 - (data[model][property]['wdistance3'] - min_max[property]['min'])/(min_max[property]['max'] - min_max[property]['min']) for property in ['OO_dist', 'OH_dist', 'HOH_dist', 'ThetaOH_dist', 'Hbonds']]
-        data_c = [1 - (data[model][property]['wdistancec'] - min_max[property]['min'])/(min_max[property]['max'] - min_max[property]['min']) for property in ['OO_dist', 'OH_dist', 'HOH_dist', 'ThetaOH_dist', 'Hbonds']]
+        data_3 = [1 - (data[model][property]['wdistance3'] - min_max[property]['min'])/(min_max[property]['max'] - min_max[property]['min']) for property in ['OO_dist', 'OH_dist', 'HOH_dist', 'ThetaOH_dist', 'Hbonds', 'OrderP']]
+        data_c = [1 - (data[model][property]['wdistancec'] - min_max[property]['min'])/(min_max[property]['max'] - min_max[property]['min']) for property in ['OO_dist', 'OH_dist', 'HOH_dist', 'ThetaOH_dist', 'Hbonds',  'OrderP']]
         print(model)
         #print(data_3)
         print(data_c)
 
-        num_vars = 5
+        num_vars = len(categories)
 
         # Compute angles for the categories
         angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
@@ -156,7 +156,7 @@ for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]:
         plt.show() if showFig else None
         plt.close()
 
-final_scores['Ref'] = {'Overall': score_3, 'OO': data_3[0], 'OH': data_3[1], 'HOH': data_3[2], 'ThetaOH': data_3[3], 'Hbonds': data_3[4]} 
+final_scores['Ref'] = {'Overall': score_3, 'OO': data_3[0], 'OH': data_3[1], 'HOH': data_3[2], 'ThetaOH': data_3[3], 'Hbonds': data_3[4], 'sg': data_3[5], 'sk': data_3[6]} 
 print(final_scores)
 # Save final scores to a file
 with open('images/final_scores.json', 'w') as file:

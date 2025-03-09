@@ -28,8 +28,8 @@ metrics = ['OO', 'OH', 'HOH', 'ZOH', 'Hbond']
 baseline = df.loc[0, metrics]  # V0 baseline values
 
 # Create a plot for each metric
-fig, axs = plt.subplots(5, 1, figsize=(6, 10), dpi=300, sharex=True)
-fig.suptitle('Comparison of Structural Metrics for Different $(\lambda_1, \lambda_2)$ Values', fontsize=14)
+fig, axs = plt.subplots(5, 1, figsize=(12, 8), sharex=True)
+#fig.suptitle('Comparison of Structural Metrics for Different $(\lambda_1, \lambda_2)$ Values', fontsize=14)
 
 for i, metric in enumerate(metrics):
     ax = axs[i]
@@ -53,6 +53,6 @@ axs[-1].set_xlabel('$(\lambda_1, \lambda_2)$ values', fontsize=10)
 
 plt.tight_layout(rect=[0, 0, 1, 0.96])
 fig.subplots_adjust(top=0.92)
-plt.savefig('allModelPerformance.png', dpi=300, bbox_inches='tight')
+plt.savefig('allModelPerformance.png', dpi=600, bbox_inches='tight')
 plt.show()
 

@@ -15,28 +15,13 @@ figure_folder = 'Figures'
 if not os.path.exists(figure_folder):
     os.makedirs(figure_folder)
 
-
-# Get the z distribution for all the structures in the Label folder
-samples = read_samples_from_folder('BatchOutStructures/Label')
-z = []
-for structure in samples:
-    atoms = read_xyz_with_atomic_numbers(structure)
-    z_positions_Au = [atom.position[2] for atom in atoms if atom.symbol == 'Au']
-    if len(z_positions_Au) > 0:
-        mean_z_Au = sum(z_positions_Au) / len(z_positions_Au)
-    else:
-        mean_z_Au = 0  # or handle this case appropriately
-        print('No Au atoms in {}'.format(structure))
-    mean_z_Au = sum(z_positions_Au) / len(z_positions_Au)
-    z_positions_O = [atom.position[2] - mean_z_Au for atom in atoms if atom.symbol == 'O']
-    z.extend(z_positions_O)
-
-
+###############################################################
 # Plot the atoms of demostration configuration in the xy plane
+###############################################################
 demoStructure = 'BatchOutStructures/Label/0.xyz'
 atoms = read_xyz_with_atomic_numbers(demoStructure)
 
-fig = plt.figure(figsize=(9, 9))
+fig = plt.figure(figsize=(9, 6))
 gs = fig.add_gridspec(1, 1)
 ax1 = fig.add_subplot(gs[0, 0])
 ax1.set_aspect('equal')
@@ -59,13 +44,35 @@ ax1.set_xlim([xmin - 3*offset, xmax + 3*offset])
 ax1.set_ylim([ymin - 2*offset, ymax + 2*offset])
 ax1.set_xlabel(r'$x$ (Å)')
 ax1.set_ylabel(r'$y$ (Å)')
-fig.subplots_adjust(hspace=0, wspace=0, left=0.08, bottom=0.15, right=0.99, top=0.95)
+
+# Add the label
+offset_text = 0.05 
+ax1.text(offset_text, 1 - offset_text, "a", transform=ax1.transAxes, fontsize=18, fontweight='bold', va='top', ha='left')
+
+#fig.subplots_adjust(hspace=0, wspace=0, left=0.08, bottom=0.15, right=0.99, top=0.95)
+plt.tight_layout()
 plt.show()
-fig.savefig("{}/xy_view.png".format(figure_folder), dpi=300, bbox_inches='tight')  # Set DPI to 300
+fig.savefig("{}/xy_view.png".format(figure_folder), dpi=600, bbox_inches='tight')  # Set DPI to 300
 fig.savefig("{}/xy_view.pdf".format(figure_folder))  # Set DPI to 300
 fig.savefig("{}/xy_view.svg".format(figure_folder))
 plt.close(fig)
 
+#####################################################################
+# Get the z distribution for all the structures in the Label folder
+#####################################################################
+samples = read_samples_from_folder('BatchOutStructures/Label')
+z = []
+for structure in samples:
+    atoms = read_xyz_with_atomic_numbers(structure)
+    z_positions_Au = [atom.position[2] for atom in atoms if atom.symbol == 'Au']
+    if len(z_positions_Au) > 0:
+        mean_z_Au = sum(z_positions_Au) / len(z_positions_Au)
+    else:
+        mean_z_Au = 0  # or handle this case appropriately
+        print('No Au atoms in {}'.format(structure))
+    mean_z_Au = sum(z_positions_Au) / len(z_positions_Au)
+    z_positions_O = [atom.position[2] - mean_z_Au for atom in atoms if atom.symbol == 'O']
+    z.extend(z_positions_O)
 # Plot the atoms of demostration configuration  of cross section in the yz plane
 # And the distribution of z positions of O atoms
 # Use the mean z position of Au atoms as the reference plane z=0
@@ -102,7 +109,7 @@ ax1.set_ylim([ymin, ymax])
 ax1.tick_params(axis='both', direction='in', labelright=False)
 ax1.set_xlabel(r'$y$ (Å)')
 ax1.set_ylabel(r'$z$ (Å)')
-
+ax1.text(offset_text, 1 - offset_text, "b", transform=ax1.transAxes, fontsize=18, fontweight='bold', va='top', ha='left')
 
 # Add the atoms to the plot as circles.
 # Reorder the atoms based on the z position so that the atoms at the back are plotted first
@@ -130,9 +137,10 @@ ax2.set_xlabel(r'Density $\rho(z)$')
 ax2.set_xlim([0, 1.2])
 ax2.set_ylim([ymin, ymax])
 ax2.tick_params(axis='both', direction='in', labelleft=False)
+ax2.text(offset_text, 1 - offset_text, "c", transform=ax2.transAxes, fontsize=18, fontweight='bold', va='top', ha='left')
 fig.subplots_adjust(hspace=0, wspace=0, left=0.05, bottom=0.15, right=0.99, top=0.95)
 plt.show()
-fig.savefig("{}/z_distribution.png".format(figure_folder), dpi=300, bbox_inches='tight')  # Set DPI to 300
+fig.savefig("{}/z_distribution.png".format(figure_folder), dpi=600, bbox_inches='tight')  # Set DPI to 300
 fig.savefig("{}/z_distribution.pdf".format(figure_folder))  # Set DPI to 300
 fig.savefig("{}/z_distribution.svg".format(figure_folder))
 plt.close(fig)
