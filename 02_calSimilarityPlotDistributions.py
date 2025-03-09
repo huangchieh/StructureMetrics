@@ -10,6 +10,7 @@ from water import plot_rdf, plot_angle_distribution, plot_kde_fill
 from water import sinkhorn_2d_distance, kde
 import json
 from scipy.stats import wasserstein_distance
+import argparse 
 
 def cosine_similarity(a, b):
     dot_product = np.dot(a, b)
@@ -24,14 +25,21 @@ def write_similarity_to_file(file_path, similarities):
         json.dump(similarities, f, indent=4)
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--testStability", action="store_true", help="Use to test the stability")
+    args = parser.parse_args()
+    print("Test stability:", args.testStability)
     baseOut = 'output'
     imagePath = 'images'
     ground_truth = 'Label'
-    results_file = os.path.join(imagePath, 'similarities_{}.json'.format(ground_truth))
+    results_file = os.path.join(imagePath, 'similarities_{}{}.json'.format('testStability_' if args.testStability else '', ground_truth))
 
     # Structures predected by the different models
     structures = []
-    structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
+    if args.testStability:
+        structures_temp = ["PPAFM2Exp_CoAll_L10_L10_Elatest_C{}".format(c) for c in range(0, 10)]
+    else:
+        structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
     #structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10] for L2 in [0.1]]
     structures.extend(structures_temp)
 
@@ -39,7 +47,9 @@ if __name__ == '__main__':
     all_similarities = {}
     for structure in structures:
         print('Calculating for structure: {}'.format(structure))
-        similarity_file = os.path.join(imagePath, structure, 'similarity.json')
+        #os.path.join(imagePath, structure)
+        os.makedirs(os.path.join(imagePath, structure), exist_ok=True)
+        #similarity_file = os.path.join(imagePath, structure, 'similarity.json' if not argparse.args.testStability else 'similarity_testStability.json')
         similarities = {}
 
         # Common parameters for the plots, and output folder
