@@ -36,12 +36,13 @@ if __name__ == '__main__':
 
     # Structures predected by the different models
     structures = []
+    structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
     if args.testStability:
-        structures_temp = ["PPAFM2Exp_CoAll_L10_L10_Elatest_C{}".format(c) for c in range(0, 10)]
-    else:
-        structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
+        structures_temp2 = ["PPAFM2Exp_CoAll_L10_L10_Elatest_C{}".format(c) for c in range(0, 10)]
     #structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10] for L2 in [0.1]]
     structures.extend(structures_temp)
+    if args.testStability:
+        structures.extend(structures_temp2)
 
     # Record scores in all_similarities
     all_similarities = {}
