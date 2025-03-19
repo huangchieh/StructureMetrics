@@ -13,14 +13,24 @@ from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--testStability", action="store_true", help="Use to test the stability")
+    parser.add_argument("-b", "--baselineStability", action="store_true", help="Use to test the baseline stability")
     args = parser.parse_args()
     print("Test stability:", args.testStability)
+    print("Test baseline stability:", args.baselineStability)
     structurePath = 'BatchOutStructures' if not args.testStability else 'BatchOutStructuresStabilityTest'
+    structurePath = 'BatchOutStructures' if not args.baselineStability else 'BatchOutStructuresStabilityTestBaseline'
     baseOut = 'output'
     #structures = ['Label', 'P', 'Ref']
     structures = ['Label', 'Ref']
+    # Sorry for ugly code, but I am running out of time
     if args.testStability:
         structures_temp = ["PPAFM2Exp_CoAll_L10_L10_Elatest_C{}".format(c) for c in range(0, 10)]
+    else:
+        structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
+
+    # Sorry for ugly code, but I am running out of time
+    if args.baselineStability:
+        structures_temp = ["Ref_C{}".format(c) for c in range(0, 10)]
     else:
         structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
     structures.extend(structures_temp)
@@ -79,15 +89,6 @@ if __name__ == '__main__':
         np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
         plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
      
-        # O-H-O: H-bond
-        # r_max = 3.5
-        # y_lim = 0.3 if firstTwo else 0.02
-        # label = "OHO_dist_{}".format(structure)
-        # legend = 'OHO ({})'.format(structure) if structure  !=  'P' else 'OHO (Reference)'
-        # angles = mean_adf(samples, 'O', 'H', 'O', r_max=r_max, firstTwo=firstTwo, mic=mic, onlyAngle=onlyAngle)
-        # np.savez('{}/{}.npz'.format(outputFolder, label), angles=angles)
-        # plot_angle_distribution(angles, label, legend, color=color, bins=bins, y_lim=y_lim, outfolder=outputFolder)
-
         # Theta of OH and z-axis 
         r_max = 1.25
         y_lim = 0.04
