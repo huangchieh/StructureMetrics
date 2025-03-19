@@ -27,21 +27,26 @@ def write_similarity_to_file(file_path, similarities):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--testStability", action="store_true", help="Use to test the stability")
+    parser.add_argument("-b", "--baselineStability", action="store_true", help="Use to test the baseline stability")
     args = parser.parse_args()
     print("Test stability:", args.testStability)
+    print("Test baseline stability:", args.baselineStability)
     baseOut = 'output'
     imagePath = 'images'
     ground_truth = 'Label'
     results_file = os.path.join(imagePath, 'similarities_{}{}.json'.format('testStability_' if args.testStability else '', ground_truth))
+    results_file = os.path.join(imagePath, 'similarities_{}{}.json'.format('baselineStability_' if args.baselineStability else '', ground_truth))
 
     # Structures predected by the different models
     structures = []
     structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] for L2 in [0.1, 1, 10]]
     if args.testStability:
         structures_temp2 = ["PPAFM2Exp_CoAll_L10_L10_Elatest_C{}".format(c) for c in range(0, 10)]
+    if args.baselineStability:
+        structures_temp2 = ["Ref_C{}".format(c) for c in range(0, 10)]
     #structures_temp = ["PPAFM2Exp_CoAll_L{}_L{}_Elatest".format(L1, L2) for L1 in [10] for L2 in [0.1]]
     structures.extend(structures_temp)
-    if args.testStability:
+    if args.testStability or args.baselineStability:
         structures.extend(structures_temp2)
 
     # Record scores in all_similarities
@@ -250,42 +255,6 @@ if __name__ == '__main__':
         if show_plots:
             plt.show()
         plt.close()
-
-        # # Order parameter
-        # fig, axs = plt.subplots(2, 2, figsize=(8, 6))
-        # axs = axs.flatten() 
-
-        # def one_subplot(ax, prop='d5', xlabel=r'$d_5$ (Å)', ylabel=r'$\rho(d_5)$', x_min=2.6, x_max=6.5):
-        #     # d5
-        #     data = np.load('{}/{}/{}.npz'.format(outputFolder, ground_truth, prop))
-        #     prop_s = data[prop]
-        #     data3 = np.load('{}/{}/{}.npz'.format(outputFolder, 'Ref', prop))
-        #     prop_s3 = data3[prop]
-        #     datac = np.load('{}/{}/{}.npz'.format(outputFolder, structure, prop))
-        #     prop_sc = datac[prop]
-        #     wdistance3 = wasserstein_distance(prop_s, prop_s3)
-        #     wdistancec = wasserstein_distance(prop_s, prop_sc)
-        #     wdistance_decrease = wdistance3 - wdistancec
-        #     print('{}, wdistance3: {:.5f}, wdistancec: {:.5f}, wdistance_decrease: {:.5f}'.format(prop, wdistance3, wdistancec, wdistance_decrease))
-        #     similarities['{}_dist'.format(prop)] = {'wdistance3': wdistance3, 'wdistancec': wdistancec, 'wdistance_decrease': wdistance_decrease}
-
-        #     plot_kde_fill(ax=ax, xmin=x_min, xmax=x_max, data=prop_s, color=colors['All'], linestyle=linestypes['All'], label='Ground truth', fill=fills['All'], alpha_fill=0.3)
-        #     plot_kde_fill(ax=ax, xmin=x_min, xmax=x_max, data=prop_s3, color=colors['V0'], linestyle=linestypes['V0'], label='V0', fill=fills['V0'], alpha_fill=0.3, hist=hist)
-        #     plot_kde_fill(ax=ax, xmin=x_min, xmax=x_max, data=prop_sc, color=colors['V1'], linestyle=linestypes['V1'], label='V1', fill=fills['V1'], alpha_fill=0.3, hist=hist)
-        #     ax.set_xlabel(xlabel)
-        #     ax.set_ylabel(ylabel)
-        #     #axs[1].set_xlim(0.6, r_max)
-        #     ax.set_ylim(bottom=0)
-        #     ax.tick_params(axis='both', direction='in')
-        #     # Legend
-        #     ax.legend(frameon=False, ncol=1)
-        # one_subplot(axs[0], prop='d5', xlabel=r'$d_5$ (Å)', ylabel=r'$\rho(d_5)$')
-        # one_subplot(axs[1], prop='sg', xlabel=r'$q$', ylabel=r'$\rho(q)$', x_min=-2.3, x_max=1)
-        # one_subplot(axs[2], prop='sk', xlabel=r'$S_k$', ylabel=r'$\rho(S_k)$', x_min=0.9, x_max=1)
-        # one_subplot(axs[3], prop='lsi', xlabel=r'$LSI$ (Å)', ylabel=r'$\rho(\text{LSI})$', x_min=0, x_max=0.23)
-        # if show_plots:
-        #     plt.show()
-        # plt.close()
 
     # Write all similarities to a single JSON file
     write_similarity_to_file(results_file, all_similarities)

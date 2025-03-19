@@ -1,36 +1,3 @@
-"""
-import matplotlib.pyplot as plt 
-import numpy as np
-from water import read_xyz_with_atomic_numbers
-
-models = ['Ref', 'PPAFM2Exp_CoAll_L10_L10_Elatest']
-angles = [0, 90, 180, 270]
-samples = ['Chen_CO', 'Ying_Jiang_1', 'Ying_Jiang_2_1', 'Ying_Jiang_2_2', 'Ying_Jiang_3', 'Ying_Jiang_4', 'Ying_Jiang_5', 'Ying_Jiang_6', 'Ying_Jiang_7']
-folder = 'BatchOutStructures'
-
-for angle in angles:
-    # Look different rotations individually
-    numRows = len(samples)
-    numCols = len(models)
-    fig, axs = plt.subplots(numRows, numCols, figsize=(numCols*3, numRows*3))
-    for i, sample in enumerate(samples):
-        for j, model in enumerate(models):
-            structure = '{}/{}/Prediction_c/{}_d{}_mol.xyz'.format(folder, model, sample, angle, angle)
-            atoms = read_xyz_with_atomic_numbers(structure)
-            x = [atom.position[0] for atom in atoms]
-            y = [atom.position[1] for atom in atoms]
-            z = [atom.position[2] for atom in atoms]
-            axs[i, j].scatter(x, y, c=z, cmap='viridis')
-            #axs[i, j].set_title('{} {}'.format(sample, model))
-            axs[i, j].set_aspect('equal')
-            axs[i, j].set_xlim([min(x) - 3, max(x) + 3])
-            axs[i, j].set_ylim([min(y) - 3, max(y) + 3])
-            #axs[i, j].set_xlabel(r'$x$ (Å)')
-            #axs[i, j].set_ylabel(r'$y$ (Å)')
-    plt.tight_layout()
-    plt.show() 
-"""
-
 import matplotlib.pyplot as plt
 import numpy as np
 from water import read_xyz_with_atomic_numbers
