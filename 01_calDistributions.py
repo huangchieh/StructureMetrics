@@ -53,7 +53,7 @@ if __name__ == '__main__':
         # Theta of OH and z-axis 
         r_max = 1.25
         y_lim = 0.04
-        angles = mean_adf_OH(samples, r_max = r_max, firstTwo=False, mic=False, onlyAngle=True)
+        angles = mean_adf_OH(samples, r_max = r_max, firstTwo=False, mic=False, onlyAngle=True, onlyFree=True)
         np.savez('{}/{}.npz'.format(outputFolder, "Theta_OH_dist_{}".format(structure)), angles=angles)
 
         # H-bonds 

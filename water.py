@@ -319,7 +319,7 @@ def cal_all_hydrogen_bonds(samples, distance_cutoff=3.5, angle_cutoff=120, zThre
         all_hydrogen_bonds.extend(hydrogen_bonds)
     return all_hydrogen_bonds
 
-def cal_angles_OH(atoms, r_max=1, mic=True, zThresholdO=4.85, aboveZthres=None): 
+def cal_angles_OH(atoms, r_max=1, mic=True, zThresholdO=4.85, onlyFree=True, aboveZthres=None): 
     '''
     Calculate the angles between OH an z axis
     '''
@@ -346,19 +346,25 @@ def cal_angles_OH(atoms, r_max=1, mic=True, zThresholdO=4.85, aboveZthres=None):
         if len(neighbor_indices) == 1:
             neighbor_indices = neighbor_indices[0] # [[ H1, O, H2]] -> [H1, O, H2]
             #print('Debug: Neighbor indices', neighbor_indices)
-            OH_vector1 = atoms.positions[neighbor_indices[0]] - atoms.positions[neighbor_indices[1]]
-            OH_vector2 = atoms.positions[neighbor_indices[-1]] - atoms.positions[neighbor_indices[1]]
-            angle1 = np.arccos(np.dot(OH_vector1, vectorUP) / (np.linalg.norm(OH_vector1) * np.linalg.norm(vectorUP))) * 180 / np.pi
-            angle2 = np.arccos(np.dot(OH_vector2, vectorUP) / (np.linalg.norm(OH_vector2) * np.linalg.norm(vectorUP))) * 180 / np.pi
-            OH_angles = [angle1, angle2]
-            angles.extend(OH_angles)
-
-            #for H_idx in (neighbor_indices[0], neighbor_indices[-1]):
-            #    # Calculate the vector of the OH bond 
-            #    OH_vector = atoms.positions[H_idx] - atoms.positions[neighbor_indices[1]]
-            #    # Compute the angle in degree between OH and z axis
-            #    angle = np.arccos(np.dot(OH_vector, vectorUP) / (np.linalg.norm(OH_vector) * np.linalg.norm(vectorUP))) * 180 / np.pi
-            #angles.append(angle)
+            for H_idx in (neighbor_indices[0], neighbor_indices[-1]):
+                OH_vector = atoms.positions[H_idx] - atoms.positions[O_idx]
+                angle_wrt_z = np.arccos(np.dot(OH_vector, vectorUP) / np.linalg.norm(OH_vector)) * 180 / np.pi
+                if onlyFree:
+                    is_free = True
+                    for O_acc_idx in O_indices:
+                        if O_acc_idx == O_idx:
+                            continue
+                        OO_vector = atoms.positions[O_acc_idx] - atoms.positions[O_idx]
+                        d_OO = np.linalg.norm(OO_vector)
+                        if d_OO < 3.5:
+                            DHA_angle = np.arccos(np.dot(OH_vector, OO_vector) / (np.linalg.norm(OH_vector) * np.linalg.norm(OO_vector))) * 180 / np.pi
+                            if DHA_angle > 120:
+                                is_free = False
+                                break
+                    if is_free:
+                        angles.append(angle_wrt_z)
+                else:
+                    angles.append(angle_wrt_z) 
     return angles
 
 def adf(ABC_all_angles, dtheta=1.0):
@@ -381,7 +387,7 @@ def adf(ABC_all_angles, dtheta=1.0):
 
     return theta, ntheta
 
-def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False, zThresholdO=4.85, aboveZthres=None):
+def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAngle=False, onlyFree=True, zThresholdO=4.85, aboveZthres=None):
     '''
     Calculate the mean OH ADF for a list of samples
 
@@ -412,7 +418,7 @@ def mean_adf_OH(samples, r_max=1.0,  subNum=79, firstTwo=False, mic=True, onlyAn
             atoms.set_cell(lattice_vectors)
 
         # Calculate angles between atom type A, B, and C. 
-        angles = cal_angles_OH(atoms, r_max=r_max, mic=mic, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
+        angles = cal_angles_OH(atoms, r_max=r_max, mic=mic, zThresholdO=zThresholdO, onlyFree=onlyFree, aboveZthres=aboveZthres)
         OH_all_angles.extend(angles)
     if onlyAngle:
         return np.array(OH_all_angles)
