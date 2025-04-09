@@ -958,5 +958,325 @@
             "wdistancec": 0.260577917098999,
             "wdistance_decrease": 0.03707242012023926
         }
+    },
+    "Ref_C0": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.15924602656281467,
+            "wdistance_decrease": -0.01750964677110778
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.05655912436913864,
+            "wdistance_decrease": -0.0029826080029087265
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 10.67911921764667,
+            "wdistance_decrease": -2.3504284759267424
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 20.34431207100227,
+            "wdistance_decrease": 0.3754898478334425
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 6.7488932609558105,
+            "wdistance_decrease": 0.4555525779724121
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.314755380153656,
+            "wdistance_decrease": -0.017105042934417725
+        }
+    },
+    "Ref_C1": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.165073839285439,
+            "wdistance_decrease": -0.023337459493732116
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.06030339687346352,
+            "wdistance_decrease": -0.006726880507233607
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 9.907094947151037,
+            "wdistance_decrease": -1.5784042054311094
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 17.897464300021994,
+            "wdistance_decrease": 2.8223376188137195
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 9.570943832397461,
+            "wdistance_decrease": -2.3664979934692383
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3322191536426544,
+            "wdistance_decrease": -0.03456881642341614
+        }
+    },
+    "Ref_C2": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.14049039855721918,
+            "wdistance_decrease": 0.0012459812344877141
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.059418772216339545,
+            "wdistance_decrease": -0.005842255850109633
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 10.23651211390915,
+            "wdistance_decrease": -1.9078213721892219
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 20.001997227347402,
+            "wdistance_decrease": 0.7178046914883112
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 7.308463096618652,
+            "wdistance_decrease": -0.10401725769042969
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3122924566268921,
+            "wdistance_decrease": -0.014642119407653809
+        }
+    },
+    "Ref_C3": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.13062578831385122,
+            "wdistance_decrease": 0.011110591477855675
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.06147575095548065,
+            "wdistance_decrease": -0.007899234589250737
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 10.168075100623238,
+            "wdistance_decrease": -1.8393843589033096
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 16.316702688999953,
+            "wdistance_decrease": 4.40309922983576
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 5.425758361816406,
+            "wdistance_decrease": 1.7786874771118164
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2945267856121063,
+            "wdistance_decrease": 0.003123551607131958
+        }
+    },
+    "Ref_C4": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.1638438159152525,
+            "wdistance_decrease": -0.0221074361235456
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.06240555667079891,
+            "wdistance_decrease": -0.008829040304568998
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 10.6503292958418,
+            "wdistance_decrease": -2.321638554121872
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 18.07092144293392,
+            "wdistance_decrease": 2.6488804759017945
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 10.764759063720703,
+            "wdistance_decrease": -3.5603132247924805
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3148883581161499,
+            "wdistance_decrease": -0.01723802089691162
+        }
+    },
+    "Ref_C5": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.14179901260219696,
+            "wdistance_decrease": -6.263281049007086e-05
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.05726836115326564,
+            "wdistance_decrease": -0.003691844787035728
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 9.24980114950686,
+            "wdistance_decrease": -0.9211104077869319
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 20.022528412146663,
+            "wdistance_decrease": 0.6972735066890507
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 8.40283203125,
+            "wdistance_decrease": -1.1983861923217773
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3262189030647278,
+            "wdistance_decrease": -0.028568565845489502
+        }
+    },
+    "Ref_C6": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.15731164829398903,
+            "wdistance_decrease": -0.015575268502282136
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.05881926058727339,
+            "wdistance_decrease": -0.005242744221043476
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 10.036444872581475,
+            "wdistance_decrease": -1.707754130861547
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 18.938784413979857,
+            "wdistance_decrease": 1.781017504855857
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 8.67538070678711,
+            "wdistance_decrease": -1.4709348678588867
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.2936018109321594,
+            "wdistance_decrease": 0.004048526287078857
+        }
+    },
+    "Ref_C7": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.14601030023352743,
+            "wdistance_decrease": -0.004273920441820539
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.05698956968112505,
+            "wdistance_decrease": -0.003413053314895137
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 9.71659197845508,
+            "wdistance_decrease": -1.3879012367351518
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 17.762357562825798,
+            "wdistance_decrease": 2.9574443560099155
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 7.976137638092041,
+            "wdistance_decrease": -0.7716917991638184
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.30540013313293457,
+            "wdistance_decrease": -0.007749795913696289
+        }
+    },
+    "Ref_C8": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.1592624810051802,
+            "wdistance_decrease": -0.01752610121347331
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.05511519325864096,
+            "wdistance_decrease": -0.0015386768924110505
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 9.308792407958027,
+            "wdistance_decrease": -0.9801016662380988
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 17.438345664464393,
+            "wdistance_decrease": 3.281456254371321
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 7.2057013511657715,
+            "wdistance_decrease": -0.0012555122375488281
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.31435900926589966,
+            "wdistance_decrease": -0.016708672046661377
+        }
+    },
+    "Ref_C9": {
+        "OO_dist": {
+            "wdistance3": 0.1417363797917069,
+            "wdistancec": 0.13905481837163558,
+            "wdistance_decrease": 0.00268156142007131
+        },
+        "OH_dist": {
+            "wdistance3": 0.05357651636622991,
+            "wdistancec": 0.0600567487090813,
+            "wdistance_decrease": -0.006480232342851389
+        },
+        "HOH_dist": {
+            "wdistance3": 8.328690741719928,
+            "wdistancec": 9.605610947428307,
+            "wdistance_decrease": -1.2769202057083788
+        },
+        "ThetaOH_dist": {
+            "wdistance3": 20.719801918835714,
+            "wdistancec": 20.099458802457974,
+            "wdistance_decrease": 0.6203431163777395
+        },
+        "Hbonds": {
+            "wdistance3": 7.204445838928223,
+            "wdistancec": 8.591439247131348,
+            "wdistance_decrease": -1.386993408203125
+        },
+        "OrderP": {
+            "wdistance3": 0.2976503372192383,
+            "wdistancec": 0.3228417634963989,
+            "wdistance_decrease": -0.025191426277160645
+        }
     }
 }
