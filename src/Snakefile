@@ -1,4 +1,8 @@
-rule structure_properties:
+rule all:
+    input:
+        "../processed_data/distribution_distances"
+
+rule calculate_structure_properties:
     input:
         script = "calDistributions.py",
         data_dir = "../data/structures/predictions"
@@ -7,4 +11,15 @@ rule structure_properties:
     shell:
         """
         ./calDistributions.py
+        """
+
+rule calculate_distances:
+    input:
+        script = "calDistances.py",
+        data_dir = "../processed_data/structure_properties"  # This ensures dependency on the output of the first rule
+    output:
+        out_dir = directory("../processed_data/distribution_distances")
+    shell:
+        """
+        ./calDistances.py
         """
