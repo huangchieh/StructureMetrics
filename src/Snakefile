@@ -1,0 +1,10 @@
+rule structure_properties:
+    input:
+        script = "calDistributions.py",
+        data_dir = "../data/structures/predictions"
+    output:
+        out_dir = directory("../processed_data/structure_properties")
+    shell:
+        """
+        ./calDistributions.py
+        """
