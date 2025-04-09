@@ -27,14 +27,17 @@ def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, 
     xmax = data.max() if xmax is None else xmax
     x = np.linspace(xmin, xmax, num_points)
     y = kde(x)
-    ax.fill_between(
-        x, 0, y,
-        facecolor=color if fill else "none",
-        edgecolor=color,
-        linestyle=linestyle,
-        label=label,
-        alpha=alpha_fill
-    )
+    if fill:
+        ax.plot(x, y, color=color, linestyle=linestyle, label=None, alpha=1.0)
+        ax.fill_between(
+            x, 0, y,
+            facecolor=color if fill else "none",
+            edgecolor=color,
+            linestyle=linestyle,
+            label=label,
+            alpha=alpha_fill)
+    else:
+        ax.plot(x, y, color=color, linestyle=linestyle, label=label, alpha=1.0)
     if hist:
         ax.hist(data, bins=bins, histtype='step', density=True, color=color, alpha=0.25, linewidth=0.3)
     return x, y
