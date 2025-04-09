@@ -1,6 +1,6 @@
 rule all:
     input:
-        "../processed_data/distribution_distances"
+        "../results/train_data"
 
 rule calculate_structure_properties:
     input:
@@ -23,3 +23,14 @@ rule calculate_distances:
         """
         ./calDistances.py
         """
+
+rule visualize_training_data:
+    input:
+    	script = "visualiseTrainingData.py",
+	data_dir = "../data/structures/simulations/Label"
+    output:
+    	out_dir = directory("../results/train_data")
+    shell:
+    	"""
+	./visualiseTrainingData.py
+    	"""
