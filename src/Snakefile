@@ -1,0 +1,49 @@
+rule all:
+    input:
+        "../results/train_data", 
+	"../results/theoretical_distributions/"
+
+rule calculate_structure_properties:
+    input:
+        script = "calDistributions.py",
+        data_dir = "../data/structures/predictions"
+    output:
+        out_dir = directory("../processed_data/structure_properties")
+    shell:
+        """
+        ./calDistributions.py
+        """
+
+rule calculate_distances:
+    input:
+        script = "calDistances.py",
+        data_dir = "../processed_data/structure_properties"  # This ensures dependency on the output of the first rule
+    output:
+        out_dir = directory("../processed_data/distribution_distances")
+    shell:
+        """
+        ./calDistances.py
+        """
+
+rule visualize_training_data:
+    input:
+    	script = "visualiseTrainingData.py",
+	data_dir = "../data/structures/simulations/Label"
+    output:
+    	out_dir = directory("../results/train_data")
+    shell:
+    	"""
+	./visualiseTrainingData.py
+    	"""
+
+rule visualize_theore_distributions:
+    input:
+    	script = "visualiseTheoreDistributions.py",
+	data_dir = "../data/structures/simulations/"
+    output:
+    	out_dir = directory("../results/theoretical_distributions/"),
+	processed_dir = directory("../processed_data/theory_distributions/")
+    shell:
+    	"""
+	./visualiseTheoreDistributions.py
+	"""
