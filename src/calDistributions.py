@@ -9,7 +9,7 @@ from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
 
 if __name__ == '__main__':
-    structurePath = 'Structures/Predictions' 
+    structurePath = '../data/Structures/Predictions' 
     baseOut = 'Outputs'
     structures = [f for f in os.listdir(structurePath) if
                os.path.isdir(os.path.join(structurePath, f))]
