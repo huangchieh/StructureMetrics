@@ -158,23 +158,23 @@ if __name__ == '__main__':
         # Order parameter
         ##################
         r_max = 3.5
-        qs, sks = compute_sg_sk_all(samples, r_max=r_max)
-        x_min, y_min = qs.min(), sks.min()
+        sgs, sks = compute_sg_sk_all(samples, r_max=r_max)
+        x_min, y_min = sgs.min(), sks.min()
         x_max, y_max = 1, 1
         figsize = (8, 2.5)
         cmap = 'Greens'
         # Save the All, Top, and Bottom separately 
         for k, (key, value) in enumerate(z_thresholds.items()):
-            qs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
-            num_samples = qs.size
+            sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+            num_samples = sgs.size
 
             sns.set(style="white")
-            g = sns.jointplot(x=qs, y=sks, kind="kde", fill=True, bw_adjust=0.5,
+            g = sns.jointplot(x=sgs, y=sks, kind="kde", fill=True, bw_adjust=0.5,
                               height=5,        # Height of the joint plot (in inches)
                               ratio=4)         # Size ratio of marginal plots to joint)
 
             g.fig.set_size_inches(6, 6)
-            g.ax_joint.scatter(qs, sks, s=5, color="black", alpha=0.3,
+            g.ax_joint.scatter(sgs, sks, s=5, color="black", alpha=0.3,
                                marker='o', linewidths=0)  # You can tweak size, color, alpha
             
             # Set axis limits
@@ -199,10 +199,10 @@ if __name__ == '__main__':
 
 
         # Show the All, Top, and Bottom in one figure
-        qs_list, sks_list = [], []
+        sgs_list, sks_list = [], []
         for k, (key, value) in enumerate(z_thresholds.items()):
-            qs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
-            qs_list.append(qs)
+            sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+            sgs_list.append(sgs)
             sks_list.append(sks)
 
         sns.set(style="white")
@@ -217,23 +217,23 @@ if __name__ == '__main__':
 
         
         # Loop over each group to plot joint and marginal densities
-        #for qs, sks, label, color in zip(qs_list, sks_list, labels, colors):
+        #for sgs, sks, label, color in zip(sgs_list, sks_list, labels, colors):
         for k, (key, value) in enumerate(z_thresholds.items()):
-            qs, sks = qs_list[k], sks_list[k]
+            sgs, sks = sgs_list[k], sks_list[k]
             color = colors[key]
             if key == "All":
                 # Joint KDE for 'All' only
-                sns.kdeplot(x=qs, y=sks, fill=True, bw_adjust=0.5, ax=ax_joint,
+                sns.kdeplot(x=sgs, y=sks, fill=True, bw_adjust=0.5, ax=ax_joint,
                             cmap=sns.light_palette(color, as_cmap=True))
             
             else:
                 # Scatter for Top and Bottom only
-                ax_joint.scatter(qs, sks, s=5, marker = ',' if key =="Bottom"
+                ax_joint.scatter(sgs, sks, s=5, marker = ',' if key =="Bottom"
                                  else 'x', color=color, alpha=0.5,
                                  label=f'{key} samples')
         
             # Marginal KDEs
-            sns.kdeplot(x=qs, ax=ax_marg_x, color=color, fill=False if key !=
+            sns.kdeplot(x=sgs, ax=ax_marg_x, color=color, fill=False if key !=
                         "All" else True,
                         bw_adjust=0.5, alpha=0.3 if key ==
                         "All" else 1, label=f"{label} samples")
@@ -286,14 +286,14 @@ if __name__ == '__main__':
         fig, axes = plt.subplots(1, 3, figsize=figsize, sharey=True, gridspec_kw={'wspace': 0.025}, constrained_layout=True)
         for k, (key, value) in enumerate(z_thresholds.items()):
 
-            qs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
-            xy = np.vstack([qs, sks])
+            sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+            xy = np.vstack([sgs, sks])
             kde = gaussian_kde(xy)
             positions = np.vstack([X.ravel(), Y.ravel()])
             Z = kde(positions).reshape(X.shape)
 
             contour = axes[k].pcolormesh(X, Y, Z, cmap=cmap, vmin=0, vmax=1200)
-            axes[k].scatter(qs, sks, s=0.5, color='black', alpha=0.1)
+            axes[k].scatter(sgs, sks, s=0.5, color='black', alpha=0.1)
             axes[k].tick_params(axis='both', direction='in', top=True, right=True)
             axes[k].text(0.2, 0.95, texts[k], color='black', fontsize=10, transform=axes[k].transAxes, verticalalignment='top')
             axes[k].set_xlim(x_min, x_max)
