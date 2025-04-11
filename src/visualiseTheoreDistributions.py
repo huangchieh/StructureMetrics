@@ -165,7 +165,14 @@ if __name__ == '__main__':
         cmap = 'Greens'
         # Save the All, Top, and Bottom separately 
         for k, (key, value) in enumerate(z_thresholds.items()):
-            sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+            npzFile = '{}/OrderParameter_{}.npz'.format(npzOut, key)
+            if os.path.exists(npzFile): 
+                print('Loading OrderParameter from file: {}'.format(npzFile))
+                sgs, sks = np.load(npzFile)['sgs'], np.load(npzFile)['sks']
+            else:
+                print('Calculating OrderParameter ...')
+                sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+                np.savez(npzFile, sgs=sgs, sks=sks)
             num_samples = sgs.size
 
             sns.set(style="white")
@@ -201,7 +208,7 @@ if __name__ == '__main__':
         # Show the All, Top, and Bottom in one figure
         sgs_list, sks_list = [], []
         for k, (key, value) in enumerate(z_thresholds.items()):
-            sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+            sgs, sks = np.load(f"{npzOut}/OrderParameter_{key}.npz")['sgs'], np.load(f"{npzOut}/OrderParameter_{key}.npz")['sks']
             sgs_list.append(sgs)
             sks_list.append(sks)
 
@@ -219,7 +226,7 @@ if __name__ == '__main__':
         # Loop over each group to plot joint and marginal densities
         #for sgs, sks, label, color in zip(sgs_list, sks_list, labels, colors):
         for k, (key, value) in enumerate(z_thresholds.items()):
-            sgs, sks = sgs_list[k], sks_list[k]
+            sgs, sks = np.load(f"{npzOut}/OrderParameter_{key}.npz")['sgs'], np.load(f"{npzOut}/OrderParameter_{key}.npz")['sks']
             color = colors[key]
             if key == "All":
                 # Joint KDE for 'All' only
@@ -285,8 +292,7 @@ if __name__ == '__main__':
         texts = ['All', 'Top', 'Bottom']
         fig, axes = plt.subplots(1, 3, figsize=figsize, sharey=True, gridspec_kw={'wspace': 0.025}, constrained_layout=True)
         for k, (key, value) in enumerate(z_thresholds.items()):
-
-            sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+            sgs, sks = np.load(f"{npzOut}/OrderParameter_{key}.npz")['sgs'], np.load(f"{npzOut}/OrderParameter_{key}.npz")['sks']
             xy = np.vstack([sgs, sks])
             kde = gaussian_kde(xy)
             positions = np.vstack([X.ravel(), Y.ravel()])
