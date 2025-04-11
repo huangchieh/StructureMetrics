@@ -8,6 +8,7 @@ from matplotlib.lines import Line2D
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, compute_sg_sk_all
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
+from water import cal_all_hydrogen_bonds
 
 from utils import plot_kde_fill, plot_joint_distribution
 from utils import plot_joint_distributions
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     os.makedirs(processedFolder, exist_ok=True)
     baseOut = '../results/theoretical_distributions/'
     structures = ['Label']
-    show = True
+    show = False
     
     for structure in structures:
         # Create the output folders
@@ -165,30 +166,70 @@ if __name__ == '__main__':
         x_max, y_max = 1+0.1, 1+0.0008
         # Plot All, Top, and Bottom separately 
         for k, (key, value) in enumerate(z_thresholds.items()):
-            npzFile = '{}/OrderParameter_{}.npz'.format(npzOut, key)
+            npzFile = '{}/OrderParameters_{}.npz'.format(npzOut, key)
             if os.path.exists(npzFile): 
-                print('Loading OrderParameter from file: {}'.format(npzFile))
+                print('Loading OrderParameters from file: {}'.format(npzFile))
                 sgs, sks = np.load(npzFile)['sgs'], np.load(npzFile)['sks']
             else:
-                print('Calculating OrderParameter ...')
+                print('Calculating OrderParameters ...')
                 sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
                 np.savez(npzFile, sgs=sgs, sks=sks)
             
             xs, ys = sgs, sks
             x_label, y_label = r'$S_g$', r'$S_k$'
-            image_prefix = f"{figureOut}/OrderParameter_{structure}_{key}"
+            image_prefix = f"{figureOut}/OrderParameters_{structure}_{key}"
             text = key
             plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label,
                                     y_label, image_prefix, text, show)
 
         # Plot All, Top, and Bottom in one figure
-        npz_prefix = f"{npzOut}/OrderParameter"
+        npz_prefix = f"{npzOut}/OrderParameters"
         x_max, y_max = 1+0.1, 1+0.0008
         npz_x, npz_y = 'sgs', 'sks'
-        image_prefix = f"{figureOut}/OrderParameter_{structure}_overlay"
+        image_prefix = f"{figureOut}/OrderParameters_{structure}_overlay"
         plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
 
         # Plot distributions side by side
         x_max, y_max = 1, 1
-        image_prefix = f"{figureOut}/OrderParameter_{structure}_row"
+        image_prefix = f"{figureOut}/OrderParameters_{structure}_row"
+        plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
+
+
+        ##################
+        # H-bonds
+        ##################
+        hbonds_ = cal_all_hydrogen_bonds(samples)
+        distances_ = np.array([hb[3] for hb in hbonds_])
+        angles_ = np.array([hb[4] for hb in hbonds_])
+        x_min, y_min = distances_.min(), angles_.min()
+        x_max, y_max = 3.5, 180
+        x_label, y_label = '$d_{OO}$ (Å)', r'$\angle$DHA (°)'
+        # Plot All, Top, and Bottom separately
+        for k, (key, value) in enumerate(z_thresholds.items()):
+            npzFile = '{}/Hbonds_{}.npz'.format(npzOut, key)
+            if os.path.exists(npzFile):
+                print('Loading Hbonds from file: {}'.format(npzFile))
+                hbonds = np.load(npzFile)['hbond']
+                #distances = np.load(npzFile)['distance']
+                #angles = np.load(npzFile)['angle']
+            else:
+                print('Calculating Hbonds ...')
+                hbonds = cal_all_hydrogen_bonds(samples, aboveZthres=value, zThresholdO=4.85)
+                np.savez(npzFile, hbond=hbonds, distance=np.array([hb[3] for hb in hbonds]), angle=np.array([hb[4] for hb in hbonds]))
+            xs = np.array([hb[3] for hb in hbonds])
+            ys = np.array([hb[4] for hb in hbonds])
+            image_prefix = f"{figureOut}/Hbonds_{structure}_{key}"
+            text = key
+            plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label,
+                                    y_label, image_prefix, text, show)
+        # Plot All, Top, and Bottom in one figure
+        npz_prefix = f"{npzOut}/Hbonds"
+        #x_max, y_max = 1+0.1, 1+0.0008
+        npz_x, npz_y = 'distance', 'angle'
+        image_prefix = f"{figureOut}/Hbonds_{structure}_overlay"
+        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
+        
+        # Plot distributions side by side
+        #x_max, y_max = 1, 1
+        image_prefix = f"{figureOut}/Hbonds_{structure}_row"
         plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
