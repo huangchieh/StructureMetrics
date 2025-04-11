@@ -8,8 +8,11 @@ from matplotlib.lines import Line2D
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, compute_sg_sk_all
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
+from water import cal_all_hydrogen_bonds
 
-from utils import plot_kde_fill
+from utils import plot_kde_fill, plot_joint_distribution
+from utils import plot_joint_distributions
+from utils import plot_joint_distributions_in_row
 
 import seaborn as sns
 from scipy.stats import gaussian_kde
@@ -20,7 +23,7 @@ if __name__ == '__main__':
     os.makedirs(processedFolder, exist_ok=True)
     baseOut = '../results/theoretical_distributions/'
     structures = ['Label']
-    show = True
+    show = False
     
     for structure in structures:
         # Create the output folders
@@ -158,157 +161,75 @@ if __name__ == '__main__':
         # Order parameter
         ##################
         r_max = 3.5
-        qs, sks = compute_sg_sk_all(samples, r_max=r_max)
-        x_min, y_min = qs.min(), sks.min()
-        x_max, y_max = 1, 1
-        figsize = (8, 2.5)
-        cmap = 'Greens'
-        # Save the All, Top, and Bottom separately 
+        sgs, sks = compute_sg_sk_all(samples, r_max=r_max)
+        x_min, y_min = sgs.min(), sks.min()
+        x_max, y_max = 1+0.1, 1+0.0008
+        # Plot All, Top, and Bottom separately 
         for k, (key, value) in enumerate(z_thresholds.items()):
-            qs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
-            num_samples = qs.size
-
-            sns.set(style="white")
-            g = sns.jointplot(x=qs, y=sks, kind="kde", fill=True, bw_adjust=0.5,
-                              height=5,        # Height of the joint plot (in inches)
-                              ratio=4)         # Size ratio of marginal plots to joint)
-
-            g.fig.set_size_inches(6, 6)
-            g.ax_joint.scatter(qs, sks, s=5, color="black", alpha=0.3,
-                               marker='o', linewidths=0)  # You can tweak size, color, alpha
-            
-            # Set axis limits
-            g.ax_joint.set_xlim(x_min, x_max + 0.1)
-            g.ax_joint.set_ylim(y_min, y_max + 0.0008)
-
-            # Force ticks to show
-            g.ax_joint.tick_params(left=True, bottom=True, direction='in')
-            g.ax_marg_x.tick_params(bottom=True)
-            g.ax_marg_y.tick_params(left=True)
-            
-            g.fig.subplots_adjust(hspace=0.01, wspace=0.01)
-            g.set_axis_labels(r'$S_g$', r'$S_k$', labelpad=8)
-            g.ax_joint.text(0.15, 0.95, key + " samples {}".format(num_samples), color='black', fontsize=14,
-                transform=g.ax_joint.transAxes, verticalalignment='top')
-            g.fig.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
-            g.fig.savefig(f"{figureOut}/OrderParameter_{structure}_{key}.pdf")
-            g.fig.savefig(f"{figureOut}/OrderParameter_{structure}_{key}.png", dpi=300)
-            g.fig.savefig(f"{figureOut}/OrderParameter_{structure}_{key}.svg")
-            if show: plt.show()  
-            plt.close()
-
-
-        # Show the All, Top, and Bottom in one figure
-        qs_list, sks_list = [], []
-        for k, (key, value) in enumerate(z_thresholds.items()):
-            qs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
-            qs_list.append(qs)
-            sks_list.append(sks)
-
-        sns.set(style="white")
-        # Create 2x2 layout: [0,0]=marg_x, [1,0]=joint, [1,1]=marg_y
-        fig = plt.figure(figsize=(6, 6))
-        grid = plt.GridSpec(2, 2, width_ratios=[4, 1], height_ratios=[1, 4],
-                            hspace=0.05, wspace=0.05)
-        
-        ax_joint = fig.add_subplot(grid[1, 0])
-        ax_marg_x = fig.add_subplot(grid[0, 0], sharex=ax_joint)
-        ax_marg_y = fig.add_subplot(grid[1, 1], sharey=ax_joint)
-
-        
-        # Loop over each group to plot joint and marginal densities
-        #for qs, sks, label, color in zip(qs_list, sks_list, labels, colors):
-        for k, (key, value) in enumerate(z_thresholds.items()):
-            qs, sks = qs_list[k], sks_list[k]
-            color = colors[key]
-            if key == "All":
-                # Joint KDE for 'All' only
-                sns.kdeplot(x=qs, y=sks, fill=True, bw_adjust=0.5, ax=ax_joint,
-                            cmap=sns.light_palette(color, as_cmap=True))
-            
+            npzFile = '{}/OrderParameters_{}.npz'.format(npzOut, key)
+            if os.path.exists(npzFile): 
+                print('Loading OrderParameters from file: {}'.format(npzFile))
+                sgs, sks = np.load(npzFile)['sgs'], np.load(npzFile)['sks']
             else:
-                # Scatter for Top and Bottom only
-                ax_joint.scatter(qs, sks, s=5, marker = ',' if key =="Bottom"
-                                 else 'x', color=color, alpha=0.5,
-                                 label=f'{key} samples')
-        
-            # Marginal KDEs
-            sns.kdeplot(x=qs, ax=ax_marg_x, color=color, fill=False if key !=
-                        "All" else True,
-                        bw_adjust=0.5, alpha=0.3 if key ==
-                        "All" else 1, label=f"{label} samples")
-            sns.kdeplot(y=sks, ax=ax_marg_y, color=color, fill=False if key !=
-                        "All" else True,
-                        bw_adjust=0.5, alpha=0.3 if key ==
-                        "All" else 1, label=f"{label} samples") 
-        
-        # Clean up joint plot
-        ax_joint.set_xlim(x_min, x_max + 0.1)
-        ax_joint.set_ylim(y_min, y_max + 0.0008)
-        ax_joint.set_xlabel(r"$S_g$")
-        ax_joint.set_ylabel(r"$S_k$")
-        ax_joint.tick_params(direction="in")
-        ax_joint.legend(loc='upper left', frameon=False)
-        ax_marg_x.legend(loc='lower left', frameon=False)
-        
-        # Hide axis ticks for marginal plots
-        ax_marg_x.axis("off")
-        ax_marg_y.axis("off")
-       
-        
-        # Create custom legend handles for marginal lines
-        legend_lines = [
-            Line2D([0], [0], color=color, lw=2, label=label)
-            for label, color in colors.items()
-        ]
-        
-        # Place legend at top center of marginal x-axis
-        ax_marg_x.legend(handles=legend_lines, loc='lower center', frameon=False,
-                         ncol=1, bbox_to_anchor=(0.15, 0.00), fontsize=10)
-        #fig.subplots_adjust(hspace=0.01, wspace=0.01)
-        fig.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
-        # Save figure
-        fig.savefig(f"{figureOut}/OrderParameter_{structure}_overlay_all.pdf", bbox_inches='tight')
-        fig.savefig(f"{figureOut}/OrderParameter_{structure}_overlay_all.png", dpi=300, bbox_inches='tight')
-        fig.savefig(f"{figureOut}/OrderParameter_{structure}_overlay_all.svg", bbox_inches='tight')
-        
-        if show: plt.show()
-        plt.close()
+                print('Calculating OrderParameters ...')
+                sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
+                np.savez(npzFile, sgs=sgs, sks=sks)
+            
+            xs, ys = sgs, sks
+            x_label, y_label = r'$S_g$', r'$S_k$'
+            image_prefix = f"{figureOut}/OrderParameters_{structure}_{key}"
+            text = key
+            plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label,
+                                    y_label, image_prefix, text, show)
 
-        # Show all side by side
-        nbin = 50
-        figsize = (8, 2.5)
-        cmap = 'Greens'
-        xgrid = np.linspace(x_min, x_max, nbin)
-        ygrid = np.linspace(y_min, y_max, nbin)
-        X, Y = np.meshgrid(xgrid, ygrid)
-        texts = ['All', 'Top', 'Bottom']
-        fig, axes = plt.subplots(1, 3, figsize=figsize, sharey=True, gridspec_kw={'wspace': 0.025}, constrained_layout=True)
+        # Plot All, Top, and Bottom in one figure
+        npz_prefix = f"{npzOut}/OrderParameters"
+        x_max, y_max = 1+0.1, 1+0.0008
+        npz_x, npz_y = 'sgs', 'sks'
+        image_prefix = f"{figureOut}/OrderParameters_{structure}_overlay"
+        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
+
+        # Plot distributions side by side
+        x_max, y_max = 1, 1
+        image_prefix = f"{figureOut}/OrderParameters_{structure}_row"
+        plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
+
+
+        ##################
+        # H-bonds
+        ##################
+        hbonds_ = cal_all_hydrogen_bonds(samples)
+        distances_ = np.array([hb[3] for hb in hbonds_])
+        angles_ = np.array([hb[4] for hb in hbonds_])
+        x_min, y_min = distances_.min(), angles_.min()
+        x_max, y_max = 3.5, 180
+        x_label, y_label = '$d_{OO}$ (Å)', r'$\angle$DHA (°)'
+        # Plot All, Top, and Bottom separately
         for k, (key, value) in enumerate(z_thresholds.items()):
-
-            qs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
-            xy = np.vstack([qs, sks])
-            kde = gaussian_kde(xy)
-            positions = np.vstack([X.ravel(), Y.ravel()])
-            Z = kde(positions).reshape(X.shape)
-
-            contour = axes[k].pcolormesh(X, Y, Z, cmap=cmap, vmin=0, vmax=1200)
-            axes[k].scatter(qs, sks, s=0.5, color='black', alpha=0.1)
-            axes[k].tick_params(axis='both', direction='in', top=True, right=True)
-            axes[k].text(0.2, 0.95, texts[k], color='black', fontsize=10, transform=axes[k].transAxes, verticalalignment='top')
-            axes[k].set_xlim(x_min, x_max)
-            axes[k].set_ylim(y_min, y_max)
-            axes[k].set_xlabel(r'$S_g$')
-            if k == 0:
-                axes[k].set_ylabel(r'$S_k$')  # Only the first subplot has a y-label
-
-        # Create shared colorbar
-        cbar = fig.colorbar(contour, ax=axes, orientation='vertical', fraction=0.05, pad=0.02)
-        cbar.set_label(r'$\rho(S_g, S_k)$')
-
-        # Save and show
-        plt.savefig(f'{figureOut}/OrderParameter_{structure}_row.pdf'.format(outputFolder))
-        plt.savefig(f'{figureOut}/OrderParameter_{structure}_row.png'.format(outputFolder), dpi=600)
-        plt.savefig(f'{figureOut}/OrderParameter_{structure}_row.svg'.format(outputFolder))
-        if show: plt.show() 
+            npzFile = '{}/Hbonds_{}.npz'.format(npzOut, key)
+            if os.path.exists(npzFile):
+                print('Loading Hbonds from file: {}'.format(npzFile))
+                hbonds = np.load(npzFile)['hbond']
+                #distances = np.load(npzFile)['distance']
+                #angles = np.load(npzFile)['angle']
+            else:
+                print('Calculating Hbonds ...')
+                hbonds = cal_all_hydrogen_bonds(samples, aboveZthres=value, zThresholdO=4.85)
+                np.savez(npzFile, hbond=hbonds, distance=np.array([hb[3] for hb in hbonds]), angle=np.array([hb[4] for hb in hbonds]))
+            xs = np.array([hb[3] for hb in hbonds])
+            ys = np.array([hb[4] for hb in hbonds])
+            image_prefix = f"{figureOut}/Hbonds_{structure}_{key}"
+            text = key
+            plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label,
+                                    y_label, image_prefix, text, show)
+        # Plot All, Top, and Bottom in one figure
+        npz_prefix = f"{npzOut}/Hbonds"
+        #x_max, y_max = 1+0.1, 1+0.0008
+        npz_x, npz_y = 'distance', 'angle'
+        image_prefix = f"{figureOut}/Hbonds_{structure}_overlay"
+        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
         
+        # Plot distributions side by side
+        #x_max, y_max = 1, 1
+        image_prefix = f"{figureOut}/Hbonds_{structure}_row"
+        plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
