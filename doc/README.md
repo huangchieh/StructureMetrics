@@ -12,6 +12,38 @@
 
 
 ## Theory distributions
+### Diantance and angle distributions
 ![](../results/theoretical_distributions/Label/RDF_ADF_Label.png)
+
+`````{tabs}
+  ````{tab} Order parameters (Overlayed)
+    ```{figure} ../results/theoretical_distributions/Label/OrderParameter_Label_overlay_all.png
+    :alt: Generated image of a kitchen
+    :width: 50%
+    ```
+  ````
+
+  ````{tab} Order parameters (In a row)
+    ```{figure} ../results/theoretical_distributions/Label/OrderParameter_Label_row.png
+    :alt: Generated image of a kitchen
+    :width: 100%
+    ```
+  ````
+
+  ````{tab} Order parameters (Seperated)
+    ```{figure} ../results/theoretical_distributions/Label/OrderParameter_Label_All.png
+    :alt: Generated image of a kitchen
+    :width: 50%
+    ```
+    ```{figure} ../results/theoretical_distributions/Label/OrderParameter_Label_Top.png
+    :alt: Generated image of a kitchen
+    :width: 50%
+    ```
+    ```{figure} ../results/theoretical_distributions/Label/OrderParameter_Label_Bottom.png
+    :alt: Generated image of a kitchen
+    :width: 50%
+    ```
+  ````
+`````
 
 ## 
