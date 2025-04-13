@@ -58,14 +58,14 @@ if __name__ == '__main__':
         for key, value in z_thresholds.items():
             label = 'OO_distances_{}_{}'.format(key, structure)
             legend = '{}'.format(key) 
-            npzFile = '{}/OO_distances_{}.npz'.format(npzOut, key) 
+            npzFile = '{}/OO_{}.npz'.format(npzOut, key) 
             if os.path.exists(npzFile):
-                print('Loading OO_distances from file: {}'.format(npzFile))
-                OO_distances = np.load(npzFile)['distances']
+                print('Loading OO_distance from file: {}'.format(npzFile))
+                OO_distances = np.load(npzFile)['OO']
             else:
-                print('Calculating OO_distances ...')
+                print('Calculating OO_distance ...')
                 OO_distances = mean_rdf(samples, 'O', 'O', r_max=r_max, mic=mic, aboveZthres=value, onlyDistances=True)
-                np.savez(npzFile, distances=OO_distances, r_max=r_max)
+                np.savez(npzFile, OO=OO_distances, r_max=r_max)
             if key != 'All':
                 axs[0].hist(OO_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             #sns.kdeplot(OO_distances, ax=axs[0], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
@@ -82,14 +82,14 @@ if __name__ == '__main__':
         for key, value in z_thresholds.items():
             label = 'OH_distances_{}_{}'.format(key, structure)
             legend = 'OH {} ({})'.format(key, structure) if structure != 'P' else 'OH {} (Reference)'.format(key)
-            npzFile = '{}/OH_distances_{}.npz'.format(npzOut, key)
+            npzFile = '{}/OH_{}.npz'.format(npzOut, key)
             if os.path.exists(npzFile):
-                print('Loading OH_distances from file: {}'.format(npzFile))
-                OH_distances = np.load(npzFile)['distances']
+                print('Loading OH_distance from file: {}'.format(npzFile))
+                OH_distances = np.load(npzFile)['OH']
             else:
-                print('Calculating OH_distances ...')
+                print('Calculating OH_distance ...')
                 OH_distances = mean_rdf(samples, 'O', 'H', r_max=r_max, mic=mic, aboveZthres=value, onlyDistances=True)
-                np.savez(npzFile, distances=OH_distances, r_max=r_max)
+                np.savez(npzFile, OH=OH_distances, r_max=r_max)
             if key != 'All':
                 axs[1].hist(OH_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             #sns.kdeplot(OH_distances, ax=axs[1], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
@@ -109,14 +109,14 @@ if __name__ == '__main__':
         for key, value in z_thresholds.items():
             label = "HOH_dist_{}_{}".format(key, structure)
             legend = 'HOH {} ({})'.format(key, structure) if structure != 'P' else 'HOH {} (Reference)'.format(key)
-            npzFile = '{}/HOH_distances_{}.npz'.format(npzOut, key)
+            npzFile = '{}/HOH_{}.npz'.format(npzOut, key)
             if os.path.exists(npzFile):
-                print('Loading HOH_distances from file: {}'.format(npzFile))
-                angles = np.load(npzFile)['angles']
+                print('Loading HOH_distance from file: {}'.format(npzFile))
+                angles = np.load(npzFile)['HOH']
             else:
-                print('Calculating HOH_distances ...')
+                print('Calculating HOH_distance ...')
                 angles = mean_adf(samples, 'H', 'O', 'H', r_max=r_max, firstTwo=firstTwo, mic=mic, onlyAngle=onlyAngle, aboveZthres=value)
-                np.savez(npzFile, angles=angles)
+                np.savez(npzFile, HOH=angles)
             if key != 'All':
                 axs[2].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             #sns.kdeplot(angles, ax=axs[2], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
@@ -133,14 +133,14 @@ if __name__ == '__main__':
         for key, value in z_thresholds.items():
             label = "Theta_OH_dist_{}_{}".format(key, structure)
             legend = r"$\theta_{{\text{{OH}}}}$ {} ({})".format(key, structure) if structure != 'P' else r"$\theta_{{\text{{OH}}}}$ {} (Reference)".format(key)
-            npzFile = '{}/Theta_OH_distances_{}.npz'.format(npzOut, key)
+            npzFile = '{}/ZOH_{}.npz'.format(npzOut, key)
             if os.path.exists(npzFile):
-                print('Loading Theta_OH_distances from file: {}'.format(npzFile))
-                angles = np.load(npzFile)['angles']
+                print('Loading Theta_OH_distance from file: {}'.format(npzFile))
+                angles = np.load(npzFile)['ZOH']
             else:
-                print('Calculating Theta_OH_distances ...')
+                print('Calculating Theta_OH_distance ...')
                 angles = mean_adf_OH(samples, r_max=r_max, firstTwo=False, mic=False, onlyAngle=True, aboveZthres=value)
-                np.savez(npzFile, angles=angles)
+                np.savez(npzFile, ZOH=angles)
             if key != 'All': 
                 axs[3].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             #sns.kdeplot(angles, ax=axs[3], linewidth=1, label=legend, bw_adjust=0.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
@@ -166,32 +166,33 @@ if __name__ == '__main__':
         x_max, y_max = 1+0.1, 1+0.0008
         # Plot All, Top, and Bottom separately 
         for k, (key, value) in enumerate(z_thresholds.items()):
-            npzFile = '{}/OrderParameters_{}.npz'.format(npzOut, key)
+            npzFile = '{}/OrderP_{}.npz'.format(npzOut, key)
             if os.path.exists(npzFile): 
-                print('Loading OrderParameters from file: {}'.format(npzFile))
+                print('Loading OrderParameter from file: {}'.format(npzFile))
                 sgs, sks = np.load(npzFile)['sgs'], np.load(npzFile)['sks']
             else:
-                print('Calculating OrderParameters ...')
+                print('Calculating OrderParameter ...')
                 sgs, sks = compute_sg_sk_all(samples, r_max=r_max, aboveZthres=value)
-                np.savez(npzFile, sgs=sgs, sks=sks)
+                sg_sk = np.array([sgs, sks]).T
+                np.savez(npzFile, sg_sk=sg_sk, sgs=sgs, sks=sks)
             
             xs, ys = sgs, sks
             x_label, y_label = r'$S_g$', r'$S_k$'
-            image_prefix = f"{figureOut}/OrderParameters_{structure}_{key}"
+            image_prefix = f"{figureOut}/OrderP_{structure}_{key}"
             text = key
             plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label,
                                     y_label, image_prefix, text, show)
 
         # Plot All, Top, and Bottom in one figure
-        npz_prefix = f"{npzOut}/OrderParameters"
+        npz_prefix = f"{npzOut}/OrderP"
         x_max, y_max = 1+0.1, 1+0.0008
         npz_x, npz_y = 'sgs', 'sks'
-        image_prefix = f"{figureOut}/OrderParameters_{structure}_overlay"
+        image_prefix = f"{figureOut}/OrderP_{structure}_overlay"
         plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
 
         # Plot distributions side by side
         x_max, y_max = 1, 1
-        image_prefix = f"{figureOut}/OrderParameters_{structure}_row"
+        image_prefix = f"{figureOut}/OrderP_{structure}_row"
         plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
 
 
@@ -206,14 +207,14 @@ if __name__ == '__main__':
         x_label, y_label = '$d_{OO}$ (Å)', r'$\angle$DHA (°)'
         # Plot All, Top, and Bottom separately
         for k, (key, value) in enumerate(z_thresholds.items()):
-            npzFile = '{}/Hbonds_{}.npz'.format(npzOut, key)
+            npzFile = '{}/Hbond_{}.npz'.format(npzOut, key)
             if os.path.exists(npzFile):
-                print('Loading Hbonds from file: {}'.format(npzFile))
+                print('Loading Hbond from file: {}'.format(npzFile))
                 hbonds = np.load(npzFile)['hbond']
                 #distances = np.load(npzFile)['distance']
                 #angles = np.load(npzFile)['angle']
             else:
-                print('Calculating Hbonds ...')
+                print('Calculating Hbond ...')
                 hbonds = cal_all_hydrogen_bonds(samples, aboveZthres=value, zThresholdO=4.85)
                 distances_da = [hb[3] for hb in hbonds]
                 angles_dha = [hb[4] for hb in hbonds]
@@ -222,18 +223,18 @@ if __name__ == '__main__':
                                   angle=angles_dha, OO_OHO=OO_OHO)
             xs = np.array([hb[3] for hb in hbonds])
             ys = np.array([hb[4] for hb in hbonds])
-            image_prefix = f"{figureOut}/Hbonds_{structure}_{key}"
+            image_prefix = f"{figureOut}/Hbond_{structure}_{key}"
             text = key
             plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label,
                                     y_label, image_prefix, text, show)
         # Plot All, Top, and Bottom in one figure
-        npz_prefix = f"{npzOut}/Hbonds"
+        npz_prefix = f"{npzOut}/Hbond"
         #x_max, y_max = 1+0.1, 1+0.0008
         npz_x, npz_y = 'distance', 'angle'
-        image_prefix = f"{figureOut}/Hbonds_{structure}_overlay"
+        image_prefix = f"{figureOut}/Hbond_{structure}_overlay"
         plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
         
         # Plot distributions side by side
         #x_max, y_max = 1, 1
-        image_prefix = f"{figureOut}/Hbonds_{structure}_row"
+        image_prefix = f"{figureOut}/Hbond_{structure}_row"
         plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show)
