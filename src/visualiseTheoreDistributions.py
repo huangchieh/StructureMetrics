@@ -215,7 +215,11 @@ if __name__ == '__main__':
             else:
                 print('Calculating Hbonds ...')
                 hbonds = cal_all_hydrogen_bonds(samples, aboveZthres=value, zThresholdO=4.85)
-                np.savez(npzFile, hbond=hbonds, distance=np.array([hb[3] for hb in hbonds]), angle=np.array([hb[4] for hb in hbonds]))
+                distances_da = [hb[3] for hb in hbonds]
+                angles_dha = [hb[4] for hb in hbonds]
+                OO_OHO = np.array([distances_da, angles_dha]).T
+                np.savez(npzFile, hbond=hbonds, distance=distances_da, 
+                                  angle=angles_dha, OO_OHO=OO_OHO)
             xs = np.array([hb[3] for hb in hbonds])
             ys = np.array([hb[4] for hb in hbonds])
             image_prefix = f"{figureOut}/Hbonds_{structure}_{key}"
