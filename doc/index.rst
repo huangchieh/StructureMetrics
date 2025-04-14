@@ -12,3 +12,7 @@ Welcome to Structure Matrics's documentation!
 
 
    README.md
+   introduction.md
+   training_data.md
+   theory_distribution.md
+   performance_evaluations.md

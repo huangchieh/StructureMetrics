@@ -72,7 +72,7 @@ def plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label, y_label
 
     g.fig.subplots_adjust(hspace=0.01, wspace=0.01)
     g.set_axis_labels(x_label, y_label, labelpad=8)
-    g.ax_joint.text(0.15, 0.95, text + " samples {}".format(num_samples), color='black', fontsize=14,
+    g.ax_joint.text(0.15, 0.15, text + " enviroment number {}".format(num_samples), color='black', fontsize=14,
         transform=g.ax_joint.transAxes, verticalalignment='top')
     g.fig.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
     g.fig.savefig(f"{image_prefix}.pdf")
@@ -115,7 +115,7 @@ def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_m
     ax_joint.set_xlabel(x_label)
     ax_joint.set_ylabel(y_label)
     ax_joint.tick_params(direction="in")
-    ax_joint.legend(loc='upper left', frameon=False)
+    #ax_joint.legend(loc='upper left', frameon=False)
     ax_marg_x.legend(loc='lower left', frameon=False)
 
     # Hide axis ticks for marginal plots
