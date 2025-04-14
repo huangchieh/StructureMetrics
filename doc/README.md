@@ -10,18 +10,25 @@
 | ![](../results/train_data/z_distribution.png) |  |
 
 
-
-## Theory distributions
-### Diantance and angle distributions
+## Theory distributions obtained from simulations
+### Diantance and angle 
 ![](../results/theoretical_distributions/Label/RDF_ADF_Label.png)
 
+### Order parameter 
 `````{tabs}
   ````{tab} Overlayed
     ```{figure} ../results/theoretical_distributions/Label/OrderParameters_Label_overlay.png
     :alt: Generated image of a kitchen
     :width: 50%
-    [Order parameters]
+    Order parameters
     ```
+  ````
+
+
+  ````{tab} Seperated
+    |![](../results/theoretical_distributions/Label/OrderParameters_Label_All.png) | ![](../results/theoretical_distributions/Label/OrderParameters_Label_Top.png)| ![](../results/theoretical_distributions/Label/OrderParameters_Label_Bottom.png) |
+    |---|---|---| 
+    | |  | |
   ````
 
   ````{tab} In a row
@@ -30,30 +37,22 @@
     :width: 100%
     ```
   ````
-
-  ````{tab} Seperated
-    ```{figure} ../results/theoretical_distributions/Label/OrderParameters_Label_All.png
-    :alt: Generated image of a kitchen
-    :width: 50%
-    ```
-    ```{figure} ../results/theoretical_distributions/Label/OrderParameters_Label_Top.png
-    :alt: Generated image of a kitchen
-    :width: 50%
-    ```
-    ```{figure} ../results/theoretical_distributions/Label/OrderParameters_Label_Bottom.png
-    :alt: Generated image of a kitchen
-    :width: 50%
-    ```
-  ````
 `````
 
+### Hydrogen bond 
 `````{tabs}
   ````{tab} Overlayed
     ```{figure} ../results/theoretical_distributions/Label/Hbonds_Label_overlay.png
     :alt: Generated image of a kitchen
     :width: 50%
-    [Hydrogen bonds]
+    Hydrogen bonds
     ```
+  ````
+
+  ````{tab} Seperated
+    |![](../results/theoretical_distributions/Label/Hbonds_Label_All.png) | ![](../results/theoretical_distributions/Label/Hbonds_Label_Top.png)| ![](../results/theoretical_distributions/Label/Hbonds_Label_Bottom.png) |
+    |---|---|---| 
+    | |  | |
   ````
 
   ````{tab} In a row
@@ -62,21 +61,7 @@
     :width: 100%
     ```
   ````
-
-  ````{tab} Seperated
-    ```{figure} ../results/theoretical_distributions/Label/Hbonds_Label_All.png
-    :alt: Generated image of a kitchen
-    :width: 50%
-    ```
-    ```{figure} ../results/theoretical_distributions/Label/Hbonds_Label_Top.png
-    :alt: Generated image of a kitchen
-    :width: 50%
-    ```
-    ```{figure} ../results/theoretical_distributions/Label/Hbonds_Label_Bottom.png
-    :alt: Generated image of a kitchen
-    :width: 50%
-    ```
-  ````
 `````
 
-## 
+## Performance evaluations
+
