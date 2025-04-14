@@ -1,7 +1,10 @@
 # Theory distributions obtained from simulations
 ## Diantance and angle 
-![](../results/theoretical_distributions/Label/RDF_ADF_Label.png)
-
+```{figure} ../results/theoretical_distributions/Label/RDF_ADF_Label.png
+:alt: RDF_ADF
+:width: 70%
+Distance and angle distribution
+```
 
 ## Hydrogen bond 
 `````{tabs}
