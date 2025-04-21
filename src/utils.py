@@ -3,6 +3,7 @@ from scipy.stats import gaussian_kde
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+import re
 
 def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=1000, bw_method=None, hist=False, bins=120):
     """
@@ -174,3 +175,111 @@ def plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y,
         plt.savefig(f'{image_prefix}.svg')
         if show: plt.show()
         plt.close()
+
+
+def get_scan_window_from_xyz(file_path):
+    """
+    Extract the full 3D scan window [xmin, ymin, zmin], [xmax, ymax, zmax]
+    from the comment line of an XYZ file.
+
+    Returns:
+        xyz_min (np.ndarray): [xmin, ymin, zmin]
+        xyz_max (np.ndarray): [xmax, ymax, zmax]
+    """
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+
+    if len(lines) < 2:
+        raise ValueError("XYZ file too short to contain scan window.")
+
+    comment = lines[1].strip()
+
+    match = re.search(r'Scan window: \[\[([^\]]+)\], \[([^\]]+)\]', comment)
+    if not match:
+        raise ValueError("Scan window not found in comment line.")
+
+    xyz_min = np.array(list(map(float, match.group(1).split())))
+    xyz_max = np.array(list(map(float, match.group(2).split())))
+
+    return xyz_min, xyz_max
+
+def draw_unit_cells(ax, origin, cell_vectors, nx, ny, color='black', lw=1.0, ls=':'):
+    """
+    Draw a grid of unit cells (without overdraw) in the xy plane.
+
+    Parameters:
+        ax: matplotlib axis
+        origin: 3D vector (usually at bottom-left of grid)
+        cell_vectors: 3x3 lattice vectors
+        nx, ny: number of repetitions in a and b directions
+        color: line color
+        lw: line width
+        ls: line style
+    """
+
+    a_vec = cell_vectors[0]
+    b_vec = cell_vectors[1]
+
+    # Draw vertical grid lines (along b direction)
+    for i in range(nx + 1):
+        start = origin + i * a_vec
+        end = start + ny * b_vec
+        xs, ys = zip(start[:2], end[:2])
+        ax.plot(xs, ys, color=color, lw=lw, linestyle=ls)
+
+    # Draw horizontal grid lines (along a direction)
+    for j in range(ny + 1):
+        start = origin + j * b_vec
+        end = start + nx * a_vec
+        xs, ys = zip(start[:2], end[:2])
+        ax.plot(xs, ys, color=color, lw=lw, linestyle=ls)
+
+def draw_3d_axis_indicator(ax, anchor=(0.95, 0.05), length=40, style='xy'):
+    """
+    Draw a small 3D axis compass with visually equal-length arrows (in pixels), 
+    independent of figure size or axis aspect ratio.
+
+    Parameters:
+        ax: matplotlib axis
+        anchor: (x, y) in axes fraction (0–1)
+        length: arrow length in pixels
+        style: 'xy' or 'x-out'
+    """
+    import matplotlib.transforms as mtransforms
+
+    fig = ax.figure
+    renderer = fig.canvas.get_renderer()
+
+    # Convert anchor to display coords (pixels)
+    x0_disp, y0_disp = ax.transAxes.transform(anchor)
+
+    def draw_arrow(dx, dy, label, color, ha, va):
+        # Compute end point in display space
+        x1_disp = x0_disp + dx
+        y1_disp = y0_disp + dy
+
+        # Convert both start and end back to axes coords
+        start = ax.transAxes.inverted().transform((x0_disp, y0_disp))
+        end = ax.transAxes.inverted().transform((x1_disp, y1_disp))
+
+        # Draw arrow and label
+        ax.annotate('', xy=end, xytext=start,
+                    arrowprops=dict(arrowstyle='->', lw=1.5, color=color),
+                    xycoords='axes fraction')
+        ax.text(end[0], end[1], label, fontsize=12, color=color,
+                ha=ha, va=va, transform=ax.transAxes)
+
+    if style == 'xy':
+        draw_arrow(length, 0, 'x', 'red', ha='left', va='center')
+        draw_arrow(0, length, 'y', 'green', ha='center', va='bottom')
+        ax.text(anchor[0], anchor[1], 'z', fontsize=12, color='blue',
+                ha='center', va='center', transform=ax.transAxes)
+
+    elif style == 'x-out':
+        draw_arrow(length, 0, 'y', 'green', ha='left', va='center')
+        draw_arrow(0, length, 'z', 'blue', ha='center', va='bottom')
+        ax.text(anchor[0], anchor[1], 'x', fontsize=12, color='red',
+                ha='center', va='center', transform=ax.transAxes)
+
+    else:
+        raise ValueError(f"Unsupported style '{style}'. Use 'xy' or 'x-out'.")

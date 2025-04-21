@@ -2,6 +2,8 @@
 \usepackage{tikz}
 \usepackage{xcolor}
 \usetikzlibrary{automata, arrows.meta, positioning}
+\usepackage{fontspec}
+\setmainfont{Arial}
 
 % Define colors based on split-complementary scheme
 % https://copic.too.com/blogs/educational/analogous-complimentary-and-split-complementary-color-schemes?srsltid=AfmBOoqZ8Nt71usioxMxPyKzjQ5vDcxs2B_imasd_wZa50UB5cZX6xCL
@@ -27,31 +29,31 @@
 	\begin{tikzpicture}[node distance = 5cm, on grid, auto]
 		
 		% Nodes
-		\node (Y) [state, initial, accepting, initial text = {DFT}, dft] {$Y$};
-		\node (X') [state, above right = of Y, simulated] {$X^{\prime}$};
-		\node (X) [state, below right = of X', experimental] {$X$};
+		\node (Y) [state, initial, accepting, initial text = {DFT}, dft] {$\mathcal{Y}$};
+		\node (X') [state, above right = of Y, simulated] {$\mathcal{X}^{\prime}$};
+		\node (X) [state, below right = of X', experimental] {$\mathcal{X}$};
 		
 		% Annotations
-		\node[below=1.2cm of Y, annotation, text=dftcolor!80!black] {Atomic structure};
-		\node[below=0.6cm of Y, annotation] {graph};
+		\node[below=1.2cm of Y, annotation, text=dftcolor!80!black] {Atomic configuration};
+		\node[below=0.6cm of Y, annotation] {graphs};
 		
 		\node[above=1.2cm of X', annotation, text=simcolor!80!black] {Simulated AFM};
-		\node[below=0.6cm of X', annotation] {image};
+		\node[below=0.6cm of X', annotation] {images};
 		
 		\node[below=1.2cm of X, annotation, text=expcolor!90!black] {Experimental AFM};
-		\node[below=0.6cm of X, annotation] {image};
+		\node[below=0.6cm of X, annotation] {images};
 		
 		% Arrows (transitions)
 		\path [YXP] 
-		(Y)  edge [bend left] node[sloped, above] {PPM} (X');
+		(Y)  edge [bend left] node[sloped, above] {$F_{\mathcal{Y}}$} (X');
 		\path [XPY]
-		(X') edge [bend left]   node[sloped, above]    {Model V$_0$}    (Y);
+		(X') edge [bend left]   node[sloped, above]    {$S_{\mathcal{X}^{\prime}}$}    (Y);
 		\path [XPX]
-		(X') edge [bend left]   node[sloped, above]    {Forward}    (X);
+		(X') edge [bend left]   node[sloped, above]    {$G_{\mathcal{X}^{\prime}}$}    (X);
 		\path [XXP]
-		(X)  edge [bend left]   node[sloped, above]    {Backward}   (X');
+		(X)  edge [bend left]   node[sloped, above, yshift=2pt]    {$G_{\mathcal{X}}$}   (X');
 		\path [XY]
-		(X)  edge [bend left]   node[sloped, above]    {Model V$_1$}    (Y);
+		(X)  edge [bend left]   node[sloped, above]    {$S_{\mathcal{X}}$}    (Y);
 		
 	\end{tikzpicture}
 	

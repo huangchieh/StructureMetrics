@@ -117,6 +117,7 @@ if __name__ == '__main__':
         df_ref = df[df["Structure"].str.contains("Ref")]
         df_P = df[df["Structure"] == 'P'] # The cropped version of Ref, including very large configurations
         plotBarchat('L10_L10')
+        plotBarchat('L10_L1')
         plotBarchat('L20_L1')
         plotBarchat('L20_L10')
     
