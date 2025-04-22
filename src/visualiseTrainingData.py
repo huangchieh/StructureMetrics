@@ -18,7 +18,11 @@ import imageio.v3 as iio
 
 from utils import get_scan_window_from_xyz, draw_unit_cells, draw_3d_axis_indicator
 # Input structure for visualization
-demoStructure = '../data/structures/simulations/Label/0.xyz'
+demoIndex = 0
+demoStructure = f'../data/structures/simulations/Label/{demoIndex}.xyz'
+exampleInput = '../data/overview'
+refZ0 = 14.0 # Needs to be confirmed latter
+dz = 0.4 # Units: Å
 
 # Output folder for the output structures
 figure_folder = '../results/train_data'
@@ -39,14 +43,15 @@ plt.rcParams['font.size']=14
 plt.rcParams['font.family']='Arial'
 plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
+plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
 
 xyz_min, xyz_max = get_scan_window_from_xyz(demoStructure)
 xyz_center = xyz_min + (xyz_max - xyz_min)/2
 
-###############################################################
-# Plot the atoms of demonstration configuration in the xy plane
-###############################################################
+####################################################################
+# 1. Plot the atoms of demonstration configuration in the xy plane
+####################################################################
 atoms = read_xyz_with_atomic_numbers(demoStructure)
 
 substrate = atoms[atoms.numbers == 79] # Au substrate
@@ -118,6 +123,10 @@ if showImageRegion:
     rect = Rectangle((x0, y0), width, height, linewidth=1, edgecolor='k',
                      facecolor='none', label='image region')
     ax1.add_patch(rect)
+    offset_x = 0.04 * width
+    offset_y = 0.04 * height
+    ax1.text(x0 - offset_x, y1 + offset_y, r"$y$", va='top', ha='left')
+
 
 yticks = np.arange(20, 70.1, 5)
 ax1.set_yticks(yticks)
@@ -150,9 +159,9 @@ plt.close(fig)
 
 
 
-#####################################################
-# Plot simulation images and style translated images
-#####################################################
+########################################################
+# 2. Plot simulation images and style translated images
+########################################################
 showScanRegion = False
 showImageRegion = True
 showLattice = False
@@ -282,59 +291,93 @@ ax2.set_ylim([xy_center[1] - sw_y/2 - offset, xy_center[1] + sw_y/2 + offset])
 # Axis label
 ax2.text(offset_text, 1 - offset_text_y, "$y$", transform=ax2.transAxes, va='top', ha='left')
 
-refZ0 = 14.0
-dz = 0.4
-# Step 1: Collect all images first to compute global vmin and vmax
+# Step 1: Collect all images first to compute global vmin and vmax, then I can use the same vmin and vmax for all images
 all_images = []
-
 for j in range(2):
     for i in range(3):
         if j == 0:
-            imagePath = '/Users/huangj4/Desktop/2024-StyleTranslation-Figures/overview/PPAFM/{:.2f}.png'.format(i * 0.1 * dz)
+            imagePath = '{}/PPAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # PPAFM
         else:
-            imagePath = '/Users/huangj4/Desktop/2024-StyleTranslation-Figures/overview/FakeAFM/{:.2f}.png'.format(i * 0.1 * dz)
-        image = iio.imread(imagePath)
+            imagePath = '{}/FakeAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # FakeAFM
+        image = iio.imread(imagePath).astype(np.float32)  
         all_images.append(image)
-
-# Step 2: Compute global vmin and vmax
 all_images_np = np.array(all_images)
 vmin = all_images_np.min()
 vmax = all_images_np.max()
 
-for j in range(2):
-    for i in range(3):
+# Calculate the error maps
+error_maps = []
+for i in range(3):
+    imagePPAFM = '{}/PPAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # PPAFM
+    imageFakeAFM = '{}/FakeAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # FakeAFM
+    imagePPAFM = iio.imread(imagePPAFM).astype(np.float32)  
+    imageFakeAFM = iio.imread(imageFakeAFM).astype(np.float32)
+    print('imagePPAFM:', imagePPAFM)
+    print('imageFakeAFM:', imageFakeAFM)
+    error_map = imageFakeAFM - imagePPAFM
+    print('error_map:', error_map)
+    error_maps.append(error_map)
+all_error_maps = np.array(error_maps)
+emin = all_error_maps.min()
+emax = all_error_maps.max()
+print('emin:', emin)
+print('emax:', emax)
+
+subLabels = [fr"$x^\prime=F_{{\mathcal{{Y}}}}(y)$", fr"$x=G_{{\mathcal{{X}}^\prime}}(x^\prime)$", fr"$x-x^\prime$"]
+
+# Store axes for each column
+axes_col = [[], [], []]
+ims_col = [None, None, None]
+
+for j in range(3): # Columns
+    for i in range(3): # Rows
         ax = fig.add_subplot(gs[i+1, j])
         ax.set_aspect('equal')
         ax.tick_params(axis='both', direction='in', labelright=False)
+        im = None
         if j == 0:
-            imagePath = '/Users/huangj4/Desktop/2024-StyleTranslation-Figures/overview/PPAFM/{:.2f}.png'.format(i * 0.1 * dz)
-        else:
-            imagePath = '/Users/huangj4/Desktop/2024-StyleTranslation-Figures/overview/FakeAFM/{:.2f}.png'.format(i * 0.1 * dz)
-        
-        # Load image and rotate it by 90 degrees counter-clockwise
-        image = iio.imread(imagePath)  # or use imageio.imread for older versions
-        rotated_image = np.rot90(image, k=3)  # 90 degrees counter-clockwise
-        ax.imshow(rotated_image, cmap='inferno', vmin=vmin, vmax=vmax)
+            imagePath = '{}/PPAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # PPAFM
+            image = iio.imread(imagePath).astype(np.float32)  # or use imageio.imread for older versions
+            rotated_image = np.rot90(image, k=3)  # 90 degrees counter-clockwise
+            im = ax.imshow(rotated_image, cmap='inferno', vmin=vmin, vmax=vmax)
+        elif j == 1:
+            imagePath = '{}/FakeAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # FakeAFM
+            image = iio.imread(imagePath).astype(np.float32)  # or use imageio.imread for older versions
+            rotated_image = np.rot90(image, k=3)  # 90 degrees counter-clockwise
+            im = ax.imshow(rotated_image, cmap='inferno', vmin=vmin, vmax=vmax)
+        elif j == 2:
+            image = all_error_maps[i]  # Use the error map
+            rotated_image = np.rot90(image, k=3)  # 90 degrees counter-clockwise
+            im = ax.imshow(rotated_image, cmap='BrBG', vmin=emin, vmax=emax)
+        ims_col[j] = im 
         ax.axis('off')  # optionally hide axis ticks and labels
         if i == 0:
-            ax.text(offset_text, 1 - offset_text_y, fr"$x^\prime=F_{{\mathcal{{Y}}}}(y)$" if j==0 else fr"$x=G_{{\mathcal{{X}}^\prime}}(x^\prime)$", transform=ax.transAxes, va='top', ha='left')
-        
+            ax.text(offset_text, 1 - offset_text_y, subLabels[j], transform=ax.transAxes, va='top', ha='left')
         if j == 0:
-            ax.text(offset_text, offset_text_y, fr"$z_{{\mathrm{{tip}}}} = {refZ0 - (i + 1) * dz :.2f}$ Å",  transform=ax.transAxes, va='bottom', ha='left')
+            ax.text(offset_text, offset_text_y, fr"$z_{{\mathrm{{tip}}}} = {refZ0 - (i + 1) * dz :.2f}$ Å",  transform=ax.transAxes, va='bottom', ha='left', color='lightgrey' if i == 2 else 'k')
+
+# Add colorbars above each column
+cax = fig.add_axes([0.13 + 0.29, 0.1, 0.2, 0.015])  # [left, bottom, width, height], adjust as needed
+cbar = fig.colorbar(ims_col[0], cax=cax, orientation='horizontal')
+cbar.set_label('Intensity')
+
+cax = fig.add_axes([0.13 + 0.29*j, 0.1, 0.2, 0.015])  # [left, bottom, width, height], adjust as needed
+cbar = fig.colorbar(ims_col[-1], cax=cax, orientation='horizontal')
+cbar.set_label('Error')
 
 
 fig.subplots_adjust(hspace=0, wspace=0.3, left=0.08, bottom=0.15, right=0.99, top=0.95)
 #plt.tight_layout()
 if show: plt.show() 
-fig.savefig("{}/xy_view_data.png".format(figure_folder), dpi=600, bbox_inches='tight')  # Set DPI to 300
+fig.savefig("{}/xy_view_data.png".format(figure_folder), dpi=600)  # Set DPI to 300
 fig.savefig("{}/xy_view_data.pdf".format(figure_folder))  # Set DPI to 300
 fig.savefig("{}/xy_view_data.svg".format(figure_folder))
 plt.close(fig)
 
 
-#####################################################################
-# Get the z distribution for all the structures in the Label folder
-#####################################################################
+########################################################################
+# 3. Get the z distribution for all the structures in the Label folder
+########################################################################
 showAll = True
 if showAll:
     samples = read_samples_from_folder('../data/structures/simulations/Label')
