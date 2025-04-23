@@ -45,10 +45,10 @@ bg07color = '#479FB1'
 bv17color = '#6E7CBC'
 
 plt.rcParams['font.size']=14
-plt.rcParams['font.family']='Arial'
+#plt.rcParams['font.family']='Arial'
 plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
-plt.rcParams['text.usetex'] = True # Render text with LaTeX
+#plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
 
 xyz_min, xyz_max = get_scan_window_from_xyz(demoStructure)
@@ -130,7 +130,7 @@ if showImageRegion:
     ax1.add_patch(rect)
     offset_x = 0.04 * width
     offset_y = 0.04 * height
-    ax1.text(x0 - offset_x, y1 + offset_y, r"$y$", va='top', ha='left')
+    ax1.text(x0 - 1.3*offset_x, y1 + 1.3*offset_y, r"$m$", va='top', ha='left')
 
 
 yticks = np.arange(20, 70.1, 5)
@@ -146,8 +146,8 @@ ax1.set_xlim([xy_center[0]-sw_x/2-offset, xy_center[0]+sw_x/2+offset])
 ax1.set_ylim([xy_center[1]-sw_y/2-offset, xy_center[1]+sw_y/2+offset])
 #ax1.set_xlabel(r'$x$ (nm)')
 #ax1.set_ylabel(r'$y$ (nm)')
-ax1.set_xlabel(r'Horizontal (Å)')
-ax1.set_ylabel(r'Vertical (Å)')
+ax1.set_xlabel(r'$x$ (Å)')
+ax1.set_ylabel(r'$y$ (Å)')
 # ax1.legend()
 # # Add the label
 # offset_text = 0.05 
@@ -239,7 +239,7 @@ emax = all_error_maps.max()
 print('emin:', emin)
 print('emax:', emax)
 
-subLabels = [fr"$x^\prime=F_{{\mathcal{{Y}}}}(y)$", fr"$x=G_{{\mathcal{{X}}^\prime}}(x^\prime)$", fr"$x-x^\prime$"]
+subLabels = [fr"$u=H_{{\mathcal{{M}}}}(m)$", fr"$\tilde{{v}}=G_{{\mathcal{{U}}}}(u)$", fr"$x-x^\prime$"]
 
 # Store axes for each column
 axes_col = [[], [], []]
@@ -275,10 +275,10 @@ for j in range(cols): # Columns
             rotated_image = np.rot90(image, k=3)  # 90 degrees counter-clockwise
             im = ax.imshow(rotated_image, cmap='BrBG', vmin=emin, vmax=emax)
         
-        if i == 1 and j == 1:
-            ax.axvline(x=x_center, color='gray', linestyle='-', zorder=10, alpha=0.5)
-            ax.plot(x_center, y1, marker='.', color='k', markersize=10, zorder=11)
-            ax.plot(x_center, y2, marker='.', color='k', markersize=10, zorder=11)
+        if i == 1:
+            ax.axvline(x=x_center, color=simcolor if j==0 else expcolor , linestyle='dashed' if j==0 else 'solid', zorder=10)
+            ax.plot(x_center, y1, marker='.', color='grey', markersize=10, zorder=11)
+            ax.plot(x_center, y2, marker='.', color='grey', markersize=10, zorder=11)
             ax.text(x_center + 0.04 * width, y1, "A", va='center', ha='left', fontsize=14, color='grey')
             ax.text(x_center + 0.04 * width, y2, "B", va='center', ha='left', fontsize=14, color='grey')
         ims_col[j] = im 
@@ -292,7 +292,7 @@ for j in range(cols): # Columns
             label_ax.text(x+0.55, 0.0, subLabels[j], ha='center', va='bottom', transform=label_ax.transAxes)
             #ax.text(offset_text, 1 - offset_text_y, subLabels[j], transform=ax.transAxes, va='top', ha='left')
         if j == 0:
-            ax.text(offset_text, offset_text_y, fr"$z_{{\mathrm{{tip}}}} = {refZ0 - (i + 1) * dz :.2f}$ Å",  transform=ax.transAxes, va='bottom', ha='left', color='lightgrey' if i == 2 else 'k')
+            ax.text(offset_text, offset_text_y-0.05, fr"$z_{i} = {refZ0 - (i + 1) * dz :.2f}$ Å",  transform=ax.transAxes, va='bottom', ha='left', color='lightgrey' if i == 2 else 'k')
 
 # Add colorbars above each column
 pos = ax.get_position()
@@ -326,8 +326,9 @@ for i in range(3):
     diff = xps[i] - xs[i]
     ax1.invert_yaxis() # >>
     ax1.set_ylim([shape[1], 0]) # << Need to be adjusted
-    ax1.plot(xps[i], yvals, color=simcolor, ls='dashed', label=rf'$x^\prime$')
-    ax1.plot(xs[i], yvals, color=expcolor, label=rf'$\hat{{x}}$')
+    ax1.text(0.45, 0.9, rf'$z_{{{i}}}$', transform=ax1.transAxes)
+    ax1.plot(xps[i], yvals, color=simcolor, ls='dashed', label=rf'$u$')
+    ax1.plot(xs[i], yvals, color=expcolor, label=rf'$\tilde{{v}}$')
     ax1.fill_betweenx(yvals, xps[i], xs[i], where=diff > 0, color=bg07color, alpha=0.3, label=rf'$\Delta > 0$')
     ax1.fill_betweenx(yvals, xps[i], xs[i], where=diff < 0, color=bv17color, alpha=0.3, label=rf'$\Delta < 0$', hatch='..', edgecolor='k')
     # ax1.axhline(y=y1, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
@@ -342,9 +343,9 @@ for i in range(3):
     else:
         ax1.tick_params(axis='y', labelleft=True)
     if i == 1: ax1.set_xlabel('Pixel intensity')
-    if i == 2: ax1.legend(loc='right', bbox_to_anchor=(1.14, 0.46), handlelength=1, handletextpad=0.1, labelspacing=0.3)
+    if i == 2: ax1.legend(loc='right', bbox_to_anchor=(1.13, 0.46), handlelength=1, handletextpad=0.1, labelspacing=0.3)
     if i == 0:
-        ax1.set_ylabel('Vertical (Å)')
+        ax1.set_ylabel(r'$y$ (Å)')
 
 #fig.subplots_adjust(hspace=0.0, wspace=0.05, left=0.05, bottom=0.15, right=0.99, top=0.95)
 fig.subplots_adjust(hspace=0.0, wspace=0.05, left=0.05, bottom=0.15, right=0.99, top=0.95)
@@ -413,7 +414,7 @@ ymin, ymax = ymin - 2*offset, ymax + 5*offset
 ax1.set_xlim([xmin, xmax])
 ax1.set_ylim([ymin, ymax])
 ax1.tick_params(axis='both', direction='in', labelright=False)
-ax1.set_xlabel(r'Vertical (Å)')
+ax1.set_xlabel(r'$y$ (Å)')
 ax1.set_ylabel(r'$z$ (Å)')
 # ax1.text(offset_text, 1 - offset_text, "b", transform=ax1.transAxes, fontsize=18, fontweight='bold', va='top', ha='left')
 draw_3d_axis_indicator(ax1, anchor=(0.89, 0.65), length=40, style='x-out')
