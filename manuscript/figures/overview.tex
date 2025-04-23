@@ -13,9 +13,12 @@
 
 % Define styles
 \tikzset{
-	dft/.style={draw=dftcolor!80!black, fill=dftcolor!40, minimum size=2cm},
-	simulated/.style={draw=simcolor!80!black, fill=simcolor!30, minimum size=2cm},
-	experimental/.style={draw=expcolor!80!black, fill=expcolor!40, minimum size=2cm},
+	%dft/.style={draw=dftcolor!80!black, fill=dftcolor!40, minimum size=2cm},
+	%simulated/.style={draw=simcolor!80!black, fill=simcolor!30, minimum size=2cm},
+	%experimental/.style={draw=expcolor!80!black, fill=expcolor!40, minimum size=2cm},
+    dft/.style={draw=dftcolor!80!black, fill=dftcolor!40, shape=rectangle, minimum width=2cm, minimum height=2cm, rounded corners=12pt},
+	simulated/.style={draw=simcolor!80!black, fill=simcolor!30, shape=rectangle, minimum width=2cm, minimum height=2cm, rounded corners=12pt},
+	experimental/.style={draw=expcolor!80!black, fill=expcolor!40, shape=rectangle, minimum width=2cm, minimum height=2cm, rounded corners=12pt},
 	YXP/.style={thick, ->, color=simcolor},
 	XPY/.style={thick, ->, color=dftcolor},
 	XPX/.style={thick, ->, color=expcolor},
@@ -35,7 +38,7 @@
 		
 		% Annotations
 		\node[below=1.2cm of Y, annotation, text=dftcolor!80!black] {Atomic configuration};
-		\node[below=0.6cm of Y, annotation] {graphs};
+		\node[below=0.6cm of Y, annotation] {atoms};
 		
 		\node[above=1.2cm of X', annotation, text=simcolor!80!black] {Simulated AFM};
 		\node[below=0.6cm of X', annotation] {images};

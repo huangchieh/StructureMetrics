@@ -39,6 +39,11 @@ showImageRegion = True
 showLattice = True
 showIndicator = True
 
+simcolor = '#ed9d2c'
+expcolor = '#de461c'
+bg07color = '#479FB1'
+bv17color = '#6E7CBC'
+
 plt.rcParams['font.size']=14
 plt.rcParams['font.family']='Arial'
 plt.rcParams['pdf.fonttype']=42
@@ -198,116 +203,27 @@ selection_mask = is_water_atom & in_xy_range & in_z_range
 Y = supercell[selection_mask]
 
 
-fig = plt.figure(figsize=(6, 8))
-gs = fig.add_gridspec(4, 3)
-ax1 = fig.add_subplot(gs[0, 0])
-ax1.set_aspect('equal')
-ax1.tick_params(axis='both', direction='in', labelright=False)
-
-showAtoms = Y
-showAtomsList = sorted(showAtoms, key=lambda atom: atom.position[2])
-for atom in showAtomsList:
-    color = jmol_colors[atom.number]
-    radius = radii[atom.number]
-    circle = Circle((atom.x, atom.y), radius, facecolor=color, edgecolor='k', linewidth=0.5)
-    ax1.add_patch(circle)
-
-xy_origin = subPositions[:, :2].min(axis=0)
-if showLattice:
-    draw_unit_cells(ax1, origin=np.array([xy_origin[0], xy_origin[1], 0]), cell_vectors=lattice_vectors, nx=3, ny=3)
-    #draw_3d_axis_indicator(ax1, anchor=(0.92, 0.08), length=40)
-
-if showScanRegion:
-    sw = ((xy_center[0] - 31.875 / 2, xy_center[1] - 31.875 / 2, sw[0][2]),
-          (xy_center[0] + 31.875 / 2, xy_center[1] + 31.875 / 2, sw[1][2]))
-    # Extract rectangle coordinates
-    (x0, y0) = sw[0][0], sw[0][1]
-    (x1, y1) = sw[1][0], sw[1][1]
-    # Width and height
-    width, height = x1 - x0, y1 - y0
-    # Create and add rectangle
-    rect = Rectangle((x0, y0), width, height, linewidth=1, edgecolor='r', facecolor='none')
-    ax1.add_patch(rect)
-
-
-
-if showImageRegion:
-    sw = ((xy_center[0] - ss[0] / 2, xy_center[1] - ss[1] / 2, sw[0][2]),
-          (xy_center[0] + ss[0] / 2, xy_center[1] + ss[1] / 2, sw[1][2]))
-    # Extract rectangle coordinates
-    (x0, y0) = sw[0][0], sw[0][1]
-    (x1, y1) = sw[1][0], sw[1][1]
-    # Width and height
-    width = x1 - x0
-    height = y1 - y0
-    # Create and add rectangle
-    rect = Rectangle((x0, y0), width, height, linewidth=1, edgecolor='k', facecolor='none')
-    ax1.add_patch(rect)
-
-offset = 5
-ax1.set_xlim([xy_center[0]-sw_x/2-offset, xy_center[0]+sw_x/2+offset])
-ax1.set_ylim([xy_center[1]-sw_y/2-offset, xy_center[1]+sw_y/2+offset])
-# ax1.set_xlabel(r'$x$ (Å)')
-# ax1.set_ylabel(r'$y$ (Å)')
-
-# Add the label
-offset_text = 0.05 
-offset_text_y = 0.02
-ax1.text(offset_text, 1 - offset_text_y, "$y$", transform=ax1.transAxes, va='top', ha='left')
-
-
-# Duplicate content from ax1 to ax2 manually
-ax2 = fig.add_subplot(gs[0, 1])
-ax2.set_aspect('equal')
-ax2.tick_params(axis='both', direction='in', labelright=False)
-#ax2.axis('off')  # optionally hide axis ticks and labels
-
-# Atoms
-for atom in showAtomsList:
-    color = jmol_colors[atom.number]
-    radius = radii[atom.number] * 0.8
-    circle = Circle((atom.x, atom.y), radius, facecolor=color, edgecolor='k', linewidth=0.5)
-    ax2.add_patch(circle)
-
-# Optional: lattice
-if showLattice:
-    draw_unit_cells(ax2, origin=np.array([xy_origin[0], xy_origin[1], 0]),
-                    cell_vectors=lattice_vectors, nx=3, ny=3)
-
-# Scan region
-if showScanRegion:
-    rect = Rectangle((x0, y0), width, height, linewidth=1, edgecolor='r', facecolor='none')
-    ax2.add_patch(rect)
-
-# Image region
-if showImageRegion:
-    rect = Rectangle((x0, y0), width, height, linewidth=1, edgecolor='k', facecolor='none')
-    ax2.add_patch(rect)
-
-# Axes limits
-ax2.set_xlim([xy_center[0] - sw_x/2 - offset, xy_center[0] + sw_x/2 + offset])
-ax2.set_ylim([xy_center[1] - sw_y/2 - offset, xy_center[1] + sw_y/2 + offset])
-
-# Axis label
-ax2.text(offset_text, 1 - offset_text_y, "$y$", transform=ax2.transAxes, va='top', ha='left')
-
+rows, cols = 3, 2
+fig = plt.figure(figsize=(2*cols, 2*rows))
+gs = fig.add_gridspec(rows, cols)
 # Step 1: Collect all images first to compute global vmin and vmax, then I can use the same vmin and vmax for all images
 all_images = []
-for j in range(2):
-    for i in range(3):
+for j in range(cols):
+    for i in range(rows):
         if j == 0:
             imagePath = '{}/PPAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # PPAFM
         else:
             imagePath = '{}/FakeAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # FakeAFM
         image = iio.imread(imagePath).astype(np.float32)  
-        all_images.append(image)
+        rotated_image = np.rot90(image, k=3)
+        all_images.append(rotated_image)
 all_images_np = np.array(all_images)
 vmin = all_images_np.min()
 vmax = all_images_np.max()
 
 # Calculate the error maps
 error_maps = []
-for i in range(3):
+for i in range(rows):
     imagePPAFM = '{}/PPAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # PPAFM
     imageFakeAFM = '{}/FakeAFM/{:.2f}.png'.format(exampleInput, i * 0.1 * dz) # FakeAFM
     imagePPAFM = iio.imread(imagePPAFM).astype(np.float32)  
@@ -329,9 +245,18 @@ subLabels = [fr"$x^\prime=F_{{\mathcal{{Y}}}}(y)$", fr"$x=G_{{\mathcal{{X}}^\pri
 axes_col = [[], [], []]
 ims_col = [None, None, None]
 
-for j in range(3): # Columns
-    for i in range(3): # Rows
-        ax = fig.add_subplot(gs[i+1, j])
+offset_text = 0.05
+offset_text_y = 0.05
+
+# Draw a gray vertical line at horizontal = width/2
+height, width = rotated_image.shape
+x_center = width / 2
+# Markers at 1/6 and 5/6 of the height on the line
+y1 = height / 5
+y2 = 4 * height / 5
+for j in range(cols): # Columns
+    for i in range(rows): # Rows
+        ax = fig.add_subplot(gs[i, j])
         ax.set_aspect('equal')
         ax.tick_params(axis='both', direction='in', labelright=False)
         im = None
@@ -349,29 +274,84 @@ for j in range(3): # Columns
             image = all_error_maps[i]  # Use the error map
             rotated_image = np.rot90(image, k=3)  # 90 degrees counter-clockwise
             im = ax.imshow(rotated_image, cmap='BrBG', vmin=emin, vmax=emax)
+        
+        if i == 1 and j == 1:
+            ax.axvline(x=x_center, color='gray', linestyle='-', zorder=10, alpha=0.5)
+            ax.plot(x_center, y1, marker='.', color='k', markersize=10, zorder=11)
+            ax.plot(x_center, y2, marker='.', color='k', markersize=10, zorder=11)
+            ax.text(x_center + 0.04 * width, y1, "A", va='center', ha='left', fontsize=14, color='grey')
+            ax.text(x_center + 0.04 * width, y2, "B", va='center', ha='left', fontsize=14, color='grey')
         ims_col[j] = im 
         ax.axis('off')  # optionally hide axis ticks and labels
         if i == 0:
-            ax.text(offset_text, 1 - offset_text_y, subLabels[j], transform=ax.transAxes, va='top', ha='left')
+            pos = ax.get_position()
+            # Create a new axes above the subplot, same width, small height
+            label_ax = fig.add_axes([pos.x0, pos.y1 + 0.01, pos.width, 0.04])
+            label_ax.axis('off')
+            x  = 0.0 if j==0 else -0.1
+            label_ax.text(x+0.55, 0.0, subLabels[j], ha='center', va='bottom', transform=label_ax.transAxes)
+            #ax.text(offset_text, 1 - offset_text_y, subLabels[j], transform=ax.transAxes, va='top', ha='left')
         if j == 0:
             ax.text(offset_text, offset_text_y, fr"$z_{{\mathrm{{tip}}}} = {refZ0 - (i + 1) * dz :.2f}$ Å",  transform=ax.transAxes, va='bottom', ha='left', color='lightgrey' if i == 2 else 'k')
 
 # Add colorbars above each column
-cax = fig.add_axes([0.13 + 0.29, 0.1, 0.2, 0.015])  # [left, bottom, width, height], adjust as needed
+pos = ax.get_position()
+cax = fig.add_axes([pos.x0 - 0.22, pos.y0 - 0.02, pos.width, 0.015])  # 0.06 is the vertical gap, adjust as needed
 cbar = fig.colorbar(ims_col[0], cax=cax, orientation='horizontal')
-cbar.set_label('Intensity')
+cbar.set_label('Pixel intensity')
 
-cax = fig.add_axes([0.13 + 0.29*j, 0.1, 0.2, 0.015])  # [left, bottom, width, height], adjust as needed
-cbar = fig.colorbar(ims_col[-1], cax=cax, orientation='horizontal')
-cbar.set_label('Error')
-
-
-fig.subplots_adjust(hspace=0, wspace=0.3, left=0.08, bottom=0.15, right=0.99, top=0.95)
+fig.subplots_adjust(hspace=0.01, wspace=0.01)
 #plt.tight_layout()
 if show: plt.show() 
 fig.savefig("{}/xy_view_data.png".format(figure_folder), dpi=600)  # Set DPI to 300
 fig.savefig("{}/xy_view_data.pdf".format(figure_folder))  # Set DPI to 300
 fig.savefig("{}/xy_view_data.svg".format(figure_folder))
+plt.close(fig)
+
+
+fig = plt.figure(figsize=(4, 2))
+gs = fig.add_gridspec(1, 3)
+
+shape = all_images[0].shape
+print('shape:', shape)
+xps = [all_images[i][:, int(shape[1]/2)] for i in range(3)]
+xs  = [all_images[i+rows][:, int(shape[1]/2)] for i in range(3)]
+
+for i in range(3):
+    if i == 0:
+        ax1 = fig.add_subplot(gs[0, i])
+    else:
+        ax1 = fig.add_subplot(gs[0, i], sharey=ax1)
+    yvals = list(range(shape[1]))
+    diff = xps[i] - xs[i]
+    ax1.invert_yaxis() # >>
+    ax1.set_ylim([shape[1], 0]) # << Need to be adjusted
+    ax1.plot(xps[i], yvals, color=simcolor, ls='dashed', label=rf'$x^\prime$')
+    ax1.plot(xs[i], yvals, color=expcolor, label=rf'$\hat{{x}}$')
+    ax1.fill_betweenx(yvals, xps[i], xs[i], where=diff > 0, color=bg07color, alpha=0.3, label=rf'$\Delta > 0$')
+    ax1.fill_betweenx(yvals, xps[i], xs[i], where=diff < 0, color=bv17color, alpha=0.3, label=rf'$\Delta < 0$', hatch='..', edgecolor='k')
+    # ax1.axhline(y=y1, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
+    # ax1.axhline(y=y2, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
+    ax1.axhline(y=y1, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
+    if i == 0: ax1.text(vmin + 0.05 * (vmax - vmin), y1, "A", va='bottom', ha='left', zorder=11, color='gray')
+    ax1.axhline(y=y2, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
+    if i == 0: ax1.text(vmin + 0.05 * (vmax - vmin), y2, "B", va='bottom', ha='left', zorder=11, color='gray')
+    ax1.set_xlim([vmin, vmax])
+    if i != 0: 
+        ax1.set_yticklabels([])
+    else:
+        ax1.tick_params(axis='y', labelleft=True)
+    if i == 1: ax1.set_xlabel('Pixel intensity')
+    if i == 2: ax1.legend(loc='right', bbox_to_anchor=(1.14, 0.46), handlelength=1, handletextpad=0.1, labelspacing=0.3)
+    if i == 0:
+        ax1.set_ylabel('Vertical (Å)')
+
+#fig.subplots_adjust(hspace=0.0, wspace=0.05, left=0.05, bottom=0.15, right=0.99, top=0.95)
+fig.subplots_adjust(hspace=0.0, wspace=0.05, left=0.05, bottom=0.15, right=0.99, top=0.95)
+if show: plt.show() 
+fig.savefig("{}/style_difference.png".format(figure_folder), dpi=600, bbox_inches='tight')  # Set DPI to 300
+fig.savefig("{}/style_difference.pdf".format(figure_folder), bbox_inches='tight')  # Set DPI to 300
+fig.savefig("{}/style_difference.svg".format(figure_folder), bbox_inches='tight')
 plt.close(fig)
 
 
