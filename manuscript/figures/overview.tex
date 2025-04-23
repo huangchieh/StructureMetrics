@@ -32,9 +32,9 @@
 	\begin{tikzpicture}[node distance = 5cm, on grid, auto]
 		
 		% Nodes
-		\node (Y) [state, initial, accepting, initial text = {DFT}, dft] {$\mathcal{Y}$};
-		\node (X') [state, above right = of Y, simulated] {$\mathcal{X}^{\prime}$};
-		\node (X) [state, below right = of X', experimental] {$\mathcal{X}$};
+		\node (Y) [state, initial, accepting, initial text = {DFT}, dft] {$\mathcal{M}$};
+		\node (X') [state, above right = of Y, simulated] {$\mathcal{U}$};
+		\node (X) [state, below right = of X', experimental] {$\mathcal{V}$};
 		
 		% Annotations
 		\node[below=1.2cm of Y, annotation, text=dftcolor!80!black] {Atomic configuration};
@@ -48,15 +48,15 @@
 		
 		% Arrows (transitions)
 		\path [YXP] 
-		(Y)  edge [bend left] node[sloped, above] {$F_{\mathcal{Y}}$} (X');
+		(Y)  edge [bend left] node[sloped, above] {$H_{\mathcal{M}}$} (X');
 		\path [XPY]
-		(X') edge [bend left]   node[sloped, above]    {$S_{\mathcal{X}^{\prime}}$}    (Y);
+		(X') edge [bend left]   node[sloped, above]    {$F_{\mathcal{U}}$}    (Y);
 		\path [XPX]
-		(X') edge [bend left]   node[sloped, above]    {$G_{\mathcal{X}^{\prime}}$}    (X);
+		(X') edge [bend left]   node[sloped, above]    {$G_{\mathcal{U}}$}    (X);
 		\path [XXP]
-		(X)  edge [bend left]   node[sloped, above, yshift=2pt]    {$G_{\mathcal{X}}$}   (X');
+		(X)  edge [bend left]   node[sloped, above, yshift=2pt]    {$G_{\mathcal{V}}$}   (X');
 		\path [XY]
-		(X)  edge [bend left]   node[sloped, above]    {$S_{\mathcal{X}}$}    (Y);
+		(X)  edge [bend left]   node[sloped, above]    {$F_{\mathcal{V}}$}    (Y);
 		
 	\end{tikzpicture}
 	
