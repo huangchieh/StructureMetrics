@@ -1,4 +1,6 @@
 # Theory distributions obtained from simulations
+![](../manuscript/figures/theory.png)
+
 ## Diantance and angle 
 ```{figure} ../results/theoretical_distributions/Label/RDF_ADF_Label.png
 :alt: RDF_ADF

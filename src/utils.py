@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import re
 
-def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=1000, bw_method=None, hist=False, bins=120):
+def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=100, bw_method=None, hist=False, bins=120, marker=None):
     """
     Plots a KDE curve with optional fill under the curve and returns the x and y values.
 
@@ -41,7 +41,7 @@ def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, 
             label=label,
             alpha=alpha_fill)
     else:
-        ax.plot(x, y, color=color, linestyle=linestyle, label=label, alpha=1.0)
+        ax.plot(x, y, color=color, linestyle=linestyle, marker=marker, markerfacecolor='none', markersize=4, markeredgewidth=1, label=label, alpha=1.0)
     if hist:
         ax.hist(data, bins=bins, histtype='step', density=True, color=color, alpha=0.25, linewidth=0.3)
     return x, y
@@ -82,10 +82,10 @@ def plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label, y_label
     if show: plt.show()
     plt.close()
 
-def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, text, show):
+def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show):
     sns.set(style="white")
-    fig = plt.figure(figsize=(6, 6))
-    grid = plt.GridSpec(2, 2, width_ratios=[4, 1], height_ratios=[1, 4], hspace=0.05, wspace=0.05)
+    fig = plt.figure(figsize=(3.85, 3.85))
+    grid = plt.GridSpec(2, 2, width_ratios=[4, 1], height_ratios=[1, 4], hspace=0.015, wspace=0.015)
     ax_joint = fig.add_subplot(grid[1, 0])
     ax_marg_x = fig.add_subplot(grid[0, 0], sharex=ax_joint)
     ax_marg_y = fig.add_subplot(grid[1, 1], sharey=ax_joint)
@@ -94,30 +94,28 @@ def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_m
         xs, ys = np.load(f"{npz_prefix}_{key}.npz")[npz_x], np.load(f"{npz_prefix}_{key}.npz")[npz_y]
         color = colors[key]
 
-        if key == "All": # Joint KDE for 'All' only
-            sns.kdeplot(x=xs, y=ys, fill=True, bw_adjust=0.5, ax=ax_joint,
-                        cmap=sns.light_palette(color, as_cmap=True))
-        else: # Scatter for Top and Bottom only
-            ax_joint.scatter(xs, ys, s=5, marker = ',' if key =="Bottom"
-                             else 'x', color=color, alpha=0.5,
-                             label=f'{key} samples')
+        # if key == "All": # Joint KDE for 'All' only
+        #     sns.kdeplot(x=xs, y=ys, fill=True, bw_adjust=0.5, ax=ax_joint,
+        #                 cmap=sns.light_palette(color, as_cmap=True))
+        # else: # Scatter for Top and Bottom only
+        #     ax_joint.scatter(xs, ys, s=5, marker = ',' if key =="Bottom"
+        #                      else 'x', color=color, alpha=0.5,
+        #                      label=f'{key} samples')
+        ax_joint.scatter(xs, ys, s=5, marker = ',' if key =="Bottom"
+                            else 'x', color=color, alpha=0.5,
+                            label=f'{key} samples')
 
-        sns.kdeplot(x=xs, ax=ax_marg_x, color=color, fill=False if key !=
-                    "All" else True,
-                    bw_adjust=0.5, alpha=0.3 if key ==
-                    "All" else 1, label=f"{key} samples")
-        sns.kdeplot(y=ys, ax=ax_marg_y, color=color, fill=False if key !=
-                    "All" else True,
-                    bw_adjust=0.5, alpha=0.3 if key ==
-                    "All" else 1, label=f"{key} samples")
+        sns.kdeplot(x=xs, ax=ax_marg_x, color=color, fill=False,
+                bw_adjust=0.5, alpha=1, label=f"{key} samples", linestyle=linestypes[key])
+        sns.kdeplot(y=ys, ax=ax_marg_y, color=color, fill=False, 
+                bw_adjust=0.5, alpha=1, label=f"{key} samples", linestyle=linestypes[key])
 
     ax_joint.set_xlim(x_min, x_max)
     ax_joint.set_ylim(y_min, y_max)
     ax_joint.set_xlabel(x_label)
     ax_joint.set_ylabel(y_label)
     ax_joint.tick_params(direction="in")
-    #ax_joint.legend(loc='upper left', frameon=False)
-    ax_marg_x.legend(loc='lower left', frameon=False)
+    #ax_marg_x.legend(loc='lower left', frameon=False)
 
     # Hide axis ticks for marginal plots
     ax_marg_x.axis("off")
@@ -128,7 +126,7 @@ def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_m
         for label, color in colors.items() ]
     ax_marg_x.legend(handles=legend_lines, loc='lower center', frameon=False,
                      ncol=1, bbox_to_anchor=(0.15, 0.00), fontsize=10)
-    fig.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15,
+    fig.subplots_adjust(left=0.25, right=0.99, top=0.92, bottom=0.15,
                         hspace=0.01, wspace=0.01)
 
     fig.savefig(f"{image_prefix}.pdf", bbox_inches='tight')
@@ -142,7 +140,7 @@ def plot_joint_distributions_in_row(z_thresholds, npz_prefix, npz_x, npz_y,
                                     x_min, x_max, y_min, y_max, x_label,
                                     y_label, image_prefix, text, show):
         nbin = 50
-        figsize = (8, 2.5)
+        figsize = (6, 2)
         cmap = 'Greens'
         xgrid = np.linspace(x_min, x_max, nbin)
         ygrid = np.linspace(y_min, y_max, nbin)
