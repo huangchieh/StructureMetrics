@@ -19,7 +19,7 @@ plt.rcParams['font.size']=14
 #plt.rcParams['font.family']='Arial'
 plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
-#plt.rcParams['text.usetex'] = True # Render text with LaTeX
+plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
 # %%
 expImage = '../data/expPNG'
@@ -33,17 +33,8 @@ for angle in angles:
     # Look different rotations individually
     numRows = len(samples)
     numCols = len(models) + 2 # Add two for the input images
-    fig, axs = plt.subplots(numRows, numCols, figsize=(numCols*2, numRows*2))
-    # Add the sublabels
-    subLabels = ['Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$']
-    for j in range(numCols):
-        ax = axs[0, j]
-        pos = ax.get_position()
-        # Create a new axes above the subplot, same width, small height
-        label_ax = fig.add_axes([pos.x0, pos.y1 + 0.001, pos.width, 0.02])
-        label_ax.axis('off')
-        x  = 0.0 
-        label_ax.text(x+0.55, 0.0, subLabels[j], ha='center', va='bottom', transform=label_ax.transAxes)
+    fig, axs = plt.subplots(numRows, numCols, figsize=(numCols*2, numRows*2+3))
+
     for i, sample in enumerate(samples):
         # Load the input image: close and far 
         closeImg = '{}/{}_{}.png'.format(expImage, sample, indexes[i][0])
@@ -105,10 +96,20 @@ for angle in angles:
                 x1 = x0 + scale_length
                 y1 = y0
                 axs[i, j+2].plot([x0, x1], [y0, y1], color='k')
-                if i == 0:
-                    axs[i, j+2].text((x0 + x1) / 2, y0 + 0.03 * (2 * span), '1 nm', color='k',
-                                ha='center', va='bottom', fontsize=10)
-    plt.subplots_adjust(wspace=0.02, hspace=0.02)
+                axs[i, j+2].text((x0 + x1) / 2, y0 + 0.03 * (2 * span), '1 nm', color='k',
+                            ha='center', va='bottom', fontsize=10)
+    # Add the sublabels
+    subLabels = ['$v$: Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$']
+    xoffsets = [-0.14, -0.11, -0.04, -0.02, 0.01, 0.04]
+    for j in range(numCols):
+        ax = axs[0, j]      # first row's axes
+        pos = ax.get_position()
+        x_center = (pos.x0 + pos.x1) / 2  # middle between left and right
+        y_top = pos.y1 + 0.01             # a little bit above the top
+
+        fig.text(x_center+xoffsets[j], y_top, subLabels[j],
+                ha='left', va='bottom')
+    plt.subplots_adjust(wspace=0.02, hspace=0.02, left=0.025, right=0.975)
     plt.savefig('{}/predictions_{}.png'.format(output, angle), dpi=600)
     plt.savefig('{}/predictions_{}.pdf'.format(output, angle))
     plt.savefig('{}/predictions_{}.svg'.format(output, angle))
