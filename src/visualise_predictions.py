@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # %%
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,8 +11,15 @@ import os
 # %%
 models = ['Ref', 'PPAFM2Exp_CoAll_L10_L10_Elatest', 'PPAFM2Exp_CoAll_L10_L0.1_Elatest', 'PPAFM2Exp_CoAll_L20_L1_Elatest']
 angles = [0, 90, 180, 270]
-samples = ['Ying_Jiang_1', 'Ying_Jiang_2_1', 'Ying_Jiang_2_2', 'Ying_Jiang_3', 'Ying_Jiang_5', 'Ying_Jiang_6', 'Ying_Jiang_4']
+samples = ['Ying_Jiang_1', 'Ying_Jiang_2_1', 'Ying_Jiang_2_2', 'Ying_Jiang_3', 'Ying_Jiang_5', 'Ying_Jiang_6'] # 'Ying_Jiang_4'
 indexes = [[0, 8], [0, 8], [0, 8], [0, 8], [0, 8], [0, 8], [0, 6]] 
+
+# %%
+plt.rcParams['font.size']=14
+#plt.rcParams['font.family']='Arial'
+plt.rcParams['pdf.fonttype']=42
+plt.rcParams['svg.fonttype'] = 'none'
+#plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
 # %%
 expImage = '../data/expPNG'
@@ -25,7 +33,17 @@ for angle in angles:
     # Look different rotations individually
     numRows = len(samples)
     numCols = len(models) + 2 # Add two for the input images
-    fig, axs = plt.subplots(numRows, numCols, figsize=(numCols*1.5, numRows*1.3))
+    fig, axs = plt.subplots(numRows, numCols, figsize=(numCols*2, numRows*2))
+    # Add the sublabels
+    subLabels = ['Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$']
+    for j in range(numCols):
+        ax = axs[0, j]
+        pos = ax.get_position()
+        # Create a new axes above the subplot, same width, small height
+        label_ax = fig.add_axes([pos.x0, pos.y1 + 0.001, pos.width, 0.02])
+        label_ax.axis('off')
+        x  = 0.0 
+        label_ax.text(x+0.55, 0.0, subLabels[j], ha='center', va='bottom', transform=label_ax.transAxes)
     for i, sample in enumerate(samples):
         # Load the input image: close and far 
         closeImg = '{}/{}_{}.png'.format(expImage, sample, indexes[i][0])
@@ -36,11 +54,12 @@ for angle in angles:
         close = np.rot90(close, k=(angle+90)//90)
         far = np.rot90(far, k=(angle+90)//90)
         # Show the image with corresponding rotation angle in gray scale
-        axs[i, 0].imshow(close, cmap='gray')
-        axs[i, 1].imshow(far, cmap='gray')
+        axs[i, 0].imshow(close, cmap='inferno')
+        axs[i, 1].imshow(far, cmap='inferno')
         # Show no axis
         axs[i, 0].axis('off')
         axs[i, 1].axis('off')
+        
         for j, model in enumerate(models):
             structure = '{}/{}/Prediction_c/{}_d{}_mol.xyz'.format(predictions, model, sample, angle)
             atoms = read_xyz_with_atomic_numbers(structure)
@@ -49,6 +68,8 @@ for angle in angles:
             axs[i, j+2].set_aspect('equal')
             axs[i, j+2].tick_params(axis='both', direction='in', labelright=False)
 
+            axs[i, j+2].set_xticks([])
+            axs[i, j+2].set_yticks([])
             # Sort atoms by z-position to draw farther atoms first
             atoms = sorted(atoms, key=lambda atom: atom.position[2])
 
@@ -59,22 +80,35 @@ for angle in angles:
                                 edgecolor='k', linewidth=0.5)
                 axs[i, j+2].add_patch(circle)
 
+    
             x_positions = [atom.position[0] for atom in atoms]
             y_positions = [atom.position[1] for atom in atoms]
             if j == 0:
                 xmin, xmax = min(x_positions), max(x_positions)
                 ymin, ymax = min(y_positions), max(y_positions)
             offset = 1
-            axs[i, j+2].set_xlim([xmin - 3*offset, xmax + 3*offset])
-            axs[i, j+2].set_ylim([ymin - 2*offset, ymax + 2*offset])
-            # if j == 0:
-            #     axs[i, j].set_ylabel(r'$y$ (Å)')
-            # if i == numRows - 1:
-            #     axs[i, j].set_xlabel(r'$x$ (Å)')
 
-            #axs[i, j].set_title('{} {}'.format(sample, model))
+            # Calculate the center and the maximum span to ensure square axes
+            x_center = (xmin + xmax) / 2
+            y_center = (ymin + ymax) / 2
+            span = max(xmax - xmin, ymax - ymin) / 2 + 4 * offset  # add padding
 
-    #plt.tight_layout()
+            axs[i, j+2].set_xlim([x_center - span, x_center + span])
+            axs[i, j+2].set_ylim([y_center - span, y_center + span])
+            # Draw 1 nm scale bar at top left for the first model
+            if j == 0:
+                # 1 nm in Angstroms (10 Å)
+                scale_length = 10  # 1 nm = 10 Å
+                # Place bar 5% from left and 10% from top
+                x0 = x_center - span + 0.05 * (2 * span)
+                y0 = y_center + span - 0.98 * (2 * span)
+                x1 = x0 + scale_length
+                y1 = y0
+                axs[i, j+2].plot([x0, x1], [y0, y1], color='k')
+                if i == 0:
+                    axs[i, j+2].text((x0 + x1) / 2, y0 + 0.03 * (2 * span), '1 nm', color='k',
+                                ha='center', va='bottom', fontsize=10)
+    plt.subplots_adjust(wspace=0.02, hspace=0.02)
     plt.savefig('{}/predictions_{}.png'.format(output, angle), dpi=600)
     plt.savefig('{}/predictions_{}.pdf'.format(output, angle))
     plt.savefig('{}/predictions_{}.svg'.format(output, angle))
