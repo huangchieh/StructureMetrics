@@ -1,1 +1,1 @@
-cp ../../../SimulationRealClassifier/results/fidelity.* .
+cp ../../../SimulationRealClassifier/results/fidelity/fidelity.* .
