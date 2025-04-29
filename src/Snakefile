@@ -3,7 +3,7 @@ rule all:
         "../results/train_data", 
 	"../results/theoretical_distributions/"
 
-rule calculate_structure_properties:
+rule calDistributions:
     input:
         script = "calDistributions.py",
         data_dir = "../data/structures/predictions"
@@ -14,10 +14,10 @@ rule calculate_structure_properties:
         ./calDistributions.py
         """
 
-rule calculate_distances:
+rule calDistances:
     input:
         script = "calDistances.py",
-        data_dir = "../processed_data/structure_properties"  # This ensures dependency on the output of the first rule
+        data_dir = "../processed_data/structure_properties" 
     output:
         out_dir = directory("../processed_data/distribution_distances")
     shell:
@@ -25,7 +25,7 @@ rule calculate_distances:
         ./calDistances.py
         """
 
-rule visualize_training_data:
+rule visualiseTrainingData:
     input:
     	script = "visualiseTrainingData.py",
 	data_dir = "../data/structures/simulations/Label"
@@ -36,7 +36,7 @@ rule visualize_training_data:
 	./visualiseTrainingData.py
     	"""
 
-rule visualize_theore_distributions:
+rule visualiseTheoreDistributions:
     input:
     	script = "visualiseTheoreDistributions.py",
 	data_dir = "../data/structures/simulations/"
@@ -47,3 +47,17 @@ rule visualize_theore_distributions:
     	"""
 	./visualiseTheoreDistributions.py
 	"""
+
+	
+rule evaluate:
+	input:
+		"evaluate.py", 
+		 "../processed_data/distribution_distances/similarities_Label_All.json", 
+		 "../processed_data/distribution_distances/similarities_Label_Top.json", 
+		 "../processed_data/distribution_distances/similarities_Label_Bottom.json" 
+	output:
+		out_dir = directory("../results/distance_evaluate")
+	shell:
+		"""
+		./evaluate.py
+		"""

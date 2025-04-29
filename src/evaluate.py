@@ -47,7 +47,7 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
     bar_width = 0.3  # Adjusted width for three bars
 
     # Create figure
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(8, 6))
 
     # Plot bars for all features
     ax.bar(x - bar_width, mean_values0, yerr=std_values0, capsize=5,
@@ -60,7 +60,7 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
     # Labels and titles
     ax.set_ylabel("Wasserstein Distance")
     ax.set_xticks(ticks=x)
-    ax.set_xticklabels(numeric_columns, rotation=45)
+    ax.set_xticklabels(numeric_columns)
     ax.grid(axis='y', linestyle='--', alpha=0.6)
     ax.text(x=0.05, y=0.5, s=f"Ref.: {layer} layer", transform=ax.transAxes)
     ax.set_ylim(0, 0.35)
@@ -69,8 +69,7 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
     ax.legend(loc='upper left')
 
     # Adjust layout and show plot
-    #plt.tight_layout()
-    plt.subplots_adjust(left=0.13, right=0.99, top=0.95, bottom=0.11)
+    plt.tight_layout()
     if save_as is not None:
         plt.savefig(save_as)
     if show:
