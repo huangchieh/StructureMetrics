@@ -1,0 +1,1502 @@
+{
+    "PPAFM2Exp_CoAll_L50_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03955247672478167
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04074192732669462
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05546073521738198
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12266794563854377
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.08402906358242035
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2579066753387451
+        }
+    },
+    "PPAFM2Exp_CoAll_L60_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04005964214125738
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04275071240530463
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04767045753755986
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.09228414211332366
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.1322958916425705
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.285320907831192
+        }
+    },
+    "PPAFM2Exp_CoAll_L40_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.037243851809577386
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04430810573436769
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.06736936125815497
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11760812958121387
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.07675161957740784
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.23387151956558228
+        }
+    },
+    "PPAFM2Exp_CoAll_L30_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03288485116435925
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04020672830546167
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04818544958083279
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14054081172954377
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.10193976759910583
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.26245832443237305
+        }
+    },
+    "Ref": {
+        "OO_dist": {
+            "wdistancec_nor": 0.040542692538560854
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.040734916703741776
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04967505519114529
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1468852157662363
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.10355759412050247
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.24327971041202545
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03845422410547123
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04094757761862898
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05239185023646954
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12106973157161637
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.058470260351896286
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.27930495142936707
+        }
+    },
+    "PPAFM2Exp_CoAll_L50_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03558695058309458
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04296764496211355
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.0528559067963489
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12437198136069544
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.07775836437940598
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2885722815990448
+        }
+    },
+    "PPAFM2Exp_CoAll_L90_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04244062944349764
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04371115417585425
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04796676236861207
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14039872808543566
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.08274698257446289
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.27051129937171936
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.028810434502489126
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.038489467956146134
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04449331585685698
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11491803163599026
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.04436343163251877
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.24674081802368164
+        }
+    },
+    "PPAFM2Exp_CoAll_L12_L4_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.0257885889171071
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03953880122093094
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04924190089262144
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1568131702350911
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.045666612684726715
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2180127501487732
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03752020596762598
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03896827287127701
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04979785766952538
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1500283137125571
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.09683318436145782
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2464037835597992
+        }
+    },
+    "PPAFM2Exp_CoAll_L50_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04271888393369588
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.043735787515348
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.06344564356037784
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.04914577566151208
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.09249863028526306
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.29192638397216797
+        }
+    },
+    "PPAFM2Exp_CoAll_L50_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04454670769931672
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.044577844204097744
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05699632884040983
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.15538203007624826
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.07792970538139343
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2720240354537964
+        }
+    },
+    "PPAFM2Exp_CoAll_L60_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.028756663877078224
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.0434034758978398
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05310500410621903
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1245856695069131
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.03761959820985794
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.28113043308258057
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C9": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03201005994336723
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04246188331322588
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05186177218014847
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11335835054649239
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.045394450426101685
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2516530156135559
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C7": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03281529624763464
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.043631685120661436
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05266773659213752
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10930906505083929
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.07461617141962051
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.20897242426872253
+        }
+    },
+    "PPAFM2Exp_CoAll_L30_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.031568965509809616
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04119380626941506
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05122272838705732
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.13332241212564575
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.07825171947479248
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.24498450756072998
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C0": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03857623684303966
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.040634807666090594
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05421266952167059
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11373856587796116
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.04279065877199173
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.28672322630882263
+        }
+    },
+    "PPAFM2Exp_CoAll_L80_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03756744475392135
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.046264091766095444
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05570115888740773
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.13096144566629783
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.08460427075624466
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.23510470986366272
+        }
+    },
+    "Ref_C7": {
+        "OO_dist": {
+            "wdistancec_nor": 0.041947146913401574
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04348995285999737
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05740505147938528
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11203374188835852
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.11416492611169815
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25162243843078613
+        }
+    },
+    "Ref_C0": {
+        "OO_dist": {
+            "wdistancec_nor": 0.0459595830771993
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.043593494964494856
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.062352444061125556
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14816566672047599
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.09960969537496567
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.26149308681488037
+        }
+    },
+    "Ref_C9": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03875942239507252
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04588742046740121
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.056256765869549925
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1290539455507579
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.11875661462545395
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.267891526222229
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C1": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03519502143266712
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04137908180842962
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05370762797786134
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1101728725571871
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.04734843224287033
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2543606460094452
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C6": {
+        "OO_dist": {
+            "wdistancec_nor": 0.0315080459887081
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04140127738037624
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.045397483324542284
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10922854679446178
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.04569022357463837
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2225545197725296
+        }
+    },
+    "PPAFM2Exp_CoAll_L12_L6_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03471482677726889
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.040840779288087846
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04893396410511068
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10768393493013625
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.05229414626955986
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.26671281456947327
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C8": {
+        "OO_dist": {
+            "wdistancec_nor": 0.030969287122515017
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04000700986505313
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04546042006486389
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14739590856594664
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.03915215656161308
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2639119029045105
+        }
+    },
+    "Ref_C8": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04509848465706805
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.041562768204189186
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.054277353623078714
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10486680108905472
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.10386638343334198
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25984418392181396
+        }
+    },
+    "Ref_C1": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04642120415128832
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.0460071262278278
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05811787324946366
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.09429641200711786
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.13484033942222595
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.27771538496017456
+        }
+    },
+    "Ref_C6": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04499876043301681
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.045332803176459185
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.058833880015965546
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12344545039480445
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.1205676794052124
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2447127103805542
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C1": {
+        "OO_dist": {
+            "wdistancec_nor": 0.028193864441477968
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03766363253513116
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.047916168670786845
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12239422271401529
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.05528327822685242
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.21720722317695618
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L6_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.0375031274521275
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03628290105987203
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.042983589125874105
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.18336342581425186
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0649566501379013
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.24358665943145752
+        }
+    },
+    "PPAFM2Exp_CoAll_L80_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03503259514729371
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03893245722926761
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04955070863309505
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1598151230691517
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0673065111041069
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.28212156891822815
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C8": {
+        "OO_dist": {
+            "wdistancec_nor": 0.0363685971106185
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04352417252554457
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.0561666246297527
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10967608642418432
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.04593685641884804
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.253876656293869
+        }
+    },
+    "PPAFM2Exp_CoAll_L100_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03372827278247437
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04277657308496084
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.0595336287636586
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.0893517301655835
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0821893960237503
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.21374569833278656
+        }
+    },
+    "PPAFM2Exp_CoAll_L90_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.036270802941942196
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.047201565217683684
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05969690095158451
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12347099390045388
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0809178501367569
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25841638445854187
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C9": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03307584072204228
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.040991329056890055
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05031713011198233
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10169092348588823
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.04978836327791214
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2976216673851013
+        }
+    },
+    "PPAFM2Exp_CoAll_L60_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04227751678619058
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04264567539789406
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.052149178470347765
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11155502762462832
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.10409672558307648
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.24604955315589905
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C7": {
+        "OO_dist": {
+            "wdistancec_nor": 0.030035792637350785
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.0408748195596293
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.049143945364360536
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1413058620004543
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.03539744019508362
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.22527962923049927
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C0": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03474198856833342
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.040379833211337784
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05493381880360285
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12772614716996034
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0739152804017067
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2672339081764221
+        }
+    },
+    "PPAFM2Exp_CoAll_L30_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.0227255697687873
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03963799538812275
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05468637270640326
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1259177900447221
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.02729973942041397
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2367883026599884
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.040234716617669274
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04180854853862964
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05507146542587879
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1069807338498868
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.07446886599063873
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25097936391830444
+        }
+    },
+    "PPAFM2Exp_CoAll_L90_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03233996658282324
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.044887102726253125
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05211016343830831
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.09827609031201831
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.07896400988101959
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2456982135772705
+        }
+    },
+    "PPAFM2Exp_CoAll_L80_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.035350579795047465
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.043448805501185545
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05617945092168365
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1225221941355162
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.09649716317653656
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25096386671066284
+        }
+    },
+    "PPAFM2Exp_CoAll_L12_L2_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03507193207983623
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04013104672237065
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.050647912134605615
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1151215589930107
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.04384920001029968
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2616780996322632
+        }
+    },
+    "PPAFM2Exp_CoAll_L100_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.034114791168193624
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04309596552212845
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.056997649290922596
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12700417471726108
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.06801823526620865
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.22425337135791779
+        }
+    },
+    "PPAFM2Exp_CoAll_L80_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.05046671407399193
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04390567419115148
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.0551597700733049
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14745223031853297
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.12723587453365326
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.352948397397995
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L2_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.02849040509945881
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03940833954964659
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04863430650871273
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11352176670432579
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.045659132301807404
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2631007134914398
+        }
+    },
+    "PPAFM2Exp_CoAll_L100_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03446030935884198
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.05016532595738943
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.057246715477567975
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14673147305874834
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.08033113181591034
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2966439127922058
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03642899814965676
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03948445792470902
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05155174166105017
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11323687624411904
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.039634302258491516
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2440098375082016
+        }
+    },
+    "PPAFM2Exp_CoAll_L40_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.041662000066452494
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04369839916685433
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.06285923932209099
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.06688866144288749
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0929388701915741
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.23933666944503784
+        }
+    },
+    "Ref_C3": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03685028756297583
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.047378806188164674
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05958796944448518
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.09418453441301339
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.08116228878498077
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.23662427067756653
+        }
+    },
+    "Ref_C4": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04695957012006978
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.047830318260197846
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.06233907524765897
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10120032012647827
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.15938344597816467
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25970253348350525
+        }
+    },
+    "PPAFM2Exp_CoAll_L40_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.028542812342136077
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03903498801882347
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04492100833034396
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1378133569479233
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.06531181931495667
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2726280689239502
+        }
+    },
+    "PPAFM2Exp_CoAll_L70_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03967922330203187
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04531605153016448
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05926734221760935
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10497807804493853
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.09661312401294708
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.28118517994880676
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C3": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03868233989865746
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.041709626457919535
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.0530403888351703
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10571718419784161
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.06690884381532669
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2767004072666168
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.035667951628461536
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.0420302808866034
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.056872610014833666
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11412282381893842
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.06536635756492615
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.34076428413391113
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C4": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03039697460657581
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.0417215678492616
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.053579697431217245
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1318568479323506
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.06262648105621338
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25410348176956177
+        }
+    },
+    "PPAFM2Exp_CoAll_L100_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04130515143209856
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04635785346007491
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.054246036109508
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1209678213323429
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.10939691215753555
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.29696550965309143
+        }
+    },
+    "Ref_C5": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04059054050957422
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04462574428450761
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05418794787106389
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.13584596005278685
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.12297087162733078
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2736559808254242
+        }
+    },
+    "Ref_C2": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03916596589844467
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04519220241509572
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.06004612884487747
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14062090818509002
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.10060237348079681
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25533923506736755
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C5": {
+        "OO_dist": {
+            "wdistancec_nor": 0.02789129447700208
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03836398300914881
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.0534708371440053
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12593437770030436
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0386320985853672
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.23327842354774475
+        }
+    },
+    "PPAFM2Exp_CoAll_L70_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04066795310733598
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04652759899473101
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05187873630274482
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10894915295963577
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.09916038811206818
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2582555115222931
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest_C2": {
+        "OO_dist": {
+            "wdistancec_nor": 0.02851741543204965
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03904386317405781
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05640000446598707
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12327387741971671
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.03932672739028931
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.20968951284885406
+        }
+    },
+    "PPAFM2Exp_CoAll_L12_L8_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03075730910247543
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.042007920211477215
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04948246274373933
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11770128958329446
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.043950170278549194
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2533685266971588
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C5": {
+        "OO_dist": {
+            "wdistancec_nor": 0.027030974903825097
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03895967139556989
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05507361287931091
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.13514942787321851
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.043907567858695984
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.21392051875591278
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L8_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.034067598909436045
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.042547353613003054
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04780774087328102
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.14488522484430993
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.06681568175554276
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2311614453792572
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C2": {
+        "OO_dist": {
+            "wdistancec_nor": 0.041499648078601174
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.043502922055684776
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05721873978176595
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1474102968885903
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0515594482421875
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2984393835067749
+        }
+    },
+    "PPAFM2Exp_CoAll_L10_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.025888080603737304
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.03595235391478925
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04693962029828964
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.1096009715037313
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.030430546030402184
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.24419105052947998
+        }
+    },
+    "PPAFM2Exp_CoAll_L30_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.028793826924516007
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.039559336459288025
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.049442236436166596
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.123118289603462
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.05954033136367798
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2529713809490204
+        }
+    },
+    "PPAFM2Exp_CoAll_L60_L10_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.04240725149685589
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04690836249333178
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.06059949638573439
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.12029917282858266
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.13442416489124298
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.25109317898750305
+        }
+    },
+    "PPAFM2Exp_CoAll_L70_L0.1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03766934439067942
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.041872280207365706
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.050369492846671825
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.09692623635694045
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.10947231948375702
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.26130878925323486
+        }
+    },
+    "PPAFM2Exp_CoAll_L70_L0_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.03799135140461653
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04390039574161815
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.062339194944369805
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.10881685635442245
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.08046938478946686
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.26228588819503784
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C3": {
+        "OO_dist": {
+            "wdistancec_nor": 0.02720516068424482
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04101618239698012
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.05758337403459432
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.11168051102055504
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.05007637292146683
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.22013825178146362
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest": {
+        "OO_dist": {
+            "wdistancec_nor": 0.026439788561739667
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04058382685460865
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.04627848410610791
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.08419269274528024
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.039609797298908234
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.23174595832824707
+        }
+    },
+    "PPAFM2Exp_CoAll_L20_L1_Elatest_C4": {
+        "OO_dist": {
+            "wdistancec_nor": 0.030909868235704786
+        },
+        "OH_dist": {
+            "wdistancec_nor": 0.04207602829071003
+        },
+        "HOH_dist": {
+            "wdistancec_nor": 0.052392376905783314
+        },
+        "ThetaOH_dist": {
+            "wdistancec_nor": 0.13108498314696976
+        },
+        "Hbonds": {
+            "wdistancec_nor": 0.0446012020111084
+        },
+        "OrderP": {
+            "wdistancec_nor": 0.2473599910736084
+        }
+    }
+}
