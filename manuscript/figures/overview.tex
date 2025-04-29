@@ -62,21 +62,27 @@
 		\path [VM]
 		(V)  edge [bend left]   node[sloped, above]    {$F_{\mathcal{V}}$}    (M);
 		
-%		% Legend
-%		\node[
-%		anchor=north west, align=left,
-%		draw=black, rounded corners,
-%		fill=white, opacity=0.95, text opacity=1,
-%		inner sep=6pt
-%		] at (current bounding box.north west) {
-%			\begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
-%				{\color{simcolor}\ensuremath{H_{\mathcal{M}}}} & \textcolor{simcolor}{Probe particle model} \\
-%				{\color{dftcolor}\ensuremath{F_{\mathcal{U}}}} & \textcolor{dftcolor}{Structure discovery} \\
-%				{\color{expcolor}\ensuremath{G_{\mathcal{U}}}} & \textcolor{expcolor}{Forward  translation} \\
-%				{\color{simcolor}\ensuremath{G_{\mathcal{V}}}} & \textcolor{simcolor}{Backward  translation} \\
-%				{\color{dftcolor}\ensuremath{F_{\mathcal{V}}}} & \textcolor{dftcolor}{Structure discovery} \\
-%			\end{tabular}
-%		};
-	\end{tikzpicture}
+	% Legend
+	\begin{scope}[shift={([xshift=-1.4cm,yshift=3.9cm]M.north west)}]
+		\node[
+		anchor=north west,
+		align=left,
+		%draw=black,
+		rounded corners,
+		fill=white,
+		opacity=0.5,
+		text opacity=1,
+		inner sep=2pt
+		] {
+			\small
+			\begin{tabular}{@{}l@{\hspace{0.3em}}l@{}}
+				$H$ & Probe particle model \\
+				$F$ & Structure discovery model \\
+				$G$ & Style translation model
+			\end{tabular}
+		};
+	\end{scope}
+
+\end{tikzpicture}
 	
 \end{document}
