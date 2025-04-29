@@ -8,11 +8,23 @@ def write_similarity_to_file(file_path, similarities):
     with open(file_path, 'w') as f:
         json.dump(similarities, f, indent=4)
 
+def normalize(data, property):
+    ranges = {'OO': (0, 3.5), 'OH': (0, 1.25), 'HOH': (0, 180), 'ZOH': (0, 180), 'Hbond': [[0, 3.5], [120, 180]], 'OrderP': [[0, 1], [0, 1]]}
+    if property != 'Hbond' and property != 'OrderP':
+        nor_data = (data - ranges[property][0]) / (ranges[property][1] - ranges[property][0])
+    else:
+        nor_data_col1 = (data[:, 0] - ranges[property][0][0]) / (ranges[property][0][1] - ranges[property][0][0])
+        nor_data_col2 = (data[:, 1] - ranges[property][1][0]) / (ranges[property][1][1] - ranges[property][1][0])
+        nor_data = np.column_stack((nor_data_col1, nor_data_col2))
+    return nor_data
+
+
 if __name__ == '__main__':
     inputFolder = '../processed_data/structure_properties'  # Predictions
     theoryFolder = '../processed_data/theory_distributions' # Reference DFT 
     outputFolder = '../processed_data/distribution_distances'
     os.makedirs(outputFolder, exist_ok=True)
+    
     for ground_truth in ['Label']: # or ['Label', 'P']
         for layer in ['All', 'Top', 'Bottom']:
             results_file = os.path.join(outputFolder, 'similarities_{}_{}.json'.format(ground_truth, layer))
@@ -29,6 +41,11 @@ if __name__ == '__main__':
                 distancesc = datac['OO']
                 wdistancec = wasserstein_distance(distances, distancesc)
                 similarities['OO_dist'] = {'wdistancec': wdistancec}
+                # Normalize 
+                distances = normalize(distances, 'OO')
+                distancesc = normalize(distancesc, 'OO')
+                wdistancec = wasserstein_distance(distances, distancesc)
+                similarities['OO_dist'] = {'wdistancec_nor': wdistancec}
         
                 # O-H
                 data = np.load(f'{theoryFolder}/{ground_truth}/OH_{layer}.npz')
@@ -37,6 +54,11 @@ if __name__ == '__main__':
                 distancesc = datac['OH']
                 wdistancec = wasserstein_distance(distances, distancesc)
                 similarities['OH_dist'] = {'wdistancec': wdistancec}
+                # Normalize
+                distances = normalize(distances, 'OH')
+                distancesc = normalize(distancesc, 'OH')
+                wdistancec = wasserstein_distance(distances, distancesc)
+                similarities['OH_dist'] = {'wdistancec_nor': wdistancec}
         
                 # H-O-H 
                 data = np.load(f'{theoryFolder}/{ground_truth}/HOH_{layer}.npz')
@@ -45,6 +67,11 @@ if __name__ == '__main__':
                 anglesc = datac['HOH'] 
                 wdistancec = wasserstein_distance(angles, anglesc)
                 similarities['HOH_dist'] = {'wdistancec': wdistancec}
+                # Normalize
+                angles = normalize(angles, 'HOH')
+                anglesc = normalize(anglesc, 'HOH')
+                wdistancec = wasserstein_distance(angles, anglesc)
+                similarities['HOH_dist'] = {'wdistancec_nor': wdistancec}
         
                 # Z-O-H 
                 data = np.load(f'{theoryFolder}/{ground_truth}/ZOH_{layer}.npz')
@@ -53,18 +80,33 @@ if __name__ == '__main__':
                 anglesc = datac['ZOH']
                 wdistancec = wasserstein_distance(angles, anglesc)
                 similarities['ThetaOH_dist'] = {'wdistancec': wdistancec}
+                # Normalize
+                angles = normalize(angles, 'ZOH')
+                anglesc = normalize(anglesc, 'ZOH')
+                wdistancec = wasserstein_distance(angles, anglesc)
+                similarities['ThetaOH_dist'] = {'wdistancec_nor': wdistancec}
         
                 # Hbond
                 data = np.load(f'{theoryFolder}/{ground_truth}/Hbond_{layer}.npz')['OO_OHO']
                 datac = np.load('{}/{}/Hbond.npz'.format(inputFolder, structure))['OO_OHO']
                 wdistancec  = sinkhorn_2d_distance(data, datac)
                 similarities['Hbonds'] = {'wdistancec': wdistancec}
+                # Normalize
+                data = normalize(data, 'Hbond')
+                datac = normalize(datac, 'Hbond')
+                wdistancec  = sinkhorn_2d_distance(data, datac)
+                similarities['Hbonds'] = {'wdistancec_nor': wdistancec}
         
                 # Order parameter 2d
                 data = np.load(f'{theoryFolder}/{ground_truth}/OrderP_{layer}.npz')['sg_sk']
                 datac = np.load('{}/{}/OrderP.npz'.format(inputFolder, structure))['sg_sk']
                 wdistancec  = sinkhorn_2d_distance(data, datac)
                 similarities['OrderP'] = {'wdistancec': wdistancec}
+                # Normalize
+                data = normalize(data, 'OrderP')
+                datac = normalize(datac, 'OrderP')
+                wdistancec  = sinkhorn_2d_distance(data, datac)
+                similarities['OrderP'] = {'wdistancec_nor': wdistancec}
         
                 # Store similarities
                 all_similarities[structure] = similarities
