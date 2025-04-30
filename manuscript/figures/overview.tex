@@ -20,11 +20,11 @@
     dft/.style={draw=dftcolor!80!black, fill=dftcolor!40, shape=rectangle, minimum width=2cm, minimum height=2cm, rounded corners=12pt},
 	simulated/.style={draw=simcolor!80!black, fill=simcolor!30, shape=rectangle, minimum width=2cm, minimum height=2cm, rounded corners=12pt},
 	experimental/.style={draw=expcolor!80!black, fill=expcolor!40, shape=rectangle, minimum width=2cm, minimum height=2cm, rounded corners=12pt},
-	MU/.style={ultra thick, ->, color=simcolor},
+	MU/.style={->, line width=1.2pt, color=simcolor},
 	UM/.style={thick, ->, color=dftcolor},
-	UV/.style={ultra thick, ->, color=expcolor},
+	UV/.style={->,  line width=1.2pt, color=expcolor},
 	VU/.style={thick, ->, color=simcolor},
-	VM/.style={ultra thick, ->, color=dftcolor},
+	VM/.style={->, line width=1.2pt, color=dftcolor},
 	annotation/.style={font=\small}
 }
 
@@ -33,19 +33,19 @@
 	\begin{tikzpicture}[node distance = 5cm, on grid, auto]
 		
 		% Nodes
-		\node (M) [state, initial, accepting, initial text = {DFT}, dft] {$\mathcal{M}$};
+		\node (M) [state, dft] {$\mathcal{M}$};
 		\node (U) [state, above right = of M, simulated] {$\mathcal{U}$};
 		\node (V) [state, below right = of U, experimental] {$\mathcal{V}$};
 		
 		% Annotations
-		\node[below=1.2cm of M, annotation, text=dftcolor!80!black] {Atomic configuration};
+		\node[below=1.2cm of M, annotation, text=dftcolor!50!black] {Atomic configuration};
 		\node[below=0.6cm of M, annotation] {atoms};
 		
-		\node[above=1.2cm of U, annotation, text=simcolor!80!black] {Simulated AFM};
+		\node[above=1.2cm of U, annotation, text=simcolor!50!black] {Simulated AFM};
 		\node[below=0.6cm of U, annotation] {images};
 		
-		\node[below=1.2cm of V, annotation, text=expcolor!90!black] {Experimental AFM};
-		\node[below=0.6cm of V, annotation] {images};
+		\node[below=1.2cm of V, annotation, text=expcolor!50!black] {Experimental AFM};
+		\node[below=0.6cm of V, annotation] {images}; 
 		
 
 		
