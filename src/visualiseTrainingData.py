@@ -48,7 +48,7 @@ plt.rcParams['font.size']=14
 #plt.rcParams['font.family']='Arial'
 plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
-#plt.rcParams['text.usetex'] = True # Render text with LaTeX
+plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
 
 xyz_min, xyz_max = get_scan_window_from_xyz(demoStructure)

@@ -12,10 +12,10 @@ bg07color = '#479FB1'
 bv17color = '#6E7CBC'
 
 plt.rcParams['font.size']=14
-#plt.rcParams['font.family']='Arial'
+plt.rcParams['font.family']='Arial'
 plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
-#plt.rcParams['text.usetex'] = True # Render text with LaTeX
+plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
 def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0", label1="Dataset 1", label2="Dataset 2", save_as=None):
     """
@@ -47,7 +47,7 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
     bar_width = 0.3  # Adjusted width for three bars
 
     # Create figure
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(6, 6))
 
     # Plot bars for all features
     ax.bar(x - bar_width, mean_values0, yerr=std_values0, capsize=5,
@@ -58,20 +58,22 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
            alpha=0.7, width=bar_width, label=label2, color='salmon', edgecolor='black')
 
     # Labels and titles
-    ax.set_ylabel("Wasserstein Distance")
+    ax.set_ylabel("Wasserstein distance to theoretical configurations ${{\mathcal{{M}}}}$")
     ax.set_xticks(ticks=x)
     ax.set_xticklabels(numeric_columns)
     ax.grid(axis='y', linestyle='--', alpha=0.6)
-    ax.text(x=0.05, y=0.5, s=f"Ref.: {layer} layer", transform=ax.transAxes)
     ax.set_ylim(0, 0.35)
-    #ax.spines['right'].set_visible(False)
-    #ax.spines['top'].set_visible(False)
     ax.legend(loc='upper left')
+
+    # Remove extra spaces between bars and axes
+    ax.margins(x=0)
 
     # Adjust layout and show plot
     plt.tight_layout()
     if save_as is not None:
-        plt.savefig(save_as)
+        plt.savefig(f'{save_as}.png', dpi=600)
+        plt.savefig(f'{save_as}.pdf')
+        plt.savefig(f'{save_as}.svg')
     if show:
         plt.show()
 
@@ -79,9 +81,10 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
 def plotBarchat(model):
     df_model = df[df["Structure"].str.contains("_{}_".format(model))]  # From selected model
     plot_comparison_subplots(df_P, df_ref, df_model, numeric_columns,
-                             label0="Training data",
-                             label1="Baseline", label2=model,
-                             save_as='{}/{}_comparision_to_{}_{}.png'.format(outputFolder, model, ground_truth, layer))
+                             label0=rf"Labeled configurations ${{\bar{{\mathcal{{M}}}}}}$",
+                             label1=rf"Predicted configurations ${{\tilde{{\mathcal{{M}}}}}}={{\mathcal{{F}}}}_{{\mathcal{{U}}}}({{\mathcal{{V}}}})$", 
+                             label2=rf"Predicted configurations ${{\hat{{\mathcal{{M}}}}}}={{\mathcal{{F}}}}_{{\tilde{{\mathcal{{V}}}}}}({{\mathcal{{V}}}})$",
+                             save_as='{}/{}_comparision_to_{}_{}'.format(outputFolder, model, ground_truth, layer))
 
 if __name__ == '__main__':
     show = True

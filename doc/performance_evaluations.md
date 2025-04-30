@@ -1,9 +1,15 @@
 # Performance evaluations
 
+## By eye
 ![](../results/predictions/predictions_0.png)
 ![](../results/predictions/predictions_90.png)
 ![](../results/predictions/predictions_180.png)
 ![](../results/predictions/predictions_270.png)
+
+## By structual metrics
+
+Theory distributions obtained from simulations
+![](../manuscript/figures/theory.png)
 
 |![](../results/distance_evaluate/L10_L10_comparision_to_Label_Top.png) | ![](../results/distance_evaluate/L10_L10_comparision_to_Label_Bottom.png)| ![](../results/distance_evaluate/L10_L10_comparision_to_Label_All.png) |
 |---|---|---| 
@@ -13,7 +19,6 @@
   layer water molecues. 
 - Performance increases are found on all aspects of properties. (for appropriate
   parameters are chosen in CycleGAN training.)
-
 
 
 
