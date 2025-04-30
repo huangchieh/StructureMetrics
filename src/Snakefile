@@ -47,8 +47,18 @@ rule visualiseTheoreDistributions:
     	"""
 	./visualiseTheoreDistributions.py
 	"""
-
-	
+rule visualiseStacks:
+	input:
+		script = "visualiseStacks.py",
+		utl = "utils.py", 
+		sim_dir = "../data/overview/PPAFM", 
+		exp_dir = "../data/expPNG", 
+	output:
+		out_dir = directory("../results/stacks/")	
+	shell:
+		"""
+		./visualiseStacks.py
+		"""
 rule evaluate:
 	input:
 		"evaluate.py", 
@@ -61,3 +71,4 @@ rule evaluate:
 		"""
 		./evaluate.py
 		"""
+
