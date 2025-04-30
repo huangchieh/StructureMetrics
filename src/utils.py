@@ -4,6 +4,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import re
+import imageio.v3 as iio  
+from mpl_toolkits.mplot3d import Axes3D
 
 def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=100, bw_method=None, hist=False, bins=120, marker=None):
     """
@@ -281,3 +283,42 @@ def draw_3d_axis_indicator(ax, anchor=(0.95, 0.05), length=40, style='xy'):
 
     else:
         raise ValueError(f"Unsupported style '{style}'. Use 'xy' or 'x-out'.")
+
+
+def plot_image_stack(images, output_folder, filename_prefix="stack", show=False):
+    """
+    Plots a stack of images in 3D and saves the output in PNG, PDF, and SVG formats.
+
+    Parameters:
+    - images: List of 2D numpy arrays representing the images to stack.
+    - output_folder: Path to the folder where the output files will be saved.
+    - filename_prefix: Prefix for the output filenames (default: "simulation_stack").
+    """
+    # Plotting
+    fig = plt.figure(figsize=(2, 2))
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Create the X and Y coordinate grid
+    nx, ny = images[0].shape
+    x = np.arange(0, nx)
+    y = np.arange(0, ny)
+    x, y = np.meshgrid(x, y)
+
+    # Plot each image at a different z level
+    for i, img in enumerate(images):
+        z = np.full_like(x, i)
+        ax.plot_surface(x, y, z, rstride=1, cstride=1, facecolors=plt.cm.inferno(img / img.max()), shade=False)
+        ax.axis('off')  # Turn off axis
+
+    # Remove background
+    ax.set_facecolor((1.0, 1.0, 1.0, 0.0))  # Set axis background to transparent
+    fig.patch.set_alpha(0.0)  # Set figure background to transparent
+
+    plt.subplots_adjust(left=0, right=1, top=1, bottom=0)  # Remove padding
+
+    # Save the figure in multiple formats
+    fig.savefig(f"{output_folder}/{filename_prefix}.png", dpi=600, transparent=True)
+    fig.savefig(f"{output_folder}/{filename_prefix}.pdf", transparent=True)
+    fig.savefig(f"{output_folder}/{filename_prefix}.svg", transparent=True)
+    if show: plt.show()
+    plt.close(fig)
