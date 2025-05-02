@@ -6,7 +6,13 @@ from water import read_xyz_with_atomic_numbers
 from ase.data import covalent_radii as radii
 from ase.data.colors import jmol_colors
 from matplotlib.patches import Circle
-import os
+import os, re
+
+show = False
+
+def extract_lambda_values(s):
+    """Extract numeric values following 'L' in the input string."""
+    return [float(x) if '.' in x else int(x) for x in re.findall(r'_L([0-9.]+)', s)]
 
 # %%
 models = ['Ref', 'PPAFM2Exp_CoAll_L10_L10_Elatest', 'PPAFM2Exp_CoAll_L10_L0.1_Elatest', 'PPAFM2Exp_CoAll_L20_L1_Elatest']
@@ -99,8 +105,9 @@ for angle in angles:
                 axs[i, j+2].text((x0 + x1) / 2, y0 + 0.03 * (2 * span), '1 nm', color='k',
                             ha='center', va='bottom', fontsize=10)
     # Add the sublabels
-    subLabels = ['$v$: Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v)$']
-    xoffsets = [-0.14, -0.11, -0.04, -0.02, 0.01, 0.04]
+    lambdas = [extract_lambda_values(model) for model in models[1:]]
+    subLabels = ['$v$: Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[0][0]}, {lambdas[0][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[1][0]}, {lambdas[1][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[2][0]}, {lambdas[2][1]}$']
+    xoffsets = [-0.14, -0.11, -0.04, -0.078, -0.05, -0.015]
     for j in range(numCols):
         ax = axs[0, j]      # first row's axes
         pos = ax.get_position()
@@ -113,6 +120,6 @@ for angle in angles:
     plt.savefig('{}/predictions_{}.png'.format(output, angle), dpi=600)
     plt.savefig('{}/predictions_{}.pdf'.format(output, angle))
     plt.savefig('{}/predictions_{}.svg'.format(output, angle))
-    plt.show()
+    if show: plt.show()
 
 # %%

@@ -47,6 +47,19 @@ rule visualiseTheoreDistributions:
     	"""
 	./visualiseTheoreDistributions.py
 	"""
+
+rule visualisePredictions:
+	input:
+		script = "visualisePredictions.py", 
+		expImage = "../data/expPNG", 
+		predictions = "../data/structures/predictions"
+	output:
+		output = directory("../results/predictions")
+	shell:
+		"""
+		./visualisePredictions.py
+		"""
+
 rule visualiseStacks:
 	input:
 		script = "visualiseStacks.py",
