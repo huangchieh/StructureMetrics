@@ -47,7 +47,7 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
     bar_width = 0.3  # Adjusted width for three bars
 
     # Create figure
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(8, 4))
 
     # Plot bars for all features
     ax.bar(x - bar_width, mean_values0, yerr=std_values0, capsize=5,
@@ -58,7 +58,7 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
            alpha=0.7, width=bar_width, label=label2, color='salmon', edgecolor='black')
 
     # Labels and titles
-    ax.set_ylabel("Wasserstein distance to theoretical configurations ${{\mathcal{{M}}}}$")
+    ax.set_ylabel("Wasserstein distance to ${{\mathcal{{M}}}}$")
     ax.set_xticks(ticks=x)
     ax.set_xticklabels(numeric_columns)
     ax.grid(axis='y', linestyle='--', alpha=0.6)
@@ -87,7 +87,7 @@ def plotBarchat(model):
                              save_as='{}/{}_comparision_to_{}_{}'.format(outputFolder, model, ground_truth, layer))
 
 if __name__ == '__main__':
-    show = True
+    show = False
     inputFolder = '../processed_data/distribution_distances'
     ground_truth, layer = 'Label', 'Top'
     for layer in ['Top', 'Bottom', 'All']:
