@@ -7,6 +7,7 @@ from tqdm import tqdm
 from ase.visualize import view
 from scipy.stats import gaussian_kde, wasserstein_distance
 from scipy.spatial.distance import cdist
+from sklearn.metrics.pairwise import rbf_kernel
 from geomloss import SamplesLoss
 import torch
 
@@ -1338,3 +1339,38 @@ def energy_distance(data1, data2):
     term_3 = np.sum(d2d2) / (m * m)
 
     return term_1 - term_2 - term_3
+
+def mmd_rbf_distance(data1, data2, gamma=None):
+    """
+    Compute Maximum Mean Discrepancy (MMD) with RBF kernel.
+
+    Parameters:
+        data1, data2 : np.ndarray
+            Input sample arrays. Shape (n,) or (n,d)
+        gamma : float or None
+            Kernel width parameter. If None, use median heuristic.
+
+    Returns:
+        float : MMD distance value
+    """
+    # Convert 1D arrays to 2D (n_samples, 1)
+    if data1.ndim == 1:
+        data1 = data1[:, np.newaxis]
+    if data2.ndim == 1:
+        data2 = data2[:, np.newaxis]
+
+    # Use median heuristic for gamma if not provided
+    if gamma is None:
+        combined = np.vstack([data1, data2])
+        pairwise_dists = cdist(combined, combined, 'euclidean')
+        median = np.median(pairwise_dists)
+        gamma = 1 / (2 * median**2 + 1e-10)  # add small epsilon to avoid div 0
+
+    # Compute RBF kernel matrices
+    Kxx = rbf_kernel(data1, data1, gamma=gamma)
+    Kyy = rbf_kernel(data2, data2, gamma=gamma)
+    Kxy = rbf_kernel(data1, data2, gamma=gamma)
+
+    # Calculate MMD^2
+    mmd2 = Kxx.mean() + Kyy.mean() - 2 * Kxy.mean()
+    return np.sqrt(mmd2)
