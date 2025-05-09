@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-
 import numpy as np
 import pandas as pd
 import json, os
 import matplotlib.pyplot as plt
-
 
 simcolor = '#ed9d2c'
 expcolor = '#de461c'
@@ -17,7 +15,7 @@ plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
 plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
-def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0", label1="Dataset 1", label2="Dataset 2", save_as=None):
+def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0", label1="Dataset 1", label2="Dataset 2", save_as=None, y_label=None):
     """
     Plots a comparison of mean values with error bars for three datasets.
 
@@ -35,6 +33,15 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
     None
     """
     global layer, show
+    x_labels = {
+        "OO": r"$d_{\mathrm{OO}}$", 
+        "OH": r"$d_{\mathrm{OH}}$", 
+        "HOH": r"$\theta_{\mathrm{HOH}}$", 
+        "ZOH": r"$\theta_{\mathrm{ZOH}}$", 
+        "Hbond": r"$(d_{\mathrm{O_d}\mathrm{O_a}}, \theta_{\mathrm{O_d}\mathrm{H}\mathrm{O_a}})$", 
+        "OrderP": r"$(S_g, S_k)$"
+    }
+    x_ticklabels = [x_labels[col] for col in numeric_columns]
     # Compute mean and standard error for all datasets
     mean_values0 = df0[numeric_columns].mean()
     std_values0 = df0[numeric_columns].std() / np.sqrt(df0[numeric_columns].count())
@@ -58,11 +65,11 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
            alpha=0.7, width=bar_width, label=label2, color='salmon', edgecolor='black')
 
     # Labels and titles
-    ax.set_ylabel("Wasserstein distance to ${{\mathcal{{M}}}}$")
+    ax.set_ylabel(y_label)
     ax.set_xticks(ticks=x)
-    ax.set_xticklabels(numeric_columns)
+    ax.set_xticklabels(x_ticklabels, rotation=0)
     ax.grid(axis='y', linestyle='--', alpha=0.6)
-    ax.set_ylim(0, 0.35)
+    #ax.set_ylim(0, 0.35)
     ax.legend(loc='upper left')
 
     # Remove extra spaces between bars and axes
@@ -78,34 +85,34 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
         plt.show()
 
 
-def plotBarchat(model):
+def plotBarchat(model, df, df_P, df_ref, y_label):
     df_model = df[df["Structure"].str.contains("_{}_".format(model))]  # From selected model
     plot_comparison_subplots(df_P, df_ref, df_model, numeric_columns,
                              label0=rf"Labeled configurations ${{\bar{{\mathcal{{M}}}}}}$",
                              label1=rf"Predicted configurations ${{\tilde{{\mathcal{{M}}}}}}={{\mathcal{{F}}}}_{{\mathcal{{U}}}}({{\mathcal{{V}}}})$", 
                              label2=rf"Predicted configurations ${{\hat{{\mathcal{{M}}}}}}={{\mathcal{{F}}}}_{{\tilde{{\mathcal{{V}}}}}}({{\mathcal{{V}}}})$",
-                             save_as='{}/{}_comparision_to_{}_{}'.format(outputFolder, model, ground_truth, layer))
+                             save_as='{}/{}_comparision_to_{}_{}_{}'.format(outputFolder, model, ground_truth, layer, y_label.replace(' ', '_')), 
+                             y_label=y_label)
 
 if __name__ == '__main__':
     show = False
     inputFolder = '../processed_data/distribution_distances'
     ground_truth, layer = 'Label', 'Top'
-    for layer in ['Top', 'Bottom', 'All']:
+    for layer in ['Top', 'All']:
         outputFolder = '../results/distance_evaluate'
         os.makedirs(outputFolder, exist_ok=True)
-        # Load json file
         with open('{}/similarities_{}_{}.json'.format(inputFolder, ground_truth, layer), "r") as file:
             similarities = json.load(file)
-        
+
         numeric_columns = ["OO", "OH", "HOH",  "ZOH", "Hbond", "OrderP"]  # Changed order of ZOH and Hbond
-        df = pd.DataFrame(columns = ['Structure', 'Truth', 'OO', 'OH', 'HOH', 'ZOH', 'Hbond', 'OrderP'])
-        for i, (key, value) in enumerate(similarities.items()):
-            df.loc[i] = [key, ground_truth, value['OO_dist']['wdistancec_nor'], value['OH_dist']['wdistancec_nor'], value['HOH_dist']['wdistancec_nor'], value['ThetaOH_dist']['wdistancec_nor'], value['Hbonds']['wdistancec_nor'], value['OrderP']['wdistancec_nor']]
-        
-        
-        df_ref = df[df["Structure"].str.contains("Ref")]
-        df_P = df[df["Structure"] == 'P'] # The cropped version of Ref, including very large configurations
-        plotBarchat('L10_L10')
-        plotBarchat('L10_L1')
-        plotBarchat('L20_L1')
-        plotBarchat('L20_L10')
+        for distance, y_label in zip(['wdistancec_nor', 'edistancec_nor', 'mdistancec_nor'], ['Wasserstein distance', 'Energy distance', 'Maximum mean discrepancy']):
+            print('Distance:', distance)
+            df = pd.DataFrame(columns = ['Structure', 'Truth', 'OO', 'OH', 'HOH', 'ZOH', 'Hbond', 'OrderP'])
+            for i, (key, value) in enumerate(similarities.items()):
+                df.loc[i] = [key, ground_truth, value['OO_dist'][distance], value['OH_dist'][distance], value['HOH_dist'][distance], value['ThetaOH_dist'][distance], value['Hbonds'][distance], value['OrderP'][distance]]
+            df_ref = df[df["Structure"].str.contains("Ref")]
+            df_P = df[df["Structure"] == 'P'] # The cropped version of Ref, including very large configurations
+            print('L10_L10')
+            plotBarchat('L10_L10', df, df_P, df_ref, y_label)
+            print('L20_L1')
+            plotBarchat('L20_L1', df, df_P, df_ref, y_label)
