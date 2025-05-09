@@ -6,6 +6,7 @@ from tqdm import tqdm
 # ASE viewer
 from ase.visualize import view
 from scipy.stats import gaussian_kde, wasserstein_distance
+from scipy.spatial.distance import cdist
 from geomloss import SamplesLoss
 import torch
 
@@ -1301,3 +1302,39 @@ def SinkhornDistance(samples1, samples2, eps=0.1, max_iter=100, tol=1e-6):
     if np.isnan(dist):
         print("Sinkhorn distance is NaN.")
     return dist, transport_plan, cost_matrix
+
+
+def energy_distance(data1, data2):
+    """
+    Compute the Energy Distance between two datasets.
+
+    Supports:
+        - 1D arrays: shape (N,)
+        - 2D arrays: shape (N, D)
+
+    Parameters:
+        data1: numpy array of shape (N,) or (N, D)
+        data2: numpy array of shape (M,) or (M, D)
+
+    Returns:
+        A float representing the Energy Distance.
+    """
+    # Convert 1D to 2D if needed
+    if data1.ndim == 1:
+        data1 = data1[:, np.newaxis]
+    if data2.ndim == 1:
+        data2 = data2[:, np.newaxis]
+
+    n, m = len(data1), len(data2)
+
+    # Pairwise distances
+    d1d2 = cdist(data1, data2, metric='euclidean')   # Cross terms
+    d1d1 = cdist(data1, data1, metric='euclidean')   # Within data1
+    d2d2 = cdist(data2, data2, metric='euclidean')   # Within data2
+
+    # Compute energy distance using the definition
+    term_1 = 2 * np.sum(d1d2) / (n * m)
+    term_2 = np.sum(d1d1) / (n * n)
+    term_3 = np.sum(d2d2) / (m * m)
+
+    return term_1 - term_2 - term_3

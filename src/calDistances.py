@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os, json
 import numpy as np
-from water import sinkhorn_2d_distance
+from water import sinkhorn_2d_distance, energy_distance
 from scipy.stats import wasserstein_distance
 
 def write_similarity_to_file(file_path, similarities):
@@ -44,7 +44,8 @@ if __name__ == '__main__':
                 distances_nor = normalize(distances, 'OO')
                 distancesc_nor = normalize(distancesc, 'OO')
                 wdistancec_nor = wasserstein_distance(distances_nor, distancesc_nor)
-                similarities['OO_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor}
+                edistancec_nor = energy_distance(distances_nor, distancesc_nor)
+                similarities['OO_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor, 'edistancec_nor': edistancec_nor}
         
                 # O-H
                 data = np.load(f'{theoryFolder}/{ground_truth}/OH_{layer}.npz')
@@ -56,7 +57,8 @@ if __name__ == '__main__':
                 distances_nor = normalize(distances, 'OH')
                 distancesc_nor = normalize(distancesc, 'OH')
                 wdistancec_nor = wasserstein_distance(distances_nor, distancesc_nor)
-                similarities['OH_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor}
+                edistancec_nor = energy_distance(distances_nor, distancesc_nor)
+                similarities['OH_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor, 'edistancec_nor': edistancec_nor}
         
                 # H-O-H 
                 data = np.load(f'{theoryFolder}/{ground_truth}/HOH_{layer}.npz')
@@ -68,7 +70,8 @@ if __name__ == '__main__':
                 angles_nor = normalize(angles, 'HOH')
                 anglesc_nor = normalize(anglesc, 'HOH')
                 wdistancec_nor = wasserstein_distance(angles_nor, anglesc_nor)
-                similarities['HOH_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor}
+                edistancec_nor = energy_distance(angles_nor, anglesc_nor)
+                similarities['HOH_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor, 'edistancec_nor': edistancec_nor}
         
                 # Z-O-H 
                 data = np.load(f'{theoryFolder}/{ground_truth}/ZOH_{layer}.npz')
@@ -80,7 +83,8 @@ if __name__ == '__main__':
                 angles_nor = normalize(angles, 'ZOH')
                 anglesc_nor = normalize(anglesc, 'ZOH')
                 wdistancec_nor = wasserstein_distance(angles_nor, anglesc_nor)
-                similarities['ThetaOH_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor}
+                edistancec_nor = energy_distance(angles_nor, anglesc_nor)
+                similarities['ThetaOH_dist'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor, 'edistancec_nor': edistancec_nor}
         
                 # Hbond
                 data = np.load(f'{theoryFolder}/{ground_truth}/Hbond_{layer}.npz')['OO_OHO']
@@ -90,7 +94,8 @@ if __name__ == '__main__':
                 data_nor = normalize(data, 'Hbond')
                 datac_nor = normalize(datac, 'Hbond')
                 wdistancec_nor  = sinkhorn_2d_distance(data_nor, datac_nor)
-                similarities['Hbonds'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor}
+                edistancec_nor = energy_distance(data_nor, datac_nor)
+                similarities['Hbonds'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor, 'edistancec_nor': edistancec_nor}
         
                 # Order parameter 2d
                 data = np.load(f'{theoryFolder}/{ground_truth}/OrderP_{layer}.npz')['sg_sk']
@@ -100,7 +105,8 @@ if __name__ == '__main__':
                 data_nor = normalize(data, 'OrderP')
                 datac_nor = normalize(datac, 'OrderP')
                 wdistancec_nor  = sinkhorn_2d_distance(data_nor, datac_nor)
-                similarities['OrderP'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor}
+                edistancec_nor = energy_distance(data_nor, datac_nor)
+                similarities['OrderP'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor, 'edistancec_nor': edistancec_nor}
         
                 # Store similarities
                 all_similarities[structure] = similarities
