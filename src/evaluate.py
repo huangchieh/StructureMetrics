@@ -95,18 +95,17 @@ def plotBarchat(model, df, df_P, df_ref, y_label):
                              y_label=y_label)
 
 if __name__ == '__main__':
-    show = True
+    show = False
     inputFolder = '../processed_data/distribution_distances'
     ground_truth, layer = 'Label', 'Top'
-    #for layer in ['Top', 'All']:
-    for layer in ['Top']:
+    for layer in ['Top', 'All']:
         outputFolder = '../results/distance_evaluate'
         os.makedirs(outputFolder, exist_ok=True)
         with open('{}/similarities_{}_{}.json'.format(inputFolder, ground_truth, layer), "r") as file:
             similarities = json.load(file)
 
         numeric_columns = ["OO", "OH", "HOH",  "ZOH", "Hbond", "OrderP"]  # Changed order of ZOH and Hbond
-        for distance, y_label in zip(['wdistancec_nor', 'edistancec_nor', 'mdistancec_nor'], ['Wasserstein distance', 'Energy distance', 'Maximum mean discrepancy ']):
+        for distance, y_label in zip(['wdistancec_nor', 'edistancec_nor', 'mdistancec_nor'], ['Wasserstein distance', 'Energy distance', 'Maximum mean discrepancy']):
             print('Distance:', distance)
             df = pd.DataFrame(columns = ['Structure', 'Truth', 'OO', 'OH', 'HOH', 'ZOH', 'Hbond', 'OrderP'])
             for i, (key, value) in enumerate(similarities.items()):
