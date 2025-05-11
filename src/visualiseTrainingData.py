@@ -279,8 +279,8 @@ for j in range(cols): # Columns
             ax.axvline(x=x_center, color=simcolor if j==0 else expcolor , linestyle='dashed' if j==0 else 'solid', zorder=10)
             ax.plot(x_center, y1, marker='.', color='grey', markersize=10, zorder=11)
             ax.plot(x_center, y2, marker='.', color='grey', markersize=10, zorder=11)
-            ax.text(x_center + 0.04 * width, y1, "A", va='center', ha='left', fontsize=14, color='grey')
-            ax.text(x_center + 0.04 * width, y2, "B", va='center', ha='left', fontsize=14, color='grey')
+            ax.text(x_center + 0.04 * width, y1, r"P$_0$", va='center', ha='left', fontsize=14, color='grey')
+            ax.text(x_center + 0.04 * width, y2, r"P$_1$", va='center', ha='left', fontsize=14, color='grey')
         ims_col[j] = im 
         ax.axis('off')  # optionally hide axis ticks and labels
         if i == 0:
@@ -334,9 +334,9 @@ for i in range(3):
     # ax1.axhline(y=y1, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
     # ax1.axhline(y=y2, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
     ax1.axhline(y=y1, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
-    if i == 0: ax1.text(vmin + 0.05 * (vmax - vmin), y1, "A", va='bottom', ha='left', zorder=11, color='gray')
+    if i == 0: ax1.text(vmin + 0.05 * (vmax - vmin), y1, r"P$_0$", va='bottom', ha='left', zorder=11, color='gray')
     ax1.axhline(y=y2, color='gray', linestyle='dashed', lw=0.5, zorder=10, alpha=0.5)
-    if i == 0: ax1.text(vmin + 0.05 * (vmax - vmin), y2, "B", va='bottom', ha='left', zorder=11, color='gray')
+    if i == 0: ax1.text(vmin + 0.05 * (vmax - vmin), y2, r"P$_1$", va='bottom', ha='left', zorder=11, color='gray')
     ax1.set_xlim([vmin, vmax])
     if i != 0: 
         ax1.set_yticklabels([])
