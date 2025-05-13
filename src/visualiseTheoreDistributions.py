@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.lines import Line2D
+from matplotlib.ticker import AutoMinorLocator
 
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, compute_sg_sk_all
@@ -41,7 +42,8 @@ if __name__ == '__main__':
     #plt.rcParams['font.family']='Arial'
     plt.rcParams['pdf.fonttype']=42
     plt.rcParams['svg.fonttype'] = 'none'
-    #plt.rcParams['text.usetex'] = True # Render text with LaTeX
+    plt.rcParams['text.usetex'] = True # Render text with LaTeX
+    plt.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 
     # %% 
     for structure in structures:
@@ -91,11 +93,14 @@ if __name__ == '__main__':
                 axs[0].hist(OO_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=1)
             #sns.kdeplot(OO_distances, ax=axs[0], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
             plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=OO_distances, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=alpha, marker=markers[key], num_points=num_points)
-        axs[0].set_xlabel('Distance (Å)')
+        axs[0].set_xlabel(rf'$d_\text{{OO}}$ (Å)')
         axs[0].set_ylabel(r'Probability density')
         axs[0].set_ylim(0, 6.5) 
         axs[0].set_yticks([])
         axs[0].set_xlim(2.2, r_max-0.01)
+        axs[0].xaxis.set_minor_locator(AutoMinorLocator())
+        axs[0].tick_params(which='minor', length=3, width=1, direction='in')
+        axs[0].tick_params(which='major', length=5, width=1.2, direction='in')
         #axs[0].legend(frameon=False, ncol=1)
         axs[0].legend(
         frameon=False,
@@ -127,13 +132,15 @@ if __name__ == '__main__':
                 axs[1].hist(OH_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=1)
             #sns.kdeplot(OH_distances, ax=axs[1], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
             plot_kde_fill(ax=axs[1], data=OH_distances, xmin=0, xmax=r_max, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
-        axs[1].set_xlabel('Distance (Å)')
+        axs[1].set_xlabel(rf'$d_\text{{OH}}$ (Å)')
         #axs[1].set_ylabel(r'$\rho(r)$')
         #axs[1].set_ylim(0, 120)
         axs[1].set_yticks([])
         axs[1].set_xlim(0.94, 1.05)
         axs[1].tick_params(axis='both', direction='in')
-
+        axs[1].xaxis.set_minor_locator(AutoMinorLocator())
+        axs[1].tick_params(which='minor', length=3, width=1, direction='in')
+        axs[1].tick_params(which='major', length=5, width=1.2, direction='in')
         # %%
         # H-O-H angles
         print('Plotting H-O-H ...')
@@ -157,11 +164,14 @@ if __name__ == '__main__':
                 axs[2].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             #sns.kdeplot(angles, ax=axs[2], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
             plot_kde_fill(ax=axs[2], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
-        axs[2].set_xlabel('Angle (°)')
+        axs[2].set_xlabel(rf'$\theta_\text{{HOH}}$ (°)')
         axs[2].set_xlim(98, 112)
         axs[2].set_ylabel('Probability density')
         axs[2].set_yticks([])
         axs[2].tick_params(axis='both', direction='in')
+        axs[2].xaxis.set_minor_locator(AutoMinorLocator())
+        axs[2].tick_params(which='minor', length=3, width=1, direction='in')
+        axs[2].tick_params(which='major', length=5, width=1.2, direction='in')
 
         # %%
         # ZOH angles 
@@ -184,11 +194,14 @@ if __name__ == '__main__':
                 axs[3].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=1)
             #sns.kdeplot(angles, ax=axs[3], linewidth=1, label=legend, bw_adjust=0.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
             plot_kde_fill(ax=axs[3], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
-        axs[3].set_xlabel('Angle (°)')
+        axs[3].set_xlabel(rf'$\theta_\text{{ZOH}}$ (°)')
         axs[3].set_xlim(0, 180)
         #axs[3].set_ylabel(r'$\rho(\theta)$')
         axs[3].set_yticks([])
         axs[3].tick_params(axis='both', direction='in')
+        axs[3].xaxis.set_minor_locator(AutoMinorLocator())
+        axs[3].tick_params(which='minor', length=3, width=1, direction='in')
+        axs[3].tick_params(which='major', length=5, width=1.2, direction='in')
 
         fig.subplots_adjust(hspace=0.25, wspace=0.25, left=0.1, bottom=0.1, right=0.95, top=0.98)
         plt.savefig('{}/RDF_ADF_{}.pdf'.format(figureOut, structure))
@@ -198,21 +211,7 @@ if __name__ == '__main__':
         plt.close() 
 
         # %%
-        ##################
-        # Order parameter
-        ##################
-        r_max = 3.5
-        sgs, sks = compute_sg_sk_all(samples, r_max=r_max)
-        x_min, y_min = sgs.min(), sks.min()
-        x_max, y_max = 1+0.1, 1
-        xs, ys = sgs, sks
-        x_label, y_label = r'$S_g$', r'$S_k$'
-        # Plot All, Top, and Bottom in one figure
-        npz_prefix = f"{npzOut}/OrderP"
-        x_max, y_max = 1+0.1, 1
-        npz_x, npz_y = 'sgs', 'sks'
-        image_prefix = f"{figureOut}/OrderP_{structure}_overlay"
-        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show)
+
 
         ##################
         # H-bonds
@@ -220,13 +219,33 @@ if __name__ == '__main__':
         hbonds_ = cal_all_hydrogen_bonds(samples)
         distances_ = np.array([hb[3] for hb in hbonds_])
         angles_ = np.array([hb[4] for hb in hbonds_])
+        # %%
         x_min, y_min = distances_.min(), angles_.min()
         x_max, y_max = 3.5, 180
-        x_label, y_label = 'Distance OO (Å)', 'Angle DHA (°)'
+        x_label, y_label = rf'$d_{{\text{{O}}_\text{{d}}\text{{O}}_\text{{a}}}}$ (Å)', rf'$\theta_{{\text{{O}}_\text{{d}}\text{{H}}\text{{O}}_\text{{a}}}}$ (°)'
 
         # Plot All, Top, and Bottom in one figure
         npz_prefix = f"{npzOut}/Hbond"
         npz_x, npz_y = 'distance', 'angle'
         image_prefix = f"{figureOut}/Hbond_{structure}_overlay"
         plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show)
-        
+
+        # %%
+        ##################
+        # Order parameter
+        ##################
+        r_max = 3.5
+        sgs, sks = compute_sg_sk_all(samples, r_max=r_max)
+        # %%
+        x_min, y_min = sgs.min(), sks.min()
+        #x_min, y_min = -0.3, 0.993 
+        x_max, y_max = 1, 1
+        xs, ys = sgs, sks
+        x_label, y_label = r'$q$', r'$S_k$'
+        # Plot All, Top, and Bottom in one figure
+        npz_prefix = f"{npzOut}/OrderP"
+        npz_x, npz_y = 'sgs', 'sks'
+        image_prefix = f"{figureOut}/OrderP_{structure}_overlay"
+        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show) 
+# %%
+ 
