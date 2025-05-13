@@ -925,13 +925,11 @@ def compute_sg_sk(atoms, r_max=3.5, zThresholdO=4.85, aboveZthres=None):
                         cos_theta = np.dot(r_j[j], r_j[k])
                         sg += (cos_theta + 1/3) ** 2
                 sg *= 3 / 8 
-                sg = 1.0 - sg
                 
                 # Compute S_k
                 r_k = np.array(distances4)
                 r_mean = np.mean(r_k)
                 sk = (1/3) * np.sum((r_k - r_mean) ** 2 / (4 * r_mean ** 2))
-                sk = 1.0 - sk
 
                 if aboveZthres is not None:
                     if aboveZthres is True: 
