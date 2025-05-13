@@ -6,6 +6,7 @@ from matplotlib.lines import Line2D
 import re
 import imageio.v3 as iio  
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import AutoMinorLocator
 
 def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=100, bw_method=None, hist=False, bins=120, marker=None):
     """
@@ -117,6 +118,21 @@ def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_m
     ax_joint.set_xlabel(x_label)
     ax_joint.set_ylabel(y_label)
     ax_joint.tick_params(direction="in")
+    # Set tick positions explicitly if needed
+    ax_joint.xaxis.set_ticks_position('both')
+    ax_joint.yaxis.set_ticks_position('both')
+
+    # Restore major ticks (default behavior)
+    ax_joint.xaxis.set_major_locator(plt.AutoLocator())
+    ax_joint.yaxis.set_major_locator(plt.AutoLocator())
+
+    # Optional: Add minor ticks for more granularity
+    ax_joint.xaxis.set_minor_locator(AutoMinorLocator())
+    ax_joint.yaxis.set_minor_locator(AutoMinorLocator())
+
+    # Make minor ticks visible
+    ax_joint.tick_params(which='minor', length=3, width=1, direction='in')
+    ax_joint.tick_params(which='major', length=5, width=1.2, direction='in')
     #ax_marg_x.legend(loc='lower left', frameon=False)
 
     # Hide axis ticks for marginal plots
