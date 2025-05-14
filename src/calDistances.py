@@ -26,7 +26,7 @@ if __name__ == '__main__':
     os.makedirs(outputFolder, exist_ok=True)
     
     for ground_truth in ['Label']: # or ['Label', 'P']
-        for layer in ['All', 'Top', 'Bottom']:
+        for layer in ['All', 'Top']:
             results_file = os.path.join(outputFolder, 'similarities_{}_{}.json'.format(ground_truth, layer))
             structures = [f for f in os.listdir(inputFolder) if os.path.isdir(os.path.join(inputFolder, f))]
             all_similarities = {}
@@ -103,8 +103,8 @@ if __name__ == '__main__':
                 similarities['Hbonds'] = {'wdistancec': wdistancec, 'wdistancec_nor': wdistancec_nor, 'edistancec_nor': edistancec_nor, 'mdistancec_nor': mdistancec_nor}
         
                 # Order parameter 2d
-                data = np.load(f'{theoryFolder}/{ground_truth}/OrderP_{layer}.npz')['sg_sk']
-                datac = np.load('{}/{}/OrderP.npz'.format(inputFolder, structure))['sg_sk']
+                data = np.load(f'{theoryFolder}/{ground_truth}/OrderP_{layer}.npz')['sk_sg']
+                datac = np.load('{}/{}/OrderP.npz'.format(inputFolder, structure))['sk_sg']
                 wdistancec  = sinkhorn_2d_distance(data, datac)
                 # Normalize
                 data_nor = normalize(data, 'OrderP')
