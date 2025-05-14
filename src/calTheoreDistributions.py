@@ -25,7 +25,7 @@ if __name__ == '__main__':
     os.makedirs(processedFolder, exist_ok=True)
     baseOut = '../results/theoretical_distributions/'
     structures = ['Label']
-    show = True
+    show = False
     hist = False
 
     simcolor = '#ed9d2c'
@@ -72,6 +72,7 @@ if __name__ == '__main__':
         # %%
         # O-O distances 
         #z_thresholds = {'All': None,  'Bottom': False, 'Top': True}
+        #z_thresholds = {'All': None,  'Bottom': False, 'Top': True}
         z_thresholds = {'All': None, 'Top': True}
         #colors = {'All': all_color,  'Bottom': bottom_color, 'Top': top_color}
         colors = {'All': all_color,  'Top': top_color}
@@ -109,12 +110,7 @@ if __name__ == '__main__':
         axs[0].legend(
         frameon=False,
         ncol=1,
-        loc='upper left',
-        handlelength=1.0,      # shorter legend line
-        handletextpad=0.3,     # less space between line and text
-        borderaxespad=0.3,     # less space between legend and axes
-        labelspacing=0.2       # less vertical space between entries
-        )
+        loc='upper left')
         axs[0].tick_params(axis='both', direction='in')
 
         # %%
@@ -140,6 +136,7 @@ if __name__ == '__main__':
         #axs[1].set_ylabel(r'$\rho(r)$')
         #axs[1].set_ylim(0, 120)
         axs[1].set_yticks([])
+        axs[1].set_ylabel(r'Probability density')
         axs[1].set_xlim(0.94, 1.05)
         axs[1].tick_params(axis='both', direction='in')
         axs[1].xaxis.set_minor_locator(AutoMinorLocator())
@@ -202,6 +199,7 @@ if __name__ == '__main__':
         axs[3].set_xlim(0, 180)
         #axs[3].set_ylabel(r'$\rho(\theta)$')
         axs[3].set_yticks([])
+        axs[3].set_ylabel(r'Probability density')
         axs[3].tick_params(axis='both', direction='in')
         axs[3].xaxis.set_minor_locator(AutoMinorLocator())
         axs[3].tick_params(which='minor', length=3, width=1, direction='in')
@@ -257,7 +255,6 @@ if __name__ == '__main__':
         # %%
         x_min, y_min = sks_.min(), sgs_.min()
         x_max, y_max = sks_.max(), sgs_.max()
-        print('x_min, y_min', x_min, y_min)
         # Calculate All, Top, and Bottom separately 
         for k, (key, value) in enumerate(z_thresholds.items()):
             npzFile = '{}/OrderP_{}.npz'.format(npzOut, key)
