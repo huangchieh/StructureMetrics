@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from water import read_samples_from_folder 
 from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, cal_all_hydrogen_bonds
-from water import compute_sg_sk_all  
+from water import compute_sk_sg_all  
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 
 
@@ -67,6 +67,6 @@ if __name__ == '__main__':
         # Order parameters: sg-sk 
         r_max = 3.5
         print('Calculating order parameters ...')
-        sgs, sks = compute_sg_sk_all(samples, r_max=r_max)
-        sg_sk = np.array([sgs, sks]).T
-        np.savez('{}/OrderP.npz'.format(outputFolder), sg_sk=sg_sk)
+        sks, sgs = compute_sk_sg_all(samples, r_max=r_max)
+        sk_sg = np.array([sks, sgs]).T
+        np.savez('{}/OrderP.npz'.format(outputFolder), sk_sg=sk_sg)
