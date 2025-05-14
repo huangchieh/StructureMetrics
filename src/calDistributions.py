@@ -57,7 +57,7 @@ if __name__ == '__main__':
         np.savez('{}/ZOH.npz'.format(outputFolder), ZOH=angles, r_max = r_max)
 
         # H-bonds 
-        print('Finding hydrogen bonds ...')
+        print('Calculating hydrogen bonds ...')
         hbonds = cal_all_hydrogen_bonds(samples)
         distances_da = [hb[3] for hb in hbonds]
         angles_dha = [hb[4] for hb in hbonds]
