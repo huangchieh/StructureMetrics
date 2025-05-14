@@ -37,16 +37,16 @@ rule visualiseTrainingData:
 	./visualiseTrainingData.py
     	"""
 
-rule visualiseTheoreDistributions:
+rule calTheoreDistributions:
     input:
-    	script = "visualiseTheoreDistributions.py",
+    	script = "calTheoreDistributions.py",
 	data_dir = "../data/structures/simulations/"
     output:
     	out_dir = directory("../results/theoretical_distributions/"),
 	processed_dir = directory("../processed_data/theory_distributions/")
     shell:
     	"""
-	./visualiseTheoreDistributions.py
+	./calTheoreDistributions.py
 	"""
 
 rule visualisePredictions:
