@@ -688,136 +688,6 @@ def cal_d5_all(samples, r_max=4.5, zThresholdO=4.85, aboveZthres=None):
         d5s.extend(d5)
     return np.array(d5s)
 
-def compute_sg(atoms, r_max=3.7, zThresholdO=4.85, aboveZthres=None):
-    """
-    Compute the tetrahedral order parameter S_g for oxygen atoms in a structure.
-    
-    Parameters:
-        atoms: ASE Atoms object
-        r_max: float, maximum neighbor search radius (default: 4.5 Å)
-    
-    Returns:
-        sg_values: list of S_g values for each oxygen atom
-    """
-    symbols = atoms.get_chemical_symbols()
-    # Find all the O atoms
-    if aboveZthres is not None:
-        # Calculate the mean value of z positions of Au atoms 
-        Au_indices = [i for i, s in enumerate(symbols) if s == 'Au']
-        Au_positions = atoms.positions[Au_indices]
-        z_mean = np.max(Au_positions[:, 2])
-        if aboveZthres == True:
-            O_indices = [i for i, s in enumerate(symbols) if s == 'O' and atoms.positions[i][2] - z_mean > zThresholdO]
-        elif aboveZthres == False:
-            O_indices = [i for i, s in enumerate(symbols) if s == 'O' and atoms.positions[i][2] - z_mean <= zThresholdO]
-    else:
-        O_indices = [i for i, s in enumerate(symbols) if s == 'O'] 
-    sg_values = []
-    
-    for O_idx in O_indices:
-        # Get all other O indices excluding the central one
-        O_neighbors = [i for i in O_indices if i != O_idx]
-        
-        # Get distances from the central O to all other O atoms
-        distances = atoms.get_distances(O_idx, O_neighbors, mic=True)
-        
-        # Sort and get the 4 nearest neighbors
-        if len(distances) >= 4:
-            nearest_indices = np.argsort(distances)[:4]
-            neighbors = [O_neighbors[i] for i in nearest_indices]
-            distances4 = [distances[i] for i in nearest_indices]
-            if np.max(distances4) <= r_max: 
-                # Compute unit bond vectors
-                r_j = [(atoms.positions[j] - atoms.positions[O_idx]) / np.linalg.norm(atoms.positions[j] - atoms.positions[O_idx]) for j in neighbors]
-            
-                # Compute S_g using the formula
-                sg = 0
-                for j in range(3):
-                    for k in range(j + 1, 4):
-                        cos_theta = np.dot(r_j[j], r_j[k])
-                        sg += (cos_theta + 1/3) ** 2
-                sg *= 3 / 8 
-                sg_values.append(sg)
-    
-    return sg_values
-
-def compute_sg_all(samples, r_max=3.7, zThresholdO=4.85, aboveZthres=None):
-    """
-    Compute S_g for all oxygen atoms in multiple samples.
-    
-    Parameters:
-        samples: list of file paths to XYZ structures
-        r_max: float, neighbor search radius
-    
-    Returns:
-        np.array of all computed S_g values
-    """
-    sg_all = []
-    for sample in tqdm(samples):
-        atoms = read_xyz_with_atomic_numbers(sample)
-        sg_values = compute_sg(atoms, r_max=r_max, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
-        sg_all.extend(sg_values)
-    return np.array(sg_all)
-
-def compute_sk(atoms, r_max=3.7, zThresholdO=4.85, aboveZthres=None):
-    """
-    Compute the distance-based order parameter S_k for oxygen atoms.
-    
-    Parameters:
-        atoms: ASE Atoms object
-        r_max: float, maximum neighbor search radius (default: 4.5 Å)
-    
-    Returns:
-        sk_values: list of S_k values for each oxygen atom
-    """
-    symbols = atoms.get_chemical_symbols()
-    # Find all the O atoms
-    if aboveZthres is not None:
-        # Calculate the mean value of z positions of Au atoms 
-        Au_indices = [i for i, s in enumerate(symbols) if s == 'Au']
-        Au_positions = atoms.positions[Au_indices]
-        z_mean = np.max(Au_positions[:, 2])
-        if aboveZthres == True:
-            O_indices = [i for i, s in enumerate(symbols) if s == 'O' and atoms.positions[i][2] - z_mean > zThresholdO]
-        elif aboveZthres == False:
-            O_indices = [i for i, s in enumerate(symbols) if s == 'O' and atoms.positions[i][2] - z_mean <= zThresholdO]
-    else:
-        O_indices = [i for i, s in enumerate(symbols) if s == 'O'] 
-    sk_values = []
-    
-    for O_idx in O_indices:
-        O_neighbors = [i for i in O_indices if i != O_idx]
-        distances = atoms.get_distances(O_idx, O_neighbors, mic=True)
-        
-        if len(distances) >= 4:
-            nearest_indices = np.argsort(distances)[:4]
-            distances4 = [distances[i] for i in nearest_indices]
-            if np.max(distances4) <= r_max: 
-                r_k = np.array([distances[i] for i in nearest_indices])
-                r_mean = np.mean(r_k)
-                sk = (1/3) * np.sum((r_k - r_mean) ** 2 / (4 * r_mean ** 2))
-                sk_values.append(sk)
-    
-    return sk_values
-
-def compute_sk_all(samples, r_max=3.7, zThresholdO=4.85, aboveZthres=None):
-    """
-    Compute S_k for all oxygen atoms in multiple samples.
-    
-    Parameters:
-        samples: list of file paths to XYZ structures
-        r_max: float, neighbor search radius
-    
-    Returns:
-        np.array of all computed S_k values
-    """
-    sk_all = []
-    for sample in tqdm(samples):
-        atoms = read_xyz_with_atomic_numbers(sample)
-        sk_values = compute_sk(atoms, r_max=r_max, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
-        sk_all.extend(sk_values)
-    return np.array(sk_all)
-
 def compute_lsi(atoms, r_max=4.5, zThresholdO=4.85, aboveZthres=None):
     """
     Compute the Local Structure Index (LSI) for oxygen atoms.
@@ -881,7 +751,7 @@ def compute_lsi_all(samples, r_max=4.5, zThresholdO=4.85, aboveZthres=None):
         lsi_all.extend(lsi_values)
     return np.array(lsi_all)
 
-def compute_sg_sk(atoms, r_max=3.5, zThresholdO=4.85, aboveZthres=None):
+def compute_sk_sg(atoms, r_max=3.5, zThresholdO=4.85, aboveZthres=None):
     """
     Compute both tetrahedral order parameter S_g and distance-based order parameter S_k for oxygen atoms.
     
@@ -947,9 +817,9 @@ def compute_sg_sk(atoms, r_max=3.5, zThresholdO=4.85, aboveZthres=None):
                     sg_values.append(sg)
                     sk_values.append(sk)
     
-    return sg_values, sk_values
+    return sk_values, sg_values
 
-def compute_sg_sk_all(samples, r_max=3.5, zThresholdO=4.85, aboveZthres=None):
+def compute_sk_sg_all(samples, r_max=3.5, zThresholdO=4.85, aboveZthres=None):
     """
     Compute S_g and S_k for all oxygen atoms in multiple samples.
     
@@ -965,10 +835,10 @@ def compute_sg_sk_all(samples, r_max=3.5, zThresholdO=4.85, aboveZthres=None):
     sk_all = []
     for sample in tqdm(samples):
         atoms = read_xyz_with_atomic_numbers(sample)
-        sg_values, sk_values = compute_sg_sk(atoms, r_max=r_max, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
+        sk_values, sg_values = compute_sk_sg(atoms, r_max=r_max, zThresholdO=zThresholdO, aboveZthres=aboveZthres)
         sg_all.extend(sg_values)
         sk_all.extend(sk_values)
-    return np.array(sg_all), np.array(sk_all)
+    return np.array(sk_all), np.array(sg_all)
 
 def plot_distance_distribution(distances, label, legend, r_max=10,  color='#299035', bins=120, y_lim=0.4, outfolder='output'):
     figure_size=(6, 2.5)
