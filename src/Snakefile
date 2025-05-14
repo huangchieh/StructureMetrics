@@ -6,6 +6,7 @@ rule all:
 rule calDistributions:
     input:
         script = "calDistributions.py",
+	tool = "water.py",
         data_dir = "../data/structures/predictions"
     output:
         out_dir = directory("../processed_data/structure_properties")
