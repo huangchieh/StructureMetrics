@@ -39,7 +39,7 @@ def plot_comparison_subplots(df0, df1, df2, numeric_columns, label0="Dataset 0",
         "HOH": r"$\theta_{\mathrm{HOH}}$", 
         "ZOH": r"$\theta_{\mathrm{ZOH}}$", 
         "Hbond": r"$(d_{\mathrm{O_d}\mathrm{O_a}}, \theta_{\mathrm{O_d}\mathrm{H}\mathrm{O_a}})$", 
-        "OrderP": r"$(S_g, S_k)$"
+        "OrderP": r"$(S_k, S_g)$"
     }
     x_ticklabels = [x_labels[col] for col in numeric_columns]
     # Compute mean and standard error for all datasets

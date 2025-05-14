@@ -6,6 +6,7 @@ from matplotlib.lines import Line2D
 import re
 import imageio.v3 as iio  
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import AutoMinorLocator
 
 def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=100, bw_method=None, hist=False, bins=120, marker=None):
     """
@@ -49,6 +50,54 @@ def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, 
     return x, y
 
 
+
+def plot_kde_fill_(ax, data, color, linestyle, label,
+                  fill=True, alpha_fill=0.3, xmin=None, xmax=None,
+                  num_points=100, bw_method=None, hist=False, bins=120, marker=None):
+    """
+    Plot a KDE curve using seaborn's kdeplot with optional fill under the curve.
+
+    Parameters:
+    - ax: The matplotlib axis to plot on.
+    - data: 1D array-like data to plot.
+    - color: Color for the KDE line and fill.
+    - linestyle: Line style for the curve.
+    - label: Legend label.
+    - fill: Whether to fill under the KDE curve.
+    - alpha_fill: Opacity of the fill.
+    - xmin, xmax: Optional x-axis range.
+    - num_points: Used for compatibility (not needed for sns.kdeplot).
+    - bw_method: Bandwidth adjustment factor (mapped to `bw_adjust` in seaborn).
+    - hist: Whether to plot histogram alongside.
+    - bins: Number of histogram bins.
+    - marker: Ignored for now; sns.kdeplot does not support markers.
+
+    Returns:
+    - kde_line: The Line2D object for the KDE curve (can be used to extract data)
+    """
+    data = np.array(data)
+
+    # Plot histogram if requested
+    if hist:
+        ax.hist(data, bins=bins, density=True, color=color, alpha=0.25,
+                histtype='stepfilled', linewidth=0)
+
+    # Use sns.kdeplot for KDE curve and fill
+    kde_line = sns.kdeplot(
+        data,
+        ax=ax,
+        bw_adjust=bw_method if bw_method is not None else 1,
+        fill=fill,
+        common_norm=False,
+        color=color,
+        linestyle=linestyle,
+        alpha=alpha_fill if fill else 1.0,
+        label=label if fill else None,  # prevent duplicate label
+        linewidth=1.5
+    )
+
+    return kde_line
+
 def plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label, y_label,
               image_prefix, text, show):
     """
@@ -84,7 +133,7 @@ def plot_joint_distribution(xs, ys, x_min, x_max, y_min, y_max, x_label, y_label
     if show: plt.show()
     plt.close()
 
-def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show):
+def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, markers,  x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show):
     sns.set(style="white")
     fig = plt.figure(figsize=(3.85, 3.85))
     grid = plt.GridSpec(2, 2, width_ratios=[4, 1], height_ratios=[1, 4], hspace=0.015, wspace=0.015)
@@ -95,7 +144,7 @@ def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_m
     for k, (key, value) in enumerate(z_thresholds.items()):
         xs, ys = np.load(f"{npz_prefix}_{key}.npz")[npz_x], np.load(f"{npz_prefix}_{key}.npz")[npz_y]
         color = colors[key]
-
+        marker = markers[key]
         # if key == "All": # Joint KDE for 'All' only
         #     sns.kdeplot(x=xs, y=ys, fill=True, bw_adjust=0.5, ax=ax_joint,
         #                 cmap=sns.light_palette(color, as_cmap=True))
@@ -103,31 +152,55 @@ def plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_m
         #     ax_joint.scatter(xs, ys, s=5, marker = ',' if key =="Bottom"
         #                      else 'x', color=color, alpha=0.5,
         #                      label=f'{key} samples')
-        ax_joint.scatter(xs, ys, s=5, marker = ',' if key =="Bottom"
-                            else 'x', color=color, alpha=0.5,
-                            label=f'{key} samples')
+        #marker_style = ',' if key == "Bottom" else 'x'
+        if key == "Top":
+            ax_joint.scatter(xs, ys, s=6, marker=marker,
+             color=color, alpha=0.4, label=f'{key} samples', facecolors=color, linewidths=0.5)
+        else:  # For 'Top' or other types
+            ax_joint.scatter(xs, ys, s=6, marker=marker,
+             color=color, alpha=0.4, label=f'{key} samples', facecolors='none', linewidths=0.5)
+        # ax_joint.scatter(xs, ys, s=5, marker = ',' if key =="Bottom"
+        #                     else 'x', color=color, alpha=0.5,
+        #                     label=f'{key} samples')
 
-        sns.kdeplot(x=xs, ax=ax_marg_x, color=color, fill=False,
-                bw_adjust=0.5, alpha=1, label=f"{key} samples", linestyle=linestypes[key])
-        sns.kdeplot(y=ys, ax=ax_marg_y, color=color, fill=False, 
-                bw_adjust=0.5, alpha=1, label=f"{key} samples", linestyle=linestypes[key])
+        sns.kdeplot(x=xs, ax=ax_marg_x, color=color, fill=True,
+                bw_adjust=0.5, alpha=0.5, label=f"{key}", linestyle=linestypes[key])
+        sns.kdeplot(y=ys, ax=ax_marg_y, color=color, fill=True, 
+                bw_adjust=0.5, alpha=0.5, label=f"{key}", linestyle=linestypes[key])
 
     ax_joint.set_xlim(x_min, x_max)
     ax_joint.set_ylim(y_min, y_max)
     ax_joint.set_xlabel(x_label)
     ax_joint.set_ylabel(y_label)
     ax_joint.tick_params(direction="in")
+    # Set tick positions explicitly if needed
+    ax_joint.xaxis.set_ticks_position('both')
+    ax_joint.yaxis.set_ticks_position('both')
+
+    # Restore major ticks (default behavior)
+    ax_joint.xaxis.set_major_locator(plt.AutoLocator())
+    ax_joint.yaxis.set_major_locator(plt.AutoLocator())
+
+    # Optional: Add minor ticks for more granularity
+    ax_joint.xaxis.set_minor_locator(AutoMinorLocator())
+    ax_joint.yaxis.set_minor_locator(AutoMinorLocator())
+
+    # Make minor ticks visible
+    ax_joint.tick_params(which='minor', length=3, width=1, direction='in')
+    ax_joint.tick_params(which='major', length=5, width=1.2, direction='in')
     #ax_marg_x.legend(loc='lower left', frameon=False)
 
     # Hide axis ticks for marginal plots
     ax_marg_x.axis("off")
     ax_marg_y.axis("off")
+    # Show legend for marginal distributions
+    ax_marg_x.legend(loc='upper left', frameon=False)
 
     # Create custom legend handles for marginal lines
-    legend_lines = [ Line2D([0], [0], color=color, lw=2, label=label)
-        for label, color in colors.items() ]
-    ax_marg_x.legend(handles=legend_lines, loc='lower center', frameon=False,
-                     ncol=1, bbox_to_anchor=(0.15, 0.00), fontsize=10)
+    # legend_lines = [ Line2D([0], [0], color=color, lw=2, label=label)
+    #     for label, color in colors.items() ]
+    # ax_marg_x.legend(handles=legend_lines, loc='lower center', frameon=False,
+    #                  ncol=1, bbox_to_anchor=(0.15, 0.00), fontsize=10)
     fig.subplots_adjust(left=0.25, right=0.99, top=0.92, bottom=0.15,
                         hspace=0.01, wspace=0.01)
 

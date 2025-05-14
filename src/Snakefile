@@ -6,6 +6,7 @@ rule all:
 rule calDistributions:
     input:
         script = "calDistributions.py",
+	tool = "water.py",
         data_dir = "../data/structures/predictions"
     output:
         out_dir = directory("../processed_data/structure_properties")
@@ -17,6 +18,7 @@ rule calDistributions:
 rule calDistances:
     input:
         script = "calDistances.py",
+	theory = "../processed_data/theory_distributions",
         data_dir = "../processed_data/structure_properties" 
     output:
         out_dir = directory("../processed_data/distribution_distances")
@@ -36,16 +38,16 @@ rule visualiseTrainingData:
 	./visualiseTrainingData.py
     	"""
 
-rule visualiseTheoreDistributions:
+rule calTheoreDistributions:
     input:
-    	script = "visualiseTheoreDistributions.py",
+    	script = "calTheoreDistributions.py",
 	data_dir = "../data/structures/simulations/"
     output:
     	out_dir = directory("../results/theoretical_distributions/"),
 	processed_dir = directory("../processed_data/theory_distributions/")
     shell:
     	"""
-	./visualiseTheoreDistributions.py
+	./calTheoreDistributions.py
 	"""
 
 rule visualisePredictions:
@@ -77,7 +79,6 @@ rule evaluate:
 		"evaluate.py", 
 		 "../processed_data/distribution_distances/similarities_Label_All.json", 
 		 "../processed_data/distribution_distances/similarities_Label_Top.json", 
-		 "../processed_data/distribution_distances/similarities_Label_Bottom.json" 
 	output:
 		out_dir = directory("../results/distance_evaluate")
 	shell:
