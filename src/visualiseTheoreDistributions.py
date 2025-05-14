@@ -8,11 +8,11 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import AutoMinorLocator
 
 from water import read_samples_from_folder 
-from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, compute_sg_sk_all
+from water import mean_rdf, mean_adf, mean_distance_distribution, mean_adf_OH, compute_sk_sg_all
 from water import plot_rdf, plot_angle_distribution, plot_distance_distribution
 from water import cal_all_hydrogen_bonds
 
-from utils import plot_kde_fill, plot_joint_distribution
+from utils import plot_kde_fill, plot_joint_distribution, plot_kde_fill_
 from utils import plot_joint_distributions
 from utils import plot_joint_distributions_in_row
 
@@ -71,12 +71,16 @@ if __name__ == '__main__':
         alpha = 0.3
         # %%
         # O-O distances 
-        z_thresholds = {'All': None,  'Bottom': False, 'Top': True}
-        colors = {'All': all_color,  'Bottom': bottom_color, 'Top': top_color}
+        #z_thresholds = {'All': None,  'Bottom': False, 'Top': True}
+        z_thresholds = {'All': None, 'Top': True}
+        #colors = {'All': all_color,  'Bottom': bottom_color, 'Top': top_color}
+        colors = {'All': all_color,  'Top': top_color}
         #linestypes = {'All': '-', 'Top': '-', 'Bottom': '-'}
         linestypes = {'All': '-', 'Bottom': '-', 'Top': '-'}
-        fills = {'All': False, 'Bottom': False, 'Top': False}
-        markers = {'All': 'o',  'Bottom': 's', 'Top': 'p'}
+        #fills = {'All': False, 'Bottom': False, 'Top': False}
+        fills = {'All': True, 'Top': True}
+        #markers = {'All': 'o',  'Bottom': 's', 'Top': 'p'}
+        markers = {'All': 'o',  'Top': 's'}
         num_points = 120
         for key, value in z_thresholds.items():
             label = 'OO_distances_{}_{}'.format(key, structure)
@@ -92,7 +96,7 @@ if __name__ == '__main__':
             if key != 'All' and hist==True:
                 axs[0].hist(OO_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=1)
             #sns.kdeplot(OO_distances, ax=axs[0], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
-            plot_kde_fill(ax=axs[0], xmin=0, xmax=r_max, data=OO_distances, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=alpha, marker=markers[key], num_points=num_points)
+            plot_kde_fill_(ax=axs[0], xmin=0, xmax=r_max, data=OO_distances, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=alpha, marker=markers[key], num_points=num_points)
         axs[0].set_xlabel(rf'$d_\text{{OO}}$ (Å)')
         axs[0].set_ylabel(r'Probability density')
         axs[0].set_ylim(0, 6.5) 
@@ -131,7 +135,7 @@ if __name__ == '__main__':
             if key != 'All' and hist==True:
                 axs[1].hist(OH_distances, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=1)
             #sns.kdeplot(OH_distances, ax=axs[1], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
-            plot_kde_fill(ax=axs[1], data=OH_distances, xmin=0, xmax=r_max, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
+            plot_kde_fill_(ax=axs[1], data=OH_distances, xmin=0, xmax=r_max, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
         axs[1].set_xlabel(rf'$d_\text{{OH}}$ (Å)')
         #axs[1].set_ylabel(r'$\rho(r)$')
         #axs[1].set_ylim(0, 120)
@@ -163,7 +167,7 @@ if __name__ == '__main__':
             if key != 'All' and hist==True:
                 axs[2].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=0.2)
             #sns.kdeplot(angles, ax=axs[2], linewidth=1, label=legend, bw_adjust=1.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
-            plot_kde_fill(ax=axs[2], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
+            plot_kde_fill_(ax=axs[2], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
         axs[2].set_xlabel(rf'$\theta_\text{{HOH}}$ (°)')
         axs[2].set_xlim(98, 112)
         axs[2].set_ylabel('Probability density')
@@ -193,7 +197,7 @@ if __name__ == '__main__':
             if key != 'All' and hist==True: 
                 axs[3].hist(angles, bins=bins, histtype='step', density=True, linewidth=0.5, color=colors[key], alpha=1)
             #sns.kdeplot(angles, ax=axs[3], linewidth=1, label=legend, bw_adjust=0.5, color=colors[key], linestyle=linestypes[key], fill=fills[key], alpha=0.3)
-            plot_kde_fill(ax=axs[3], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
+            plot_kde_fill_(ax=axs[3], data=angles, xmin=0, xmax=180, color=colors[key], linestyle=linestypes[key], label=legend, fill=fills[key], alpha_fill=0.3, marker=markers[key], num_points=num_points)
         axs[3].set_xlabel(rf'$\theta_\text{{ZOH}}$ (°)')
         axs[3].set_xlim(0, 180)
         #axs[3].set_ylabel(r'$\rho(\theta)$')
@@ -221,31 +225,61 @@ if __name__ == '__main__':
         angles_ = np.array([hb[4] for hb in hbonds_])
         # %%
         x_min, y_min = distances_.min(), angles_.min()
-        x_max, y_max = 3.5, 180
+        x_max, y_max = distances_.max(), angles_.max()
+        #x_max, y_max = 3.5, 180
         x_label, y_label = rf'$d_{{\text{{O}}_\text{{d}}\text{{O}}_\text{{a}}}}$ (Å)', rf'$\theta_{{\text{{O}}_\text{{d}}\text{{H}}\text{{O}}_\text{{a}}}}$ (°)'
-
+        # Calculate All, Top, and Bottom separately
+        for k, (key, value) in enumerate(z_thresholds.items()):
+            npzFile = '{}/Hbond_{}.npz'.format(npzOut, key)
+            if os.path.exists(npzFile):
+                print('Loading Hbond from file: {}'.format(npzFile))
+                hbonds = np.load(npzFile)['hbond']
+            else:
+                print('Calculating Hbond ...')
+                hbonds = cal_all_hydrogen_bonds(samples, aboveZthres=value, zThresholdO=4.85)
+                distances_da = [hb[3] for hb in hbonds]
+                angles_dha = [hb[4] for hb in hbonds]
+                OO_OHO = np.array([distances_da, angles_dha]).T
+                np.savez(npzFile, hbond=hbonds, distance=distances_da, 
+                                  angle=angles_dha, OO_OHO=OO_OHO)
         # Plot All, Top, and Bottom in one figure
         npz_prefix = f"{npzOut}/Hbond"
         npz_x, npz_y = 'distance', 'angle'
         image_prefix = f"{figureOut}/Hbond_{structure}_overlay"
-        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show)
+        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, markers,  x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show)
 
         # %%
         ##################
         # Order parameter
         ##################
         r_max = 3.5
-        sgs, sks = compute_sg_sk_all(samples, r_max=r_max)
+        sks_, sgs_ = compute_sk_sg_all(samples, r_max=r_max)
         # %%
-        x_min, y_min = sgs.min(), sks.min()
+        x_min, y_min = sks_.min(), sgs_.min()
+        x_max, y_max = sks_.max(), sgs_.max()
+        print('x_min, y_min', x_min, y_min)
+        # Calculate All, Top, and Bottom separately 
+        for k, (key, value) in enumerate(z_thresholds.items()):
+            npzFile = '{}/OrderP_{}.npz'.format(npzOut, key)
+            if os.path.exists(npzFile): 
+                print('Loading OrderParameter from file: {}'.format(npzFile))
+                sks, sgs = np.load(npzFile)['sks'], np.load(npzFile)['sgs']
+            else:
+                print('Calculating OrderParameter ...')
+                sks, sgs = compute_sk_sg_all(samples, r_max=r_max, aboveZthres=value)
+                sk_sg = np.array([sks, sgs]).T
+                np.savez(npzFile, sk_sg=sk_sg, sks=sks, sgs=sgs)
+            
         #x_min, y_min = -0.3, 0.993 
-        x_max, y_max = 1, 1
-        xs, ys = sgs, sks
-        x_label, y_label = r'$q$', r'$S_k$'
+        #x_min = 0.994
+        #x_max, y_max = 0.006, 1
+        #xs, ys = sgs, sks
+        xs, ys = sks, sgs
+        x_label, y_label = r'$S_k$', r'$S_g$'
         # Plot All, Top, and Bottom in one figure
         npz_prefix = f"{npzOut}/OrderP"
-        npz_x, npz_y = 'sgs', 'sks'
+        npz_x, npz_y = 'sks', 'sgs'
         image_prefix = f"{figureOut}/OrderP_{structure}_overlay"
-        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show) 
+        plot_joint_distributions(z_thresholds, npz_prefix, npz_x, npz_y, colors, markers, x_min, x_max, y_min, y_max, x_label, y_label, image_prefix, linestypes, show) 
 # %%
  
