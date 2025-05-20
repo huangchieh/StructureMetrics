@@ -9,6 +9,7 @@ from matplotlib.patches import Circle
 import os, re
 
 show = False
+#perspective = 'xy'  # Change to 'xz' to view side-on
 
 def extract_lambda_values(s):
     """Extract numeric values following 'L' in the input string."""
@@ -35,91 +36,106 @@ if not os.path.exists(output):
     os.makedirs(output)
 
 # %%
-for angle in angles:
+for perspective in ['xy', 'xz']:
     # Look different rotations individually
-    numRows = len(samples)
-    numCols = len(models) + 2 # Add two for the input images
-    fig, axs = plt.subplots(numRows, numCols, figsize=(numCols*2, numRows*2+3))
+    for angle in angles:
+        numRows = len(samples)
+        numCols = len(models) + 2 # Add two for the input images
+        fig, axs = plt.subplots(numRows, numCols, figsize=(numCols*2, numRows*2+3))
 
-    for i, sample in enumerate(samples):
-        # Load the input image: close and far 
-        closeImg = '{}/{}_{}.png'.format(expImage, sample, indexes[i][0])
-        farImg = '{}/{}_{}.png'.format(expImage, sample, indexes[i][1])
-        close = plt.imread(closeImg, )
-        far = plt.imread(farImg)
-        # Rotate the images
-        close = np.rot90(close, k=(angle+90)//90)
-        far = np.rot90(far, k=(angle+90)//90)
-        # Show the image with corresponding rotation angle in gray scale
-        axs[i, 0].imshow(close, cmap='inferno')
-        axs[i, 1].imshow(far, cmap='inferno')
-        # Show no axis
-        axs[i, 0].axis('off')
-        axs[i, 1].axis('off')
-        
-        for j, model in enumerate(models):
-            structure = '{}/{}/Prediction_c/{}_d{}_mol.xyz'.format(predictions, model, sample, angle)
-            atoms = read_xyz_with_atomic_numbers(structure)
+        for i, sample in enumerate(samples):
+            # Load the input image: close and far 
+            closeImg = '{}/{}_{}.png'.format(expImage, sample, indexes[i][0])
+            farImg = '{}/{}_{}.png'.format(expImage, sample, indexes[i][1])
+            close = plt.imread(closeImg, )
+            far = plt.imread(farImg)
+            # Rotate the images
+            close = np.rot90(close, k=(angle+90)//90)
+            far = np.rot90(far, k=(angle+90)//90)
+            # Show the image with corresponding rotation 
+            axs[i, 0].imshow(close, cmap='inferno')
+            axs[i, 1].imshow(far, cmap='inferno')
+            # Show no axis
+            axs[i, 0].axis('off')
+            axs[i, 1].axis('off')
 
+            for j, model in enumerate(models):
+                structure = '{}/{}/Prediction_c/{}_d{}_mol.xyz'.format(predictions, model, sample, angle)
+                atoms = read_xyz_with_atomic_numbers(structure)
 
-            axs[i, j+2].set_aspect('equal')
-            axs[i, j+2].tick_params(axis='both', direction='in', labelright=False)
+                axs[i, j+2].set_aspect('equal')
+                axs[i, j+2].tick_params(axis='both', direction='in', labelright=False)
 
-            axs[i, j+2].set_xticks([])
-            axs[i, j+2].set_yticks([])
-            # Sort atoms by z-position to draw farther atoms first
-            atoms = sorted(atoms, key=lambda atom: atom.position[2])
+                axs[i, j+2].set_xticks([])
+                axs[i, j+2].set_yticks([])
+                # Sort atoms by z-position to draw farther atoms first
+                atoms = sorted(atoms, key=lambda atom: atom.position[2])
 
-            for atom in atoms:
-                color = jmol_colors[atom.number]
-                radius = radii[atom.number]
-                circle = Circle((atom.position[0], atom.position[1]), radius, facecolor=color,
-                                edgecolor='k', linewidth=0.5)
-                axs[i, j+2].add_patch(circle)
+                # for atom in atoms:
+                #     color = jmol_colors[atom.number]
+                #     radius = radii[atom.number]
+                #     circle = Circle((atom.position[0], atom.position[1]), radius, facecolor=color,
+                #                     edgecolor='k', linewidth=0.5)
+                #     axs[i, j+2].add_patch(circle)
 
-    
-            x_positions = [atom.position[0] for atom in atoms]
-            y_positions = [atom.position[1] for atom in atoms]
-            if j == 0:
-                xmin, xmax = min(x_positions), max(x_positions)
-                ymin, ymax = min(y_positions), max(y_positions)
-            offset = 1
+                # x_positions = [atom.position[0] for atom in atoms]
+                # y_positions = [atom.position[1] for atom in atoms]
 
-            # Calculate the center and the maximum span to ensure square axes
-            x_center = (xmin + xmax) / 2
-            y_center = (ymin + ymax) / 2
-            span = max(xmax - xmin, ymax - ymin) / 2 + 4 * offset  # add padding
+                for atom in atoms:
+                    color = jmol_colors[atom.number]
+                    radius = radii[atom.number]
+                    if perspective == 'xy':
+                        x, y = atom.position[0], atom.position[1]
+                    elif perspective == 'xz':
+                        x, y = atom.position[0], atom.position[2]  # height view
+                    else:
+                        raise ValueError("Perspective must be 'xy' or 'xz'")
+                    circle = Circle((x, y), radius, facecolor=color, edgecolor='k', linewidth=0.5)
+                    axs[i, j+2].add_patch(circle)
 
-            axs[i, j+2].set_xlim([x_center - span, x_center + span])
-            axs[i, j+2].set_ylim([y_center - span, y_center + span])
-            # Draw 1 nm scale bar at top left for the first model
-            if j == 0:
-                # 1 nm in Angstroms (10 Å)
-                scale_length = 10  # 1 nm = 10 Å
-                # Place bar 5% from left and 10% from top
-                x0 = x_center - span + 0.05 * (2 * span)
-                y0 = y_center + span - 0.98 * (2 * span)
-                x1 = x0 + scale_length
-                y1 = y0
-                axs[i, j+2].plot([x0, x1], [y0, y1], color='k')
-                axs[i, j+2].text((x0 + x1) / 2, y0 + 0.03 * (2 * span), '1 nm', color='k',
-                            ha='center', va='bottom', fontsize=10)
-    # Add the sublabels
-    lambdas = [extract_lambda_values(model) for model in models[1:]]
-    subLabels = ['$v$: Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[0][0]}, {lambdas[0][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[1][0]}, {lambdas[1][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[2][0]}, {lambdas[2][1]}$']
-    xoffsets = [-0.14, -0.11, -0.04, -0.078, -0.05, -0.015]
-    for j in range(numCols):
-        ax = axs[0, j]      # first row's axes
-        pos = ax.get_position()
-        x_center = (pos.x0 + pos.x1) / 2  # middle between left and right
-        y_top = pos.y1 + 0.01             # a little bit above the top
+                x_positions = [atom.position[0] for atom in atoms]
+                y_positions = [atom.position[1] if perspective == 'xy' else atom.position[2] for atom in atoms]
 
-        fig.text(x_center+xoffsets[j], y_top, subLabels[j],
-                ha='left', va='bottom')
-    plt.subplots_adjust(wspace=0.02, hspace=0.02, left=0.025, right=0.975)
-    plt.savefig('{}/predictions_{}.png'.format(output, angle), dpi=600)
-    plt.savefig('{}/predictions_{}.pdf'.format(output, angle))
-    plt.savefig('{}/predictions_{}.svg'.format(output, angle))
-    if show: plt.show()
+                if j == 0:
+                    xmin, xmax = min(x_positions), max(x_positions)
+                    ymin, ymax = min(y_positions), max(y_positions)
+                offset = 1
+
+                # Calculate the center and the maximum span to ensure square axes
+                x_center = (xmin + xmax) / 2
+                y_center = (ymin + ymax) / 2
+                span = max(xmax - xmin, ymax - ymin) / 2 + 4 * offset  # add padding
+
+                axs[i, j+2].set_xlim([x_center - span, x_center + span])
+                axs[i, j+2].set_ylim([y_center - span, y_center + span])
+                # Draw 1 nm scale bar at top left for the first model
+                if j == 0:
+                    # 1 nm in Angstroms (10 Å)
+                    scale_length = 10  # 1 nm = 10 Å
+                    # Place bar 5% from left and 10% from top
+                    x0 = x_center - span + 0.05 * (2 * span)
+                    y0 = y_center + span - 0.98 * (2 * span)
+                    x1 = x0 + scale_length
+                    y1 = y0
+                    axs[i, j+2].plot([x0, x1], [y0, y1], color='k')
+                    axs[i, j+2].text((x0 + x1) / 2, y0 + 0.03 * (2 * span), '1 nm', color='k',
+                                ha='center', va='bottom', fontsize=10)
+        # Add the sublabels
+        lambdas = [extract_lambda_values(model) for model in models[1:]]
+        subLabels = ['$v$: Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[0][0]}, {lambdas[0][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[1][0]}, {lambdas[1][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[2][0]}, {lambdas[2][1]}$']
+        xoffsets = [-0.14, -0.11, -0.04, -0.078, -0.05, -0.015]
+        for j in range(numCols):
+            ax = axs[0, j]      # first row's axes
+            pos = ax.get_position()
+            x_center = (pos.x0 + pos.x1) / 2  # middle between left and right
+            y_top = pos.y1 + 0.01             # a little bit above the top
+
+            fig.text(x_center+xoffsets[j], y_top, subLabels[j],
+                    ha='left', va='bottom')
+        plt.subplots_adjust(wspace=0.02, hspace=0.02, left=0.025, right=0.975)
+        plt.savefig('{}/predictions_{}_{}.png'.format(output, angle, perspective), dpi=600)
+        plt.savefig('{}/predictions_{}_{}.pdf'.format(output, angle, perspective))
+        plt.savefig('{}/predictions_{}_{}.svg'.format(output, angle, perspective))
+        if show: plt.show()
 
 # %%
