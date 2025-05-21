@@ -8,8 +8,7 @@ from ase.data.colors import jmol_colors
 from matplotlib.patches import Circle
 import os, re
 
-show = False
-#perspective = 'xy'  # Change to 'xz' to view side-on
+show = True
 
 def extract_lambda_values(s):
     """Extract numeric values following 'L' in the input string."""
@@ -71,26 +70,25 @@ for perspective in ['xy', 'xz']:
                 # Sort atoms by z-position to draw farther atoms first
                 atoms = sorted(atoms, key=lambda atom: atom.position[2])
 
-                # for atom in atoms:
-                #     color = jmol_colors[atom.number]
-                #     radius = radii[atom.number]
-                #     circle = Circle((atom.position[0], atom.position[1]), radius, facecolor=color,
-                #                     edgecolor='k', linewidth=0.5)
-                #     axs[i, j+2].add_patch(circle)
+                z_values = np.array([atom.position[2] for atom in atoms])
+                z_min, z_max = np.min(z_values), np.max(z_values)
+                z_range = z_max - z_min if z_max > z_min else 1.0  # avoid divide-by-zero
 
-                # x_positions = [atom.position[0] for atom in atoms]
-                # y_positions = [atom.position[1] for atom in atoms]
 
                 for atom in atoms:
                     color = jmol_colors[atom.number]
                     radius = radii[atom.number]
                     if perspective == 'xy':
-                        x, y = atom.position[0], atom.position[1]
+                        x, y, z = atom.position[0], atom.position[1], atom.position[2]
+                        # Scale size by z depth (closer atoms are larger)
+                        scale = 0.5 + 0.5 * (z - z_min) / z_range  # scale between 0.5x and 1.0x
+                        scaled_radius = radius * scale
                     elif perspective == 'xz':
                         x, y = atom.position[0], atom.position[2]  # height view
+                        scaled_radius = radius
                     else:
                         raise ValueError("Perspective must be 'xy' or 'xz'")
-                    circle = Circle((x, y), radius, facecolor=color, edgecolor='k', linewidth=0.5)
+                    circle = Circle((x, y), scaled_radius, facecolor=color, edgecolor='k', linewidth=0.5)
                     axs[i, j+2].add_patch(circle)
 
                 x_positions = [atom.position[0] for atom in atoms]
@@ -104,7 +102,7 @@ for perspective in ['xy', 'xz']:
                 # Calculate the center and the maximum span to ensure square axes
                 x_center = (xmin + xmax) / 2
                 y_center = (ymin + ymax) / 2
-                span = max(xmax - xmin, ymax - ymin) / 2 + 4 * offset  # add padding
+                span = max(xmax - xmin, ymax - ymin) / 2 + 6 * offset  # add padding
 
                 axs[i, j+2].set_xlim([x_center - span, x_center + span])
                 axs[i, j+2].set_ylim([y_center - span, y_center + span])
