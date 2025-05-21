@@ -15,8 +15,9 @@ def extract_lambda_values(s):
     return [float(x) if '.' in x else int(x) for x in re.findall(r'_L([0-9.]+)', s)]
 
 # %%
-models = ['Ref', 'PPAFM2Exp_CoAll_L10_L10_Elatest', 'PPAFM2Exp_CoAll_L10_L0.1_Elatest', 'PPAFM2Exp_CoAll_L20_L1_Elatest']
-angles = [0, 90, 180, 270]
+models = ['Ref_Best', 'PPAFM2Exp_CoAll_L10_L10_Elatest', 'PPAFM2Exp_CoAll_L10_L0.1_Elatest', 'PPAFM2Exp_CoAll_L20_L1_Elatest']
+#angles = [0, 90, 180, 270]
+angles = [0]
 samples = ['Ying_Jiang_1', 'Ying_Jiang_2_1', 'Ying_Jiang_2_2', 'Ying_Jiang_3', 'Ying_Jiang_5', 'Ying_Jiang_6'] # 'Ying_Jiang_4'
 indexes = [[0, 8], [0, 8], [0, 8], [0, 8], [0, 8], [0, 8], [0, 6]] 
 
