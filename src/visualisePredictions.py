@@ -8,14 +8,14 @@ from ase.data.colors import jmol_colors
 from matplotlib.patches import Circle
 import os, re
 
-show = True
+show = False
 
 def extract_lambda_values(s):
     """Extract numeric values following 'L' in the input string."""
     return [float(x) if '.' in x else int(x) for x in re.findall(r'_L([0-9.]+)', s)]
 
 # %%
-models = ['Ref', 'PPAFM2Exp_CoAll_L10_L10_Elatest', 'PPAFM2Exp_CoAll_L10_L0.1_Elatest', 'PPAFM2Exp_CoAll_L20_L1_Elatest']
+models = ['Ref_Best', 'PPAFM2Exp_CoAll_L20_L1_Elatest_C1', 'PPAFM2Exp_CoAll_L10_L10_Elatest_C6', 'PPAFM2Exp_CoAll_L50_L1_Elatest']
 angles = [0, 90, 180, 270]
 samples = ['Ying_Jiang_1', 'Ying_Jiang_2_1', 'Ying_Jiang_2_2', 'Ying_Jiang_3', 'Ying_Jiang_5', 'Ying_Jiang_6'] # 'Ying_Jiang_4'
 indexes = [[0, 8], [0, 8], [0, 8], [0, 8], [0, 8], [0, 8], [0, 6]] 
@@ -35,7 +35,8 @@ if not os.path.exists(output):
     os.makedirs(output)
 
 # %%
-for perspective in ['xy', 'xz']:
+#for perspective in ['xy', 'xz']:
+for perspective in ['xy']:
     # Look different rotations individually
     for angle in angles:
         numRows = len(samples)
@@ -77,7 +78,7 @@ for perspective in ['xy', 'xz']:
 
                 for atom in atoms:
                     color = jmol_colors[atom.number]
-                    radius = radii[atom.number]
+                    radius = radii[atom.number]*1.3
                     if perspective == 'xy':
                         x, y, z = atom.position[0], atom.position[1], atom.position[2]
                         # Scale size by z depth (closer atoms are larger)
