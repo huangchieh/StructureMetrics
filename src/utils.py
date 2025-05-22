@@ -8,6 +8,58 @@ import imageio.v3 as iio
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import AutoMinorLocator
 
+plt.rcParams['font.size']=14
+plt.rcParams['font.family']='Arial'
+plt.rcParams['pdf.fonttype']=42
+plt.rcParams['svg.fonttype'] = 'none'
+plt.rcParams['text.usetex'] = True # Render text with LaTeX
+
+def radar_plot(ax, mins, maxs, data, labels, color=None, errors=None, title=None):
+    # normalize data
+    data = (data - mins) / (maxs - mins)
+    # Convert the data 
+    data = 1 - data # Indicate the performance
+    # If errors is not None, normalize errors
+    if errors is not None:
+        errors = errors / (maxs - mins)
+     
+    # Compute angle for each axis
+    angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
+    angles += angles[:1]  # Close the circle
+    data = np.concatenate((data, [data[0]]))  # Close the circle
+    if errors is not None:
+        errors = np.concatenate((errors, [errors[0]]))  # Close the circle
+        # Draw the error bars
+        for i in range(len(labels)):
+            ax.errorbar(angles[i], data[i], yerr=errors[i], color=color, capsize=2, alpha=0.5)
+    if color is not None:
+        # Draw the outline of our data and fill the area under the curve
+        ax.plot(angles, data, linewidth=1, linestyle='solid', color=color, label='Data')
+        ax.fill(angles, data, color=color, alpha=0.4)
+    else:
+        # Draw the outline of our data and fill the area under the curve
+        ax.plot(angles, data, linewidth=1, linestyle='solid', label='Data')
+        ax.fill(angles, data, alpha=0.4)
+    ax.set_yticklabels([])
+    # Add labels to each axis
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels)
+    ax.set_ylim(0, 1)
+    if title: ax.set_title(title)
+    return ax 
+
+if __name__ == "__main__":
+    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+    maxs = np.array([0.5, 1, 0.3, 0.7, 1, 1])
+    mins = np.array([0, 0, 0, 0, 0.1, 0.1])
+    data = np.array([0.1, 0.2, 0.2, 0.3, 0.5, 0.5]) # Distance
+    errors = np.array([0.01, 0.02, 0.02, 0.03, 0.05, 0.02]) # Distance
+    labels = [r"$d_{\mathrm{OO}}$", r"$d_{\mathrm{OH}}$", r"$\theta_{\mathrm{HOH}}$", r"$\theta_{\mathrm{ZOH}}$", r"$(d_{\mathrm{O_d}\mathrm{O_a}}, \theta_{\mathrm{O_d}\mathrm{H}\mathrm{O_a}})$", r"$(S_k, S_g)$"]
+    title = r'Ref_C{}'.format(0)
+    radar_plot(ax, mins, maxs, data, errors=errors, color='k', labels=labels, title=title)
+    plt.tight_layout()
+    plt.show()
+
 def plot_kde_fill(ax, data, color, linestyle, label, fill=True, alpha_fill=0.3, xmin=None, xmax=None, num_points=100, bw_method=None, hist=False, bins=120, marker=None):
     """
     Plots a KDE curve with optional fill under the curve and returns the x and y values.

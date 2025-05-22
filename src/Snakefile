@@ -86,3 +86,15 @@ rule evaluate:
 		./evaluate.py
 		"""
 
+rule visualiseRadar:
+	input:
+		"visualiseRadar.py",
+		 "../processed_data/distribution_distances/similarities_Label_All.json", 
+		 "../processed_data/distribution_distances/similarities_Label_Top.json",
+	output: 
+		out_dir = directory("../results/radar")
+	shell:
+		"""
+		./visualiseRadar.py
+		"""
+
