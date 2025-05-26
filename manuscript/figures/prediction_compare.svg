@@ -3,8 +3,8 @@
 
 <svg
    width="294.40933mm"
-   height="303.34164mm"
-   viewBox="0 0 294.40933 303.34164"
+   height="297.82251mm"
+   viewBox="0 0 294.40933 297.82251"
    version="1.1"
    id="svg1"
    xml:space="preserve"
@@ -24,13 +24,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.48935041"
-     inkscape:cx="592.62237"
-     inkscape:cy="518.03369"
-     inkscape:window-width="1512"
-     inkscape:window-height="842"
+     inkscape:zoom="0.69204599"
+     inkscape:cx="447.22462"
+     inkscape:cy="591.00119"
+     inkscape:window-width="2048"
+     inkscape:window-height="1071"
      inkscape:window-x="0"
-     inkscape:window-y="858"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" /><defs
      id="defs1"><style
@@ -3913,7 +3913,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(396.99162,244.40518)"><g
+     transform="translate(396.99162,238.88605)"><g
        id="patch_1"
        transform="matrix(0.35277778,0,0,0.35277778,-400.14187,-279.98236)" /><g
        id="axes_1"
@@ -11429,7 +11429,7 @@
            style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:square;stroke-linejoin:miter"
            id="path1966" /></g></g><g
        id="text_7"
-       transform="matrix(0.35277778,0,0,0.35277778,-400.14187,-279.98236)"><!-- $v$: Exp. AFM (far) --><g
+       transform="matrix(0.35277778,0,0,0.35277778,-398.55436,-279.98236)"><!-- $v$: Exp. AFM (far) --><g
          transform="matrix(0.14,0,0,-0.14,34.868571,126.88451)"
          id="g1979"><defs
            id="defs1966"><path
@@ -11518,7 +11518,7 @@
            transform="matrix(0.996264,0,0,0.996264,700.86066,0)"
            id="use1979" /></g></g><g
        id="text_8"
-       transform="matrix(0.35277778,0,0,0.35277778,-400.14187,-279.98236)"><!-- Exp. AFM (close) --><g
+       transform="matrix(0.35277778,0,0,0.35277778,-398.02519,-279.98236)"><!-- Exp. AFM (close) --><g
          transform="matrix(0.14,0,0,-0.14,175.57714,126.88451)"
          id="g1993"><defs
            id="defs1979"><path
@@ -11580,7 +11580,7 @@
            transform="matrix(0.996264,0,0,0.996264,667.82211,0)"
            id="use1993" /></g></g><g
        id="text_9"
-       transform="matrix(0.35277778,0,0,0.35277778,-400.14187,-279.98236)"><!-- $F_{\mathcal{U}}(v)$ --><g
+       transform="matrix(0.35277778,0,0,0.35277778,-402.25855,-279.98236)"><!-- $F_{\mathcal{U}}(v)$ --><g
          transform="matrix(0.14,0,0,-0.14,350.84571,126.88451)"
          id="g1998"><defs
            id="defs1993"><path
@@ -11612,7 +11612,7 @@
            transform="matrix(0.996264,0,0,0.996264,200.23204,0)"
            id="use1998" /></g></g><g
        id="text_10"
-       transform="matrix(0.35277778,0,0,0.35277778,-400.14187,-279.98236)"><!-- $F_{\mathcal{V}}(v): \lambda_1, \lambda_2 = 20, 1$ --><g
+       transform="matrix(0.35277778,0,0,0.35277778,-395.90851,-279.98236)"><!-- $F_{\mathcal{V}}(v): \lambda_1, \lambda_2 = 20, 1$ --><g
          transform="matrix(0.14,0,0,-0.14,432.80229,126.88451)"
          id="g2014"><defs
            id="defs1998"><path
@@ -11689,7 +11689,7 @@
            transform="matrix(0.996264,0,0,0.996264,798.24815,0)"
            id="use2014" /></g></g><g
        id="text_11"
-       transform="matrix(0.35277778,0,0,0.35277778,-400.14187,-279.98236)"><!-- $F_{\mathcal{V}}(v): \lambda_1, \lambda_2 = 10, 10$ --><g
+       transform="matrix(0.35277778,0,0,0.35277778,-396.43768,-279.98236)"><!-- $F_{\mathcal{V}}(v): \lambda_1, \lambda_2 = 10, 10$ --><g
          transform="matrix(0.14,0,0,-0.14,571.78286,126.88451)"
          id="g2031"><use
            xlink:href="#CMMI12-46-6"
@@ -11744,7 +11744,7 @@
            transform="matrix(0.996264,0,0,0.996264,843.93862,0)"
            id="use2031" /></g></g><g
        id="text_12"
-       transform="matrix(0.35277778,0,0,0.35277778,-400.14187,-279.98236)"><!-- $F_{\mathcal{V}}(v): \lambda_1, \lambda_2 = 50, 1$ --><g
+       transform="matrix(0.35277778,0,0,0.35277778,-398.55436,-279.98236)"><!-- $F_{\mathcal{V}}(v): \lambda_1, \lambda_2 = 50, 1$ --><g
          transform="matrix(0.14,0,0,-0.14,716.81143,126.88451)"
          id="g2047"><defs
            id="defs2031"><path
@@ -14327,61 +14327,61 @@
          y="37.907074">F</tspan></text><text
        xml:space="preserve"
        style="font-size:5.64444px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.201;stroke-linejoin:round;stroke-miterlimit:3.8;stroke-dasharray:0.402, 0.201"
-       x="-369.00769"
-       y="-240.27658"
+       x="-391.17569"
+       y="-234.59941"
        id="text1"><tspan
          sodipodi:role="line"
          id="tspan1"
          style="stroke-width:0.201"
-         x="-369.00769"
-         y="-240.27658">1</tspan></text><text
+         x="-391.17569"
+         y="-234.59941">1</tspan></text><text
        xml:space="preserve"
        style="font-size:5.64444px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.201;stroke-linejoin:round;stroke-miterlimit:3.8;stroke-dasharray:0.402, 0.201"
-       x="-321.37625"
-       y="-240.27658"
+       x="-342.4859"
+       y="-234.59941"
        id="text2"><tspan
          sodipodi:role="line"
          id="tspan2"
          style="stroke-width:0.201"
-         x="-321.37625"
-         y="-240.27658">2</tspan></text><text
+         x="-342.4859"
+         y="-234.59941">2</tspan></text><text
        xml:space="preserve"
        style="font-size:5.64444px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.201;stroke-linejoin:round;stroke-miterlimit:3.8;stroke-dasharray:0.402, 0.201"
-       x="-273.07275"
-       y="-240.34824"
+       x="-294.1824"
+       y="-234.67107"
        id="text3"><tspan
          sodipodi:role="line"
          id="tspan3"
          style="stroke-width:0.201"
-         x="-273.07275"
-         y="-240.34824">3</tspan></text><text
+         x="-294.1824"
+         y="-234.67107">3</tspan></text><text
        xml:space="preserve"
        style="font-size:5.64444px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.201;stroke-linejoin:round;stroke-miterlimit:3.8;stroke-dasharray:0.402, 0.201"
-       x="-224.56258"
-       y="-240.27658"
+       x="-245.67226"
+       y="-234.59941"
        id="text4"><tspan
          sodipodi:role="line"
          id="tspan4"
          style="stroke-width:0.201"
-         x="-224.56258"
-         y="-240.27658">4</tspan></text><text
+         x="-245.67226"
+         y="-234.59941">4</tspan></text><text
        xml:space="preserve"
        style="font-size:5.64444px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.201;stroke-linejoin:round;stroke-miterlimit:3.8;stroke-dasharray:0.402, 0.201"
-       x="-176.23154"
-       y="-240.34549"
+       x="-197.34122"
+       y="-234.66832"
        id="text5"><tspan
          sodipodi:role="line"
          id="tspan5"
          style="stroke-width:0.201"
-         x="-176.23154"
-         y="-240.34549">5</tspan></text><text
+         x="-197.34122"
+         y="-234.66832">5</tspan></text><text
        xml:space="preserve"
        style="font-size:5.64444px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke-width:0.201;stroke-linejoin:round;stroke-miterlimit:3.8;stroke-dasharray:0.402, 0.201"
-       x="-127.8316"
-       y="-240.34549"
+       x="-147.88295"
+       y="-234.66832"
        id="text6"><tspan
          sodipodi:role="line"
          id="tspan6"
          style="stroke-width:0.201"
-         x="-127.8316"
-         y="-240.34549">6</tspan></text></g></svg>
+         x="-147.88295"
+         y="-234.66832">6</tspan></text></g></svg>
