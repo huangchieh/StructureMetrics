@@ -17,16 +17,15 @@ os.makedirs(baseOut, exist_ok=True)
 show = False
 
 def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
-                       ncols=10, nrows=4, xlabel=r'$x$', ylabel=r'$y$',
+                       ncols=6, nrows=6, xlabel=r'$x$', ylabel=r'$y$',
                        xlim=None, ylim=None,
                        baseOut='../results/compare_distributions/',
                        property_name="2D_property", show=False):
     """
     Improved version that adds model labels and WD distances to each subplot.
     """
-
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols,
-                             figsize=(ncols * 2.2, nrows * 2),
+                             figsize=(ncols * 1.8, nrows * 1.7),
                              sharex=True, sharey=True)
     axes = axes.flatten()
 
@@ -53,7 +52,7 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
         ax.scatter(x, y, s=5, alpha=0.5, color=color, edgecolor='k', linewidth=0.1)
 
         # Text label and WD
-        if i == 3:
+        if i == 2: # Excluding 'All' and 'Top', this is the third plot
             extra = ", min"
         elif i == len(keys) - 1:
             extra = ", max"
@@ -65,6 +64,7 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
         ax.text(
             0.2, 0.2, text, ha='left', va='top', transform=ax.transAxes,
             fontsize=6, color='black',
+            #color='black',
             bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', boxstyle='round,pad=0.2')
         )
 
@@ -76,11 +76,13 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
     for j in range(i+1, len(axes)):
         axes[j].axis('off')
 
-    fig.supxlabel(xlabel, fontsize=12)
-    fig.supylabel(ylabel, fontsize=12)
+    #fig.supxlabel(xlabel, fontsize=12)
+    #fig.supylabel(ylabel, fontsize=12)
+    fig.supxlabel(xlabel)
+    fig.supylabel(ylabel)
 
     plt.tight_layout()
-    fig.subplots_adjust(left=0.05, right=0.98, top=0.98, bottom=0.07, wspace=0.05, hspace=0.05)
+    fig.subplots_adjust(left=0.06, right=0.98, top=0.99, bottom=0.05, wspace=0.01, hspace=0.01)
 
     outbase = f"{baseOut}/compare2D_{property_name}"
     plt.savefig(outbase + ".png", dpi=600)
@@ -178,7 +180,7 @@ def plot_multi_kdes(
         # --- Add WD annotation if provided ---
         if annotations and annotations[i] is not None:
             extra = ""
-            if i == 3:
+            if i == 2: # Excluding 'All' and 'Top', this is the third plot
                 extra = ", min"
             elif i == len(annotations) - 1:
                 extra = ", max"
@@ -254,14 +256,14 @@ def plot_distribution_property(property_name):
     "OO_dist": (0, 3.5),
     "OH_dist": (0, 1.25),
     "HOH_dist": (35, 180),
-    "ThetaOH_dist": (0, 180),
-    "Hbonds": (1.9, 3.5), 
-    "OrderP": (0, 0.0045)
+    "ThetaOH_dist": (0, 179.9),
+    "Hbonds": (1.9, 3.49), 
+    "OrderP": (0.00001, 0.0045)
     }
 
     ylim_map = {
-    "Hbonds": (120, 180), 
-    "OrderP": (0, 1.2) 
+    "Hbonds": (120, 179.9), 
+    "OrderP": (0, 1.19) 
     }
 
     file_key_map = {
@@ -277,7 +279,7 @@ def plot_distribution_property(property_name):
     "OO_dist": 0.025,
     "OH_dist": 0.05,
     "HOH_dist": 0.025,
-    "ThetaOH_dist": 0.1,  # special case
+    "ThetaOH_dist": 0.08,  # special case
     }
 
     xlabel_map = {
@@ -352,7 +354,8 @@ def plot_distribution_property(property_name):
     }
     all_selected = sorted(set().union(*selected_models.values()))
     # Make sure the order is All, Top, P, then the rest
-    model_tags = ['All', 'Top', 'P'] + [m for m in all_selected if m not in ['All', 'Top', 'P']] 
+    #model_tags = ['All', 'Top', 'P'] + [m for m in all_selected if m not in ['All', 'Top', 'P']] 
+    model_tags = ['All', 'Top'] + [m for m in all_selected if m not in ['All', 'Top']] 
 
     # Collect data
     data = {'value': [], 'group': []}
@@ -374,11 +377,11 @@ def plot_distribution_property(property_name):
         else:
             print(f"Warning: {npz_path} not found")
 
-    # Add P (reference)
-    if os.path.exists(reference_file):
-        values = np.load(reference_file)[key]
-        data['value'].extend(values)
-        data['group'].extend(['P'] * len(values))
+    # # Add P (reference)
+    # if os.path.exists(reference_file):
+    #     values = np.load(reference_file)[key]
+    #     data['value'].extend(values)
+    #     data['group'].extend(['P'] * len(values))
 
     # Add All and Top
     for label in ['All', 'Top']:
@@ -403,7 +406,8 @@ def plot_distribution_property(property_name):
     # Build distance map
     distance_map = {}
     for tag in model_tags:
-        if tag in ['All', 'Top', 'P']:
+        #if tag in ['All', 'Top', 'P']:
+        if tag in ['All', 'Top']:
             distance_map[tag] = -1
         elif tag in similarities and property_name in similarities[tag]:
             distance_map[tag] = similarities[tag][property_name]['wdistancec_nor']
@@ -411,7 +415,8 @@ def plot_distribution_property(property_name):
             distance_map[tag] = 999
 
     # Sort
-    fixed_order = ['All', 'Top', 'P']
+    #fixed_order = ['All', 'Top', 'P']
+    fixed_order = ['All', 'Top']
     others = sorted([g for g in distance_map if g not in fixed_order], key=lambda x: (distance_map[x], x))
     ordered_groups = fixed_order + others
     #ordered_groups = sorted(distance_map, key=lambda x: (distance_map[x], x))
@@ -421,7 +426,8 @@ def plot_distribution_property(property_name):
     # Generate annotations (WD text), None for All/Top/P
     annotations = []
     for g in ordered_groups:
-        if g in ['All', 'Top', 'P']:
+        #if g in ['All', 'Top', 'P']:
+        if g in ['All', 'Top']:
             annotations.append(None)
         else:
             annotations.append(distance_map[g])
