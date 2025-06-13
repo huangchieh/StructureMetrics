@@ -12,6 +12,14 @@ plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
 plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
+simcolor = '#ed9d2c'
+expcolor = '#de461c'
+dftcolor = '#2ca3cf'
+bg07color = '#479FB1'
+bv17color = '#6E7CBC'
+
+
+
 baseOut = '../results/compare_distributions/'
 os.makedirs(baseOut, exist_ok=True)
 show = False
@@ -49,27 +57,41 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
         wd = distance_map.get(key, None)
         color = smap.to_rgba(wd if wd is not None and wd >= 0 else 0)
 
-        ax.scatter(x, y, s=5, alpha=0.5, color=color, edgecolor='k', linewidth=0.1)
+        ax.scatter(x, y, s=10, alpha=0.5, color=color, edgecolor='k', linewidth=0.1)
 
-        # Text label and WD
-        if i == 2: # Excluding 'All' and 'Top', this is the third plot
-            extra = ", min"
-        elif i == len(keys) - 1:
-            extra = ", max"
-        else:
-            extra = ""
+        # Plot label at top left
         label = convert_label_func(key)
-        text = f"{label}\n" + (fr"$\mathrm{{WD}}(\cdot, \mathcal{{U}}_\mathrm{{Top}}) = {wd:.5f}$" if wd is not None and wd > 0 else "")
-        text += extra
         ax.text(
-            0.2, 0.2, text, ha='left', va='top', transform=ax.transAxes,
-            fontsize=6, color='black',
-            #color='black',
-            bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', boxstyle='round,pad=0.2')
+            0.02, 0.25, label, ha='left', va='top', transform=ax.transAxes,
+            fontsize=10,
+            color='black' if 'tilde' not in label else dftcolor,
+            bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', boxstyle='round,pad=0.05')
         )
+        # Plot WD distance below the label (if available and > 0)
+        if wd is not None and wd > 0:
+            ax.text(
+            0.02, 0.10, fr"$\mathrm{{WD}}(\cdot, \mathcal{{U}}_\mathrm{{Top}}) = {wd:.5f}$",
+            ha='left', va='top', transform=ax.transAxes,
+            fontsize=10,
+            color='black',
+            bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', boxstyle='round,pad=0.03')
+            )
+        # Add "Min" or "Max" at top right corner if needed (bold font)
+        if i == 2:  # Excluding 'All' and 'Top', this is the third plot
+            ax.text(
+            0.7, 0.2, rf"$\mathrm{{Min}}$", ha='left', va='top', transform=ax.transAxes,
+            fontsize=14, color='green',
+            bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', boxstyle='round,pad=0.02')
+            )
+        elif i == len(keys) - 1:
+            ax.text(
+            0.7, 0.2, rf"$\mathrm{{Max}}$", ha='left', va='top', transform=ax.transAxes,
+            fontsize=14, color='red',
+            bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', boxstyle='round,pad=0.02')
+            )
 
         # Axes styling
-        ax.tick_params(axis='both', which='both', direction='in', labelsize=6)
+        ax.tick_params(axis='both', which='both', direction='in', labelsize=10)
         if xlim: ax.set_xlim(xlim)
         if ylim: ax.set_ylim(ylim)
 
@@ -78,8 +100,8 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
 
     #fig.supxlabel(xlabel, fontsize=12)
     #fig.supylabel(ylabel, fontsize=12)
-    fig.supxlabel(xlabel)
-    fig.supylabel(ylabel)
+    fig.supxlabel(xlabel, x=0.5, ha='left')
+    fig.supylabel(ylabel, x=0.01, y=0.5, va='top')
 
     plt.tight_layout()
     fig.subplots_adjust(left=0.06, right=0.98, top=0.99, bottom=0.05, wspace=0.01, hspace=0.01)
@@ -168,6 +190,7 @@ def plot_multi_kdes(
                 xlim[0],
                 ax.get_ylim()[1] * 0.1,               # vertical center
                 label,
+                color='black' if 'tilde' not in label else dftcolor,
                 fontsize=9,
                 ha='left',
                 va='center',
@@ -179,19 +202,36 @@ def plot_multi_kdes(
 
         # --- Add WD annotation if provided ---
         if annotations and annotations[i] is not None:
-            extra = ""
-            if i == 2: # Excluding 'All' and 'Top', this is the third plot
-                extra = ", min"
-            elif i == len(annotations) - 1:
-                extra = ", max"
+            # WD annotation
             ax.text(
-            1.01, 0,
-            fr"$\mathrm{{WD}}(\cdot, \mathcal{{U}}_\mathrm{{Top}}) = {annotations[i]:.5f}${extra}",
+            1.01, 0.05,
+            fr"$\mathrm{{WD}}(\cdot, \mathcal{{U}}_\mathrm{{Top}}) = {annotations[i]:.5f}$",
             transform=ax.transAxes,
             ha='left',
             va='center',
-            fontsize=8
+            fontsize=8,
             )
+            # Min/Max annotation (separate, colored)
+            if i == 2:  # Excluding 'All' and 'Top', this is the third plot
+                ax.text(
+                    1.29, 0.05,
+                    r"$\mathrm{Min}$",
+                    transform=ax.transAxes,
+                    ha='left',
+                    va='center',
+                    fontsize=10,
+                    color='green'
+                )
+            elif i == len(annotations) - 1:
+                ax.text(
+                    1.29, 0.05,
+                    r"$\mathrm{Max}$",
+                    transform=ax.transAxes,
+                    ha='left',
+                    va='center',
+                    fontsize=10,
+                    color='red'
+                )
     # Bottom axis
     axes[0].set_xlabel(xlabel)
     axes[0].tick_params(bottom=True, labelbottom=True)
@@ -224,7 +264,7 @@ def convert_label_to_latex(name):
         except IndexError:
             l1, l2 = "?", "?"
         suffix = parts[-1] if parts[-1].startswith("C") else ""
-        latex = rf"$F_{{\tilde{{\mathcal{{V}}}}}}^{{\lambda_1,\lambda_2={l1},{l2}}} (\mathcal{{V}})$"
+        latex = rf"$F_{{\tilde{{\mathcal{{V}}}}}}^{{\lambda_\mathrm{{c}},\lambda_\mathrm{{i}}={l1},{l2}}} (\mathcal{{V}})$"
         return latex + f" {suffix}" if suffix else latex
     else:
         return name  # fallback

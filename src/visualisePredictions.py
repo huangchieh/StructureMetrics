@@ -121,7 +121,14 @@ for perspective in ['xy']:
                                 ha='center', va='bottom', fontsize=10)
         # Add the sublabels
         lambdas = [extract_lambda_values(model) for model in models[1:]]
-        subLabels = ['$v$: Exp. AFM (far)', 'Exp. AFM (close)', rf'$F_{{\mathcal{{U}}}}(v)$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[0][0]}, {lambdas[0][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[1][0]}, {lambdas[1][1]}$', rf'$F_{{\mathcal{{V}}}}(v): \lambda_1, \lambda_2 = {lambdas[2][0]}, {lambdas[2][1]}$']
+        subLabels = [
+            '$v$: Exp. AFM (far)',
+            'Exp. AFM (close)',
+            rf'$F_{{\mathcal{{U}}}}(v)$',
+            rf'$F_{{\tilde{{\mathcal{{V}}}}}}^{{\lambda_\mathrm{{c}}, \lambda_\mathrm{{i}} = {lambdas[0][0]}, {lambdas[0][1]}}}(v)$',
+            rf'$F_{{\tilde{{\mathcal{{V}}}}}}^{{\lambda_\mathrm{{c}}, \lambda_\mathrm{{i}} = {lambdas[1][0]}, {lambdas[1][1]}}}(v)$',
+            rf'$F_{{\tilde{{\mathcal{{V}}}}}}^{{\lambda_\mathrm{{c}}, \lambda_\mathrm{{i}} = {lambdas[2][0]}, {lambdas[2][1]}}}(v)$'
+        ]
         xoffsets = [-0.14, -0.11, -0.04, -0.078, -0.05, -0.015]
         for j in range(numCols):
             ax = axs[0, j]      # first row's axes
