@@ -79,34 +79,45 @@
 		% Arrows (transitions)
 		\path [MU] 
 		(M)  edge [bend left] 
-			node[sloped, above]  {$H_{\mathcal{M}}$} (U);
+			node[sloped, above, inner sep=0pt, yshift=0.1ex]  {$H_{\mathcal{M}}$} 
+			%node[sloped, below, inner sep=0pt, yshift=0.1ex, rotate=-15] {\includegraphics[width=0.3cm]{ppm.pdf}}
+			(U);
 		\path [UM]
-		(U) edge [bend left]   node[sloped, above]    {$F_{\mathcal{U}}$}    (M);
+		(U) edge [bend left]   node[sloped, above, inner sep=1pt, yshift=0.1ex]{$F_{\mathcal{U}}$}
+		 									 %node[sloped, below, inner sep=0pt, yshift=0.1ex] {\includegraphics[width=0.5cm]{nn.pdf}}  
+		 									 (M);
+
 		\path [UV]
-		(U) edge [bend left]   node[sloped, above]    {$G_{\mathcal{U}}$}    (V);
+		(U) edge [bend left]   node[sloped, above, , inner sep=1pt, yshift=0.1ex]    {$G_{\mathcal{U}}$}  
+											 %node[sloped, below, inner sep=0pt, yshift=0.1ex] {\includegraphics[width=0.5cm]{nn.pdf}}  
+											 (V);
 		\path [VU]
-		(V)  edge [bend left]   node[sloped, above, yshift=2pt]    {$G_{\mathcal{V}}$}   (U);
+		(V)  edge [bend left]   node[sloped, above, inner sep=1pt, yshift=0.1ex]    {$G_{\mathcal{V}}$}  
+											  %node[sloped, below, inner sep=0pt, yshift=0.1ex] {\includegraphics[width=0.5cm]{nn.pdf}} 
+											  (U);
 		\path [VM]
-		(V)  edge [bend left]   node[sloped, above]    {$F_{\mathcal{V}}$}    (M);
+		(V)  edge [bend left]   node[sloped, above, inner sep=2pt, yshift=0.1ex]    {$F_{\mathcal{V}}$}  
+		                                      %node[sloped, above, inner sep=0pt, yshift=0.1ex] {\includegraphics[width=0.5cm]{nn.pdf}} 
+		                                      (M);
 		
 	% Legend
-	\begin{scope}[shift={([xshift=-1cm,yshift=3.95cm]M.north west)}]
+	\begin{scope}[shift={([xshift=-1.1cm,yshift=3.95cm]M.north west)}]
 		\node[
 		anchor=north west,
 		align=left,
 		%draw=black,
 		rounded corners,
 		fill=white,
-		opacity=0.5,
+		opacity=0,
 		text opacity=1,
 		inner sep=2pt
 		] {
 			\small
-			\begin{tabular}{@{}l@{\hspace{0.3em}}l@{}}
-				$H$ & Probe particle model \\
-				$F$ & Structure discovery model \\
-				$G$ & Style translation model
-			\end{tabular}
+    \begin{tabular}{@{}l@{\hspace{0.2em}}l@{\hspace{0.em}}l@{}}
+	$H$  & Probe particle model \raisebox{-0.4ex}{\includegraphics[width=0.3cm]{ppm.pdf}} & \\
+	$F$  & Structure discovery model \raisebox{-0.4ex}{\includegraphics[width=0.4cm]{nn.pdf}} & \\
+	$G$ & Style translation model \raisebox{-0.4ex}{\includegraphics[width=0.4cm]{nn.pdf}} &
+	\end{tabular}
 		};
 	\end{scope}
 
