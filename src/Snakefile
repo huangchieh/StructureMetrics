@@ -50,18 +50,6 @@ rule calTheoreDistributions:
 	./calTheoreDistributions.py
 	"""
 
-rule visualisePredictions:
-	input:
-		script = "visualisePredictions.py", 
-		expImage = "../data/expPNG", 
-		predictions = "../data/structures/predictions"
-	output:
-		output = directory("../results/predictions")
-	shell:
-		"""
-		./visualisePredictions.py
-		"""
-
 rule visualiseStacks:
 	input:
 		script = "visualiseStacks.py",
@@ -74,6 +62,19 @@ rule visualiseStacks:
 		"""
 		./visualiseStacks.py
 		"""
+
+rule visualisePredictions:
+	input:
+		script = "visualisePredictions.py", 
+		expImage = "../data/expPNG", 
+		predictions = "../data/structures/predictions"
+	output:
+		output = directory("../results/predictions")
+	shell:
+		"""
+		./visualisePredictions.py
+		"""
+
 rule evaluate:
 	input:
 		"evaluate.py", 

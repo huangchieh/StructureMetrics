@@ -8,7 +8,7 @@ from ase.data.colors import jmol_colors
 from matplotlib.patches import Circle
 import os, re
 
-show = False
+show = True
 
 def extract_lambda_values(s):
     """Extract numeric values following 'L' in the input string."""
