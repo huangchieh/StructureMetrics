@@ -75,6 +75,18 @@ rule visualisePredictions:
 		./visualisePredictions.py
 		"""
 
+rule visualisePredictionsPureOnlyBoth:
+	input:
+		script = "visualisePredictions.py", 
+		expImage = "../data/expPNG", 
+		predictions = "../data/structures/predictions"
+	output:
+		output = directory("../results/predictionsPureOnlyBoth")
+	shell:
+		"""
+		./visualisePredictionsPureOnlyBoth.py
+		"""
+
 rule evaluate:
 	input:
 		"evaluate.py", 
