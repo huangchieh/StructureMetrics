@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="833.95001pt"
-   height="845.53162pt"
-   viewBox="0 0 833.95001 845.53162"
+   width="835.57391pt"
+   height="846.11072pt"
+   viewBox="0 0 835.57391 846.11072"
    version="1.1"
    id="svg2029"
    sodipodi:docname="predictions_180_xy.svg"
@@ -26,7 +26,7 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      inkscape:zoom="0.57777778"
-     inkscape:cx="424.90385"
+     inkscape:cx="424.03846"
      inkscape:cy="565.96154"
      inkscape:window-width="1920"
      inkscape:window-height="953"
@@ -59,6 +59,13 @@
   <g
      id="figure_1"
      transform="translate(-8.8500004,-115.18312)">
+    <rect
+       style="fill:#ffffff;stroke-width:0.850975;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:3.8"
+       id="rect1"
+       width="834.82391"
+       height="845.36072"
+       x="9.6000004"
+       y="115.93312" />
     <g
        id="axes_1">
       <g
