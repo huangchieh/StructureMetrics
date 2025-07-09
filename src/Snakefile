@@ -111,6 +111,18 @@ rule visualiseRadar:
 		./visualiseRadar.py
 		"""
 
+rule visualiseEvaluateMeanInRadar:
+	input:
+		"visualiseRadar.py",
+		 "../processed_data/distribution_distances/similarities_Label_All.json", 
+		 "../processed_data/distribution_distances/similarities_Label_Top.json",
+	output: 
+		out_dir = directory("../results/meanInRadar")
+	shell:
+		"""
+		./visualiseEvaluateMeanInRadar.py
+		"""
+
 rule visualiseDistributionCompare:
 	input:
 		script = "visualiseDistributionCompare.py",
