@@ -38,7 +38,17 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
     axes = axes.flatten()
 
     keys = list(data_dict.keys())
-    num = len(keys)
+
+    # After creating axes and keys
+    n_axes = len(axes)
+    if len(keys) > n_axes:
+        # Keep only the first (n_axes - 1) keys and the last key (max distance)
+        keys = keys[:n_axes-1] + [keys[-1]]
+    elif len(keys) < n_axes:
+        # Optionally, trim axes as well if you have fewer keys than axes
+        axes = axes[:len(keys)]
+
+    #num = len(keys)
 
     # Normalize WD distances for color mapping
     wds = [distance_map.get(k, 0) for k in keys]
@@ -61,10 +71,20 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
 
         # Plot label at top left
         label = convert_label_func(key)
+        if 'tilde' in label:
+            ycolor = dftcolor
+        elif 'Pure' in label:
+            ycolor = simcolor
+        else:
+            if 'U' in label:
+                ycolor = 'k'
+            else:
+                ycolor = expcolor
         ax.text(
             0.02, 0.25, label, ha='left', va='top', transform=ax.transAxes,
             fontsize=10,
-            color='black' if 'tilde' not in label else dftcolor,
+            #color='black' if 'tilde' not in label else dftcolor,
+            color= ycolor,
             bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', boxstyle='round,pad=0.05')
         )
         # Plot WD distance below the label (if available and > 0)
@@ -185,12 +205,24 @@ def plot_multi_kdes(
         ax.set_facecolor((1, 1, 1, 0))
         ax.set_yticks([])
         if ylabels is not None:
+            # Determine label color based on whether it contains 'tilde'
+            # I konw it's ugly. Forgive me. 
+            if 'tilde' in label:
+                ycolor = dftcolor
+            elif 'Pure' in label:
+                ycolor = simcolor
+            else:
+                if 'U' in label:
+                    ycolor = 'k'
+                else:
+                    ycolor = expcolor
             ax.text(
                 #xlim[0] - 0.02 * (xlim[1] - xlim[0]),  # just outside the left of plot
                 xlim[0],
                 ax.get_ylim()[1] * 0.1,               # vertical center
                 label,
-                color='black' if 'tilde' not in label else dftcolor,
+                #color=expcolor if 'tilde' not in label else dftcolor,
+                color=ycolor,
                 fontsize=9,
                 ha='left',
                 va='center',
@@ -254,7 +286,7 @@ def convert_label_to_latex(name):
         suffix = name[3:]  # e.g., "_C3" or ""
         if suffix.startswith("_"):
             suffix = suffix[1:]
-        return rf"$F_{{\mathcal{{U}}}}(\mathcal{{V}})$" + (f" {suffix}" if suffix else "")
+        return rf"$F_{{\bar{{\mathcal{{V}}}}}}(\mathcal{{V}})$" + (f" {suffix}" if suffix else "")
     elif name.startswith("PPAFM2Exp_CoAll_"):
         parts = name.split("_")
         try:
@@ -264,7 +296,7 @@ def convert_label_to_latex(name):
         except IndexError:
             l1, l2 = "?", "?"
         suffix = parts[-1] if parts[-1].startswith("C") else ""
-        latex = rf"$F_{{\tilde{{\mathcal{{V}}}}}}^{{\lambda_\mathrm{{c}},\lambda_\mathrm{{i}}={l1},{l2}}} (\mathcal{{V}})$"
+        latex = rf"$F_{{\bar{{\tilde{{\mathcal{{V}}}}}}}}^{{\lambda_\mathrm{{c}},\lambda_\mathrm{{i}}={l1},{l2}}} (\mathcal{{V}})$"
         return latex + f" {suffix}" if suffix else latex
     else:
         return name  # fallback
@@ -387,9 +419,12 @@ def plot_distribution_property(property_name):
     # Select models
     model_names = list(similarities.keys())
     selected_models = {
-        'L20_L1': [m for m in model_names if 'L20_L1' in m],
-        'L10_L10': [m for m in model_names if 'L10_L10' in m],
-        'Ref': [m for m in model_names if 'Ref' in m],
+        # 'L20_L1': [m for m in model_names if 'L20_L1' in m],
+        # 'L10_L10': [m for m in model_names if 'L10_L10' in m],
+        # 'Ref': [m for m in model_names if 'Ref' in m],
+        'L20_L1': [m for m in model_names if 'L20_L1' in m and 'Only' not in m],
+        'L10_L10': [m for m in model_names if 'L10_L10' in m and 'Only' not in m],
+        'Ref': [m for m in model_names if 'Ref' in m and 'Pure' not in m],
         'MinMax': [min_model, max_model]
     }
     all_selected = sorted(set().union(*selected_models.values()))
