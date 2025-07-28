@@ -71,7 +71,7 @@ def plot_multi_2d_scatter(data_dict, distance_map, convert_label_func,
 
         # Plot label at top left
         label = convert_label_func(key)
-        if 'tilde' in label:
+        if 'dagger' in label:
             ycolor = dftcolor
         elif 'Pure' in label:
             ycolor = simcolor
@@ -205,9 +205,9 @@ def plot_multi_kdes(
         ax.set_facecolor((1, 1, 1, 0))
         ax.set_yticks([])
         if ylabels is not None:
-            # Determine label color based on whether it contains 'tilde'
+            # Determine label color based on whether it contains 'dagger'
             # I konw it's ugly. Forgive me. 
-            if 'tilde' in label:
+            if 'dagger' in label:
                 ycolor = dftcolor
             elif 'Pure' in label:
                 ycolor = simcolor
@@ -296,7 +296,7 @@ def convert_label_to_latex(name):
         except IndexError:
             l1, l2 = "?", "?"
         suffix = parts[-1] if parts[-1].startswith("C") else ""
-        latex = rf"$F_{{\bar{{\tilde{{\mathcal{{V}}}}}}}}^{{\lambda_\mathrm{{c}},\lambda_\mathrm{{i}}={l1},{l2}}} (\mathcal{{V}})$"
+        latex = rf"$F_{{\mathcal{{V}}^{{\dagger}}}}^{{\lambda_\mathrm{{c}},\lambda_\mathrm{{i}}={l1},{l2}}} (\mathcal{{V}})$"
         return latex + f" {suffix}" if suffix else latex
     else:
         return name  # fallback
