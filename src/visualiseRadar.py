@@ -50,7 +50,7 @@ if __name__ == '__main__':
                 print('Max values:', max_values)
 
                 # Find the reference performance
-                ref_key = "Ref"
+                ref_key = "Ref_Pure"
                 ref_df = df[df["Structure"].str.contains(ref_key)]
                 print(ref_df)
                 # Get the numeric columns and compute the mean and std or ref_df 

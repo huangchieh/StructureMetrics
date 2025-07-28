@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import matplotlib.pyplot as plt
 from mlspm.graph import MoleculeGraph
 from mlspm.utils import read_xyzs
@@ -45,11 +46,13 @@ params = [
         {'pred_dir': 'predictions_augmentation'  , 'exp_name': 'Ying_Jiang_6'  , 'label': 'H', 'dist': 4.8, 'offset': ( 1.5,  2.0)},
         ]
 
+show = False
 output = '../results/ppafm4predictions'
 os.makedirs(output, exist_ok=True)
 samples = ['Ying_Jiang_1', 'Ying_Jiang_2_1', 'Ying_Jiang_2_2', 'Ying_Jiang_3', 'Ying_Jiang_5', 'Ying_Jiang_6'] 
 indexes = [[0, 8], [0, 8], [0, 8], [0, 8], [0, 8], [0, 8]] 
-models = ['Ref_best', 'PPAFM2Exp_CoAll_L20_L1_Elatest_C1', 'PPAFM2Exp_CoAll_L10_L10_Elatest_C6', 'PPAFM2Exp_CoAll_L50_L1_Elatest']
+#models = ['Ref_best', 'PPAFM2Exp_CoAll_L20_L1_Elatest_C1', 'PPAFM2Exp_CoAll_L10_L10_Elatest_C6', 'PPAFM2Exp_CoAll_L50_L1_Elatest']
+models = ['Ref_Pure_C9', 'Ref_best', 'PPAFM2Exp_CoAll_L20_L1_Elatest_Only_C7', 'PPAFM2Exp_CoAll_L20_L1_Elatest_C1']
 expImage = '../data/expPNG'
 model_path = '../data/structures/Predictions'
 numRows = len(samples)
@@ -144,5 +147,6 @@ for angle in angles:
             axs[i, 4].axis('off')
         plt.subplots_adjust(wspace=0.02, hspace=0.02, left=0.025, right=0.975)
         plt.savefig(f"{output}/ppafm4predictions_{model}_{angle}.svg")
-        plt.show()
+        plt.savefig(f"{output}/ppafm4predictions_{model}_{angle}.png")
+        if show: plt.show()
         plt.close(fig)

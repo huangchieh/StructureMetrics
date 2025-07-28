@@ -14,7 +14,7 @@ plt.rcParams['pdf.fonttype']=42
 plt.rcParams['svg.fonttype'] = 'none'
 plt.rcParams['text.usetex'] = True # Render text with LaTeX
 
-def radar_plot(ax, mins, maxs, data, labels, color=None, errors=None, title=None, legend=None):
+def radar_plot(ax, mins, maxs, data, labels, color=None, alpha_fill=0.5, errors=None, title=None, legend=None):
     # normalize data
     data = (data - mins) / (maxs - mins)
     # Convert the data 
@@ -35,20 +35,23 @@ def radar_plot(ax, mins, maxs, data, labels, color=None, errors=None, title=None
     if color is not None:
         # Draw the outline of our data and fill the area under the curve
         #ax.plot(angles, data, linewidth=1, linestyle='solid', color=color)
-        ax.fill(angles, data, color=color, alpha=0.5, label = legend)
+        ax.fill(angles, data, color=color, alpha=alpha_fill, label = legend)
     else:
         # Draw the outline of our data and fill the area under the curve
         #ax.plot(angles, data, linewidth=1, linestyle='solid')
-        ax.fill(angles, data, alpha=0.5)
+        ax.fill(angles, data, alpha=alpha_fill)
     if legend is not None:
-        ax.legend(loc='upper center', bbox_to_anchor=(-0.05, 1.22), frameon=False, ncol=1, handlelength=1.2, handletextpad=0.5, borderaxespad=0.2, columnspacing=0.5)
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 2.6), frameon=False, ncol=1, handlelength=0.7, handletextpad=0.2, borderaxespad=0.2, columnspacing=0.5)
     # ax.set_yticklabels([])
     # Add labels to each axis
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(labels)
 
     ax.set_ylim(0, 1)
-    if title: ax.set_title(title)
+    if title:
+        ax.set_title("")  # Remove default title
+        ax.text(-0.20, 0.5, title, va='center', ha='center', rotation=90,
+                rotation_mode='anchor', transform=ax.transAxes, fontsize=plt.rcParams['font.size'])
     return ax 
 
 if __name__ == "__main__":
